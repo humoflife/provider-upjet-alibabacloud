@@ -13,7 +13,7 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type DiskAttachmentInitParameters_2 struct {
+type DiskAttachmentInitParameters struct {
 
 	// Whether to mount as a system disk. Default to: false.
 	Bootable *bool `json:"bootable,omitempty" tf:"bootable,omitempty"`
@@ -34,7 +34,7 @@ type DiskAttachmentInitParameters_2 struct {
 	Password *string `json:"password,omitempty" tf:"password,omitempty"`
 }
 
-type DiskAttachmentObservation_2 struct {
+type DiskAttachmentObservation struct {
 
 	// Whether to mount as a system disk. Default to: false.
 	Bootable *bool `json:"bootable,omitempty" tf:"bootable,omitempty"`
@@ -61,7 +61,7 @@ type DiskAttachmentObservation_2 struct {
 	Password *string `json:"password,omitempty" tf:"password,omitempty"`
 }
 
-type DiskAttachmentParameters_2 struct {
+type DiskAttachmentParameters struct {
 
 	// Whether to mount as a system disk. Default to: false.
 	// +kubebuilder:validation:Optional
@@ -91,7 +91,7 @@ type DiskAttachmentParameters_2 struct {
 // DiskAttachmentSpec defines the desired state of DiskAttachment
 type DiskAttachmentSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     DiskAttachmentParameters_2 `json:"forProvider"`
+	ForProvider     DiskAttachmentParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -102,13 +102,13 @@ type DiskAttachmentSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider DiskAttachmentInitParameters_2 `json:"initProvider,omitempty"`
+	InitProvider DiskAttachmentInitParameters `json:"initProvider,omitempty"`
 }
 
 // DiskAttachmentStatus defines the observed state of DiskAttachment.
 type DiskAttachmentStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        DiskAttachmentObservation_2 `json:"atProvider,omitempty"`
+	AtProvider        DiskAttachmentObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

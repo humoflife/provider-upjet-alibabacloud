@@ -4,12 +4,12 @@ metadata:
   annotations:
     meta.upbound.io/example-id: ecs/v1alpha1/diskattachment
   labels:
-    testing.upbound.io/example-name: ecs_disk_att
-  name: ecs-disk-att
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
-    diskId: ${alicloud_disk.ecs_disk.id}
-    instanceId: ${alicloud_instance.ecs_instance.id}
+    diskId: ${alicloud_ecs_disk.default.id}
+    instanceId: ${alicloud_instance.default.id}
 
 ---
 
@@ -19,14 +19,21 @@ metadata:
   annotations:
     meta.upbound.io/example-id: ecs/v1alpha1/diskattachment
   labels:
-    testing.upbound.io/example-name: ecs_disk
-  name: ecs-disk
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
-    availabilityZone: cn-beijing-a
-    size: "50"
+    category: cloud_efficiency
+    deleteAutoSnapshot: "true"
+    description: Test For Terraform
+    diskName: ${var.name}
+    enableAutoSnapshot: "true"
+    encrypted: "true"
+    size: "500"
     tags:
-      Name: TerraformTest-disk
+      Created: TF
+      Environment: Acceptance-test
+    zoneId: ${data.alicloud_zones.disk.zones.0.id}
 
 ---
 
@@ -36,19 +43,18 @@ metadata:
   annotations:
     meta.upbound.io/example-id: ecs/v1alpha1/diskattachment
   labels:
-    testing.upbound.io/example-name: ecs_instance
-  name: ecs-instance
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
-    availabilityZone: cn-beijing-a
-    imageId: ubuntu_18_04_64_20G_alibase_20190624.vhd
-    instanceName: Hello
-    instanceType: ecs.n4.small
-    internetChargeType: PayByBandwidth
+    availabilityZone: ${data.alicloud_zones.default.zones.0.id}
+    hostName: ${var.name}
+    imageId: ${data.alicloud_images.default.images.0.id}
+    instanceName: ${var.name}
+    instanceType: ${data.alicloud_instance_types.default.instance_types.0.id}
     securityGroups:
-    - ${alicloud_security_group.ecs_sg.id}
-    tags:
-      Name: TerraformTest-instance
+    - ${alicloud_security_group.default.id}
+    vswitchId: ${alicloud_vswitch.default.id}
 
 ---
 
@@ -58,9 +64,45 @@ metadata:
   annotations:
     meta.upbound.io/example-id: ecs/v1alpha1/diskattachment
   labels:
-    testing.upbound.io/example-name: ecs_sg
-  name: ecs-sg
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
     description: New security group
-    name: terraform-test-group
+    name: tf-example
+    vpcIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: default
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: VPC
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ecs/v1alpha1/diskattachment
+  labels:
+    testing.upbound.io/example-name: default
+  name: default
+spec:
+  forProvider:
+    cidrBlock: 10.4.0.0/16
+    vpcName: ${var.name}
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: Vswitch
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ecs/v1alpha1/diskattachment
+  labels:
+    testing.upbound.io/example-name: default
+  name: default
+spec:
+  forProvider:
+    cidrBlock: 10.4.0.0/24
+    vpcIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: default
+    zoneId: ${data.alicloud_zones.default.zones.0.id}

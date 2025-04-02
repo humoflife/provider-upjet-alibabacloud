@@ -14,18 +14,18 @@ import (
 	"github.com/crossplane/upjet/pkg/resource/json"
 )
 
-// GetTerraformResourceType returns Terraform resource type for this HaVip
-func (mg *HaVip) GetTerraformResourceType() string {
-	return "alicloud_vpc_ha_vip"
+// GetTerraformResourceType returns Terraform resource type for this ACLEntries
+func (mg *ACLEntries) GetTerraformResourceType() string {
+	return "alicloud_network_acl_entries"
 }
 
-// GetConnectionDetailsMapping for this HaVip
-func (tr *HaVip) GetConnectionDetailsMapping() map[string]string {
+// GetConnectionDetailsMapping for this ACLEntries
+func (tr *ACLEntries) GetConnectionDetailsMapping() map[string]string {
 	return nil
 }
 
-// GetObservation of this HaVip
-func (tr *HaVip) GetObservation() (map[string]any, error) {
+// GetObservation of this ACLEntries
+func (tr *ACLEntries) GetObservation() (map[string]any, error) {
 	o, err := json.TFParser.Marshal(tr.Status.AtProvider)
 	if err != nil {
 		return nil, err
@@ -34,8 +34,8 @@ func (tr *HaVip) GetObservation() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(o, &base)
 }
 
-// SetObservation for this HaVip
-func (tr *HaVip) SetObservation(obs map[string]any) error {
+// SetObservation for this ACLEntries
+func (tr *ACLEntries) SetObservation(obs map[string]any) error {
 	p, err := json.TFParser.Marshal(obs)
 	if err != nil {
 		return err
@@ -43,16 +43,16 @@ func (tr *HaVip) SetObservation(obs map[string]any) error {
 	return json.TFParser.Unmarshal(p, &tr.Status.AtProvider)
 }
 
-// GetID returns ID of underlying Terraform resource of this HaVip
-func (tr *HaVip) GetID() string {
+// GetID returns ID of underlying Terraform resource of this ACLEntries
+func (tr *ACLEntries) GetID() string {
 	if tr.Status.AtProvider.ID == nil {
 		return ""
 	}
 	return *tr.Status.AtProvider.ID
 }
 
-// GetParameters of this HaVip
-func (tr *HaVip) GetParameters() (map[string]any, error) {
+// GetParameters of this ACLEntries
+func (tr *ACLEntries) GetParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.ForProvider)
 	if err != nil {
 		return nil, err
@@ -61,8 +61,8 @@ func (tr *HaVip) GetParameters() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// SetParameters for this HaVip
-func (tr *HaVip) SetParameters(params map[string]any) error {
+// SetParameters for this ACLEntries
+func (tr *ACLEntries) SetParameters(params map[string]any) error {
 	p, err := json.TFParser.Marshal(params)
 	if err != nil {
 		return err
@@ -70,8 +70,8 @@ func (tr *HaVip) SetParameters(params map[string]any) error {
 	return json.TFParser.Unmarshal(p, &tr.Spec.ForProvider)
 }
 
-// GetInitParameters of this HaVip
-func (tr *HaVip) GetInitParameters() (map[string]any, error) {
+// GetInitParameters of this ACLEntries
+func (tr *ACLEntries) GetInitParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.InitProvider)
 	if err != nil {
 		return nil, err
@@ -80,8 +80,8 @@ func (tr *HaVip) GetInitParameters() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// GetInitParameters of this HaVip
-func (tr *HaVip) GetMergedParameters(shouldMergeInitProvider bool) (map[string]any, error) {
+// GetInitParameters of this ACLEntries
+func (tr *ACLEntries) GetMergedParameters(shouldMergeInitProvider bool) (map[string]any, error) {
 	params, err := tr.GetParameters()
 	if err != nil {
 		return nil, errors.Wrapf(err, "cannot get parameters for resource '%q'", tr.GetName())
@@ -110,10 +110,10 @@ func (tr *HaVip) GetMergedParameters(shouldMergeInitProvider bool) (map[string]a
 	return params, nil
 }
 
-// LateInitialize this HaVip using its observed tfState.
+// LateInitialize this ACLEntries using its observed tfState.
 // returns True if there are any spec changes for the resource.
-func (tr *HaVip) LateInitialize(attrs []byte) (bool, error) {
-	params := &HaVipParameters{}
+func (tr *ACLEntries) LateInitialize(attrs []byte) (bool, error) {
+	params := &ACLEntriesParameters{}
 	if err := json.TFParser.Unmarshal(attrs, params); err != nil {
 		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
 	}
@@ -124,6 +124,6 @@ func (tr *HaVip) LateInitialize(attrs []byte) (bool, error) {
 }
 
 // GetTerraformSchemaVersion returns the associated Terraform schema version
-func (tr *HaVip) GetTerraformSchemaVersion() int {
+func (tr *ACLEntries) GetTerraformSchemaVersion() int {
 	return 0
 }

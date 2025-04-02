@@ -12,17 +12,6 @@ func Configure(p *config.Provider) {
 		r.Kind = "AutoProvisioningGroup"
 		r.ShortGroup = Ecs
 	})
-	p.AddResourceConfigurator("alicloud_disk", func(r *config.Resource) {
-		// We need to override the default group that upjet generated for
-		// this resource, which would be Ecs
-		r.ShortGroup = Ecs
-	})
-	p.AddResourceConfigurator("alicloud_disk_attachment", func(r *config.Resource) {
-		// We need to override the default group that upjet generated for
-		// this resource, which would be Ecs
-		r.Kind = "DiskAttachment"
-		r.ShortGroup = Ecs
-	})
 	p.AddResourceConfigurator("alicloud_image", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		// this resource, which would be Ecs

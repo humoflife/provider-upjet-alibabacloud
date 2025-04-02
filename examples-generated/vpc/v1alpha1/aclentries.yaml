@@ -1,0 +1,93 @@
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: ACLEntries
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/aclentries
+  labels:
+    testing.upbound.io/example-name: default
+  name: default
+spec:
+  forProvider:
+    egress:
+    - description: ${var.name}
+      destinationCidrIp: 0.0.0.0/32
+      entryType: custom
+      name: ${var.name}
+      policy: accept
+      port: -1/-1
+      protocol: all
+    ingress:
+    - description: ${var.name}
+      entryType: custom
+      name: ${var.name}
+      policy: accept
+      port: -1/-1
+      protocol: all
+      sourceCidrIp: 0.0.0.0/32
+    networkAclId: ${alicloud_network_acl.default.id}
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: ACL
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/aclentries
+  labels:
+    testing.upbound.io/example-name: default
+  name: default
+spec:
+  forProvider:
+    name: ${var.name}
+    vpcId: ${alicloud_vpc.default.id}
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: ACLAttachment
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/aclentries
+  labels:
+    testing.upbound.io/example-name: default
+  name: default
+spec:
+  forProvider:
+    networkAclId: ${alicloud_network_acl.default.id}
+    resources:
+    - resourceId: ${alicloud_vswitch.default.id}
+      resourceType: VSwitch
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: VPC
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/aclentries
+  labels:
+    testing.upbound.io/example-name: default
+  name: default
+spec:
+  forProvider:
+    cidrBlock: 172.16.0.0/12
+    name: ${var.name}
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: Vswitch
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/aclentries
+  labels:
+    testing.upbound.io/example-name: default
+  name: default
+spec:
+  forProvider:
+    cidrBlock: 172.16.0.0/21
+    name: ${var.name}
+    vpcIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: default
+    zoneId: ${data.alicloud_zones.default.zones[0].id}

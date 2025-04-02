@@ -8,6 +8,42 @@ package v1alpha1
 
 import resource "github.com/crossplane/crossplane-runtime/pkg/resource"
 
+// GetItems of this ACLAttachmentList.
+func (l *ACLAttachmentList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ACLEntriesList.
+func (l *ACLEntriesList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this ACLList.
+func (l *ACLList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this CenInstanceGrantList.
+func (l *CenInstanceGrantList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this DHCPOptionsSetAttachmentList.
 func (l *DHCPOptionsSetAttachmentList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
@@ -19,6 +55,15 @@ func (l *DHCPOptionsSetAttachmentList) GetItems() []resource.Managed {
 
 // GetItems of this DHCPOptionsSetList.
 func (l *DHCPOptionsSetList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this EntryList.
+func (l *EntryList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]
@@ -62,8 +107,8 @@ func (l *GatewayRouteTableAttachmentList) GetItems() []resource.Managed {
 	return items
 }
 
-// GetItems of this HaVipList.
-func (l *HaVipList) GetItems() []resource.Managed {
+// GetItems of this HavipAttachmentList.
+func (l *HavipAttachmentList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]
@@ -172,6 +217,24 @@ func (l *PublicIPAddressPoolCidrBlockList) GetItems() []resource.Managed {
 
 // GetItems of this PublicIPAddressPoolList.
 func (l *PublicIPAddressPoolList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this TableAttachmentList.
+func (l *TableAttachmentList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this TableList.
+func (l *TableList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]

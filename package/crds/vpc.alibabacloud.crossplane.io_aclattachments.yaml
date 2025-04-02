@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: havips.vpc.alibabacloud.crossplane.io
+  name: aclattachments.vpc.alibabacloud.crossplane.io
 spec:
   group: vpc.alibabacloud.crossplane.io
   names:
@@ -12,10 +12,10 @@ spec:
     - crossplane
     - managed
     - alicloud
-    kind: HaVip
-    listKind: HaVipList
-    plural: havips
-    singular: havip
+    kind: ACLAttachment
+    listKind: ACLAttachmentList
+    plural: aclattachments
+    singular: aclattachment
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,8 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: HaVip is the Schema for the HaVips API. Provides a Alicloud Vpc
-          Ha Vip resource.
+        description: ACLAttachment is the Schema for the ACLAttachments API. Provides
+          a Alicloud Network Acl Attachment resource.
         properties:
           apiVersion:
             description: |-
@@ -55,7 +55,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: HaVipSpec defines the desired state of HaVip
+            description: ACLAttachmentSpec defines the desired state of ACLAttachment
             properties:
               deletionPolicy:
                 default: Delete
@@ -73,34 +73,24 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  description:
-                    description: The description of the HaVip instance. The length
-                      is 2 to 256 characters.
+                  networkAclId:
+                    description: The id of the network acl, the field can't be changed.
                     type: string
-                  haVipName:
-                    description: The name of the HaVip instance.
-                    type: string
-                  havipName:
-                    description: (Deprecated from v1.205.0+) Field 'havip_name' has
-                      been deprecated from provider version 1.205.0. New field 'ha_vip_name'
-                      instead.
-                    type: string
-                  ipAddress:
-                    description: The ip address of the HaVip. If not filled, the default
-                      will be assigned one from the vswitch.
-                    type: string
-                  resourceGroupId:
-                    description: The ID of the resource group.
-                    type: string
-                  tags:
-                    additionalProperties:
-                      type: string
-                    description: The tags of HaVip.
-                    type: object
-                    x-kubernetes-map-type: granular
-                  vswitchId:
-                    description: The switch ID to which the HaVip instance belongs.
-                    type: string
+                  resources:
+                    description: List of the resources associated with the network
+                      acl. The details see Block Resources.
+                    items:
+                      properties:
+                        resourceId:
+                          description: The resource id that the network acl will associate
+                            with.
+                          type: string
+                        resourceType:
+                          description: The resource id that the network acl will associate
+                            with. Only support VSwitch now.
+                          type: string
+                      type: object
+                    type: array
                 type: object
               initProvider:
                 description: |-
@@ -115,34 +105,24 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  description:
-                    description: The description of the HaVip instance. The length
-                      is 2 to 256 characters.
+                  networkAclId:
+                    description: The id of the network acl, the field can't be changed.
                     type: string
-                  haVipName:
-                    description: The name of the HaVip instance.
-                    type: string
-                  havipName:
-                    description: (Deprecated from v1.205.0+) Field 'havip_name' has
-                      been deprecated from provider version 1.205.0. New field 'ha_vip_name'
-                      instead.
-                    type: string
-                  ipAddress:
-                    description: The ip address of the HaVip. If not filled, the default
-                      will be assigned one from the vswitch.
-                    type: string
-                  resourceGroupId:
-                    description: The ID of the resource group.
-                    type: string
-                  tags:
-                    additionalProperties:
-                      type: string
-                    description: The tags of HaVip.
-                    type: object
-                    x-kubernetes-map-type: granular
-                  vswitchId:
-                    description: The switch ID to which the HaVip instance belongs.
-                    type: string
+                  resources:
+                    description: List of the resources associated with the network
+                      acl. The details see Block Resources.
+                    items:
+                      properties:
+                        resourceId:
+                          description: The resource id that the network acl will associate
+                            with.
+                          type: string
+                        resourceType:
+                          description: The resource id that the network acl will associate
+                            with. Only support VSwitch now.
+                          type: string
+                      type: object
+                    type: array
                 type: object
               managementPolicies:
                 default:
@@ -312,75 +292,41 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
-            - message: spec.forProvider.vswitchId is a required parameter
+            - message: spec.forProvider.networkAclId is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.vswitchId)
-                || (has(self.initProvider) && has(self.initProvider.vswitchId))'
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.networkAclId)
+                || (has(self.initProvider) && has(self.initProvider.networkAclId))'
+            - message: spec.forProvider.resources is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.resources)
+                || (has(self.initProvider) && has(self.initProvider.resources))'
           status:
-            description: HaVipStatus defines the observed state of HaVip.
+            description: ACLAttachmentStatus defines the observed state of ACLAttachment.
             properties:
               atProvider:
                 properties:
-                  associatedEipAddresses:
-                    description: EIP bound to HaVip.
-                    items:
-                      type: string
-                    type: array
-                  associatedInstanceType:
-                    description: 'The type of the instance that is bound to the HaVip.
-                      Value:-EcsInstance: ECS instance.-NetworkInterface: ENI instance.'
-                    type: string
-                  associatedInstances:
-                    description: An ECS instance that is bound to HaVip.
-                    items:
-                      type: string
-                    type: array
-                  createTime:
-                    description: The creation time of the resource.
-                    type: string
-                  description:
-                    description: The description of the HaVip instance. The length
-                      is 2 to 256 characters.
-                    type: string
-                  haVipId:
-                    description: The ID of the resource.
-                    type: string
-                  haVipName:
-                    description: The name of the HaVip instance.
-                    type: string
-                  havipName:
-                    description: (Deprecated from v1.205.0+) Field 'havip_name' has
-                      been deprecated from provider version 1.205.0. New field 'ha_vip_name'
-                      instead.
-                    type: string
                   id:
-                    description: The ID of the resource supplied above.
+                    description: The ID of the network acl attachment. It is formatted
+                      as <network_acl_id>:<a unique id>.
                     type: string
-                  ipAddress:
-                    description: The ip address of the HaVip. If not filled, the default
-                      will be assigned one from the vswitch.
+                  networkAclId:
+                    description: The id of the network acl, the field can't be changed.
                     type: string
-                  masterInstanceId:
-                    description: The primary instance ID bound to HaVip.
-                    type: string
-                  resourceGroupId:
-                    description: The ID of the resource group.
-                    type: string
-                  status:
-                    description: The status of this resource instance.
-                    type: string
-                  tags:
-                    additionalProperties:
-                      type: string
-                    description: The tags of HaVip.
-                    type: object
-                    x-kubernetes-map-type: granular
-                  vpcId:
-                    description: The VPC ID to which the HaVip instance belongs.
-                    type: string
-                  vswitchId:
-                    description: The switch ID to which the HaVip instance belongs.
-                    type: string
+                  resources:
+                    description: List of the resources associated with the network
+                      acl. The details see Block Resources.
+                    items:
+                      properties:
+                        resourceId:
+                          description: The resource id that the network acl will associate
+                            with.
+                          type: string
+                        resourceType:
+                          description: The resource id that the network acl will associate
+                            with. Only support VSwitch now.
+                          type: string
+                      type: object
+                    type: array
                 type: object
               conditions:
                 description: Conditions of the resource.

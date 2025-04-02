@@ -13,8 +13,6 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 
 	// ECS
 	"alicloud_auto_provisioning_group":             config.IdentifierFromProvider,
-	"alicloud_disk":                                config.IdentifierFromProvider,
-	"alicloud_disk_attachment":                     config.IdentifierFromProvider,
 	"alicloud_ecs_activation":                      config.IdentifierFromProvider,
 	"alicloud_ecs_auto_snapshot_policy":            config.IdentifierFromProvider,
 	"alicloud_ecs_auto_snapshot_policy_attachment": config.IdentifierFromProvider,
@@ -123,6 +121,14 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"alicloud_ram_user_policy_attachment":  config.IdentifierFromProvider,
 
 	// VPC
+	"alicloud_cen_instance_grant":                          config.IdentifierFromProvider,
+	"alicloud_havip_attachment":                            config.IdentifierFromProvider,
+	"alicloud_network_acl":                                 config.IdentifierFromProvider,
+	"alicloud_network_acl_attachment":                      config.IdentifierFromProvider,
+	"alicloud_network_acl_entries":                         config.IdentifierFromProvider,
+	"alicloud_route_entry":                                 config.IdentifierFromProvider,
+	"alicloud_route_table":                                 config.IdentifierFromProvider,
+	"alicloud_route_table_attachment":                      config.IdentifierFromProvider,
 	"alicloud_vpc":                                         config.IdentifierFromProvider,
 	"alicloud_vpc_dhcp_options_set":                        config.IdentifierFromProvider,
 	"alicloud_vpc_dhcp_options_set_attachment":             config.IdentifierFromProvider,
@@ -130,7 +136,6 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"alicloud_vpc_gateway_endpoint":                        config.IdentifierFromProvider,
 	"alicloud_vpc_gateway_endpoint_route_table_attachment": config.IdentifierFromProvider,
 	"alicloud_vpc_gateway_route_table_attachment":          config.IdentifierFromProvider,
-	"alicloud_vpc_ha_vip":                                  config.IdentifierFromProvider,
 	"alicloud_vpc_ipv4_cidr_block":                         config.IdentifierFromProvider,
 	"alicloud_vpc_ipv4_gateway":                            config.IdentifierFromProvider,
 	"alicloud_vpc_ipv6_address":                            config.IdentifierFromProvider,

@@ -1,0 +1,62 @@
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: TableAttachment
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/tableattachment
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    routeTableId: ${alicloud_route_table.foo.id}
+    vswitchId: ${alicloud_vswitch.foo.id}
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: Table
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/tableattachment
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    description: route_table_attachment
+    routeTableName: ${var.name}
+    vpcId: ${alicloud_vpc.foo.id}
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: VPC
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/tableattachment
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    cidrBlock: 172.16.0.0/12
+    vpcName: ${var.name}
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: Vswitch
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/tableattachment
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    cidrBlock: 172.16.0.0/21
+    vpcIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: foo
+    vswitchName: ${var.name}
+    zoneId: ${data.alicloud_zones.default.zones[0].id}

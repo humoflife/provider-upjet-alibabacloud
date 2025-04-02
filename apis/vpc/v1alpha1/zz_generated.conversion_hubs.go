@@ -7,10 +7,25 @@
 package v1alpha1
 
 // Hub marks this type as a conversion hub.
+func (tr *ACL) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ACLAttachment) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ACLEntries) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *CenInstanceGrant) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *DHCPOptionsSet) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *DHCPOptionsSetAttachment) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *Entry) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *FlowLog) Hub() {}
@@ -25,7 +40,7 @@ func (tr *GatewayEndpointRouteTableAttachment) Hub() {}
 func (tr *GatewayRouteTableAttachment) Hub() {}
 
 // Hub marks this type as a conversion hub.
-func (tr *HaVip) Hub() {}
+func (tr *HavipAttachment) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *IPv4CidrBlock) Hub() {}
@@ -62,6 +77,12 @@ func (tr *PublicIPAddressPool) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *PublicIPAddressPoolCidrBlock) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *Table) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *TableAttachment) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *TrafficMirrorFilter) Hub() {}

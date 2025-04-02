@@ -14,6 +14,21 @@ spec:
 ---
 
 apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: Table
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/gatewayendpointroutetableattachment
+  labels:
+    testing.upbound.io/example-name: defaultRT
+  name: defaultrt
+spec:
+  forProvider:
+    routeTableName: ${var.name}2
+    vpcId: ${alicloud_vpc.defaulteVpc.id}
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
 kind: VPC
 metadata:
   annotations:

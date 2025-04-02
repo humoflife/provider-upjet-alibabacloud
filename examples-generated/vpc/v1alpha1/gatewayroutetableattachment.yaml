@@ -14,6 +14,23 @@ spec:
 ---
 
 apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: Table
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/gatewayroutetableattachment
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    associateType: Gateway
+    description: terraform-example
+    routeTableName: terraform-example
+    vpcId: ${alicloud_vpc.example.id}
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
 kind: VPC
 metadata:
   annotations:

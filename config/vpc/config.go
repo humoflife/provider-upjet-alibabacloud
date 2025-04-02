@@ -18,17 +18,16 @@ func Configure(p *config.Provider) {
 		delete(r.TerraformResource.Schema, "router_table_id")
 		delete(r.TerraformResource.Schema, "secondary_cidr_blocks")
 	})
-	p.AddResourceConfigurator("alicloud_havip", func(r *config.Resource) {
+	p.AddResourceConfigurator("alicloud_cen_instance_grant", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		// this resource, which would be Vpc
+		r.Kind = "CenInstanceGrant"
 		r.ShortGroup = Vpc
-
-		delete(r.TerraformResource.Schema, "havip_id")
 	})
-	p.AddResourceConfigurator("alicloud_haveip_attachment", func(r *config.Resource) {
+	p.AddResourceConfigurator("alicloud_havip_attachment", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		// this resource, which would be Vpc
-		r.Kind = "HaveIpAttachment"
+		r.Kind = "HavipAttachment"
 		r.ShortGroup = Vpc
 	})
 	p.AddResourceConfigurator("alicloud_network_acl", func(r *config.Resource) {

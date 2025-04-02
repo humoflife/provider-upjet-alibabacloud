@@ -13,7 +13,7 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type DiskInitParameters_2 struct {
+type DiskInitParameters struct {
 	AdvancedFeatures *string `json:"advancedFeatures,omitempty" tf:"advanced_features,omitempty"`
 
 	// (Deprecated since v1.122.0) Field availability_zone has been deprecated from provider version 1.122.0. New field zone_id instead.
@@ -97,7 +97,7 @@ type DiskInitParameters_2 struct {
 	ZoneID *string `json:"zoneId,omitempty" tf:"zone_id,omitempty"`
 }
 
-type DiskObservation_2 struct {
+type DiskObservation struct {
 	AdvancedFeatures *string `json:"advancedFeatures,omitempty" tf:"advanced_features,omitempty"`
 
 	// (Deprecated since v1.122.0) Field availability_zone has been deprecated from provider version 1.122.0. New field zone_id instead.
@@ -192,7 +192,7 @@ type DiskObservation_2 struct {
 	ZoneID *string `json:"zoneId,omitempty" tf:"zone_id,omitempty"`
 }
 
-type DiskParameters_2 struct {
+type DiskParameters struct {
 
 	// +kubebuilder:validation:Optional
 	AdvancedFeatures *string `json:"advancedFeatures,omitempty" tf:"advanced_features,omitempty"`
@@ -308,7 +308,7 @@ type DiskParameters_2 struct {
 // DiskSpec defines the desired state of Disk
 type DiskSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     DiskParameters_2 `json:"forProvider"`
+	ForProvider     DiskParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -319,13 +319,13 @@ type DiskSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider DiskInitParameters_2 `json:"initProvider,omitempty"`
+	InitProvider DiskInitParameters `json:"initProvider,omitempty"`
 }
 
 // DiskStatus defines the observed state of Disk.
 type DiskStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        DiskObservation_2 `json:"atProvider,omitempty"`
+	AtProvider        DiskObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -22,21 +22,6 @@ spec:
 ---
 
 apiVersion: ecs.alibabacloud.crossplane.io/v1alpha1
-kind: DiskAttachment
-metadata:
-  annotations:
-    meta.upbound.io/example-id: ecs/v1alpha1/snapshotgroup
-  labels:
-    testing.upbound.io/example-name: default
-  name: default
-spec:
-  forProvider:
-    diskId: ${alicloud_ecs_disk.default.id}
-    instanceId: ${alicloud_instance.default.id}
-
----
-
-apiVersion: ecs.alibabacloud.crossplane.io/v1alpha1
 kind: Disk
 metadata:
   annotations:

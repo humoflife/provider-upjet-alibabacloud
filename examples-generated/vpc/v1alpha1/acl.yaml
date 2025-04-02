@@ -1,0 +1,64 @@
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: ACL
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/acl
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    description: ${var.name}
+    egressAclEntries:
+    - description: ${var.name}-egress
+      destinationCidrIp: 10.0.0.0/24
+      networkAclEntryName: ${var.name}-egress
+      policy: accept
+      port: 20/80
+      protocol: tcp
+    ingressAclEntries:
+    - description: ${var.name}-ingress
+      networkAclEntryName: ${var.name}-ingress
+      policy: accept
+      port: 20/80
+      protocol: tcp
+      sourceCidrIp: 10.0.0.0/24
+    networkAclName: ${var.name}
+    resources:
+    - resourceId: ${alicloud_vswitch.example.id}
+      resourceType: VSwitch
+    vpcId: ${alicloud_vpc.example.id}
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: VPC
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/acl
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    cidrBlock: 10.4.0.0/16
+    vpcName: ${var.name}
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: Vswitch
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/acl
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    cidrBlock: 10.4.0.0/24
+    vpcIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    vswitchName: ${var.name}
+    zoneId: ${data.alicloud_zones.default.zones.0.id}

@@ -103,13 +103,18 @@ import (
 	securitypreference "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/ram/securitypreference"
 	user "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/ram/user"
 	userpolicyattachment "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/ram/userpolicyattachment"
+	acl "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/acl"
+	aclattachment "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/aclattachment"
+	aclentries "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/aclentries"
+	ceninstancegrant "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/ceninstancegrant"
 	dhcpoptionsset "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/dhcpoptionsset"
 	dhcpoptionssetattachment "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/dhcpoptionssetattachment"
+	entry "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/entry"
 	flowlog "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/flowlog"
 	gatewayendpoint "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/gatewayendpoint"
 	gatewayendpointroutetableattachment "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/gatewayendpointroutetableattachment"
 	gatewayroutetableattachment "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/gatewayroutetableattachment"
-	havip "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/havip"
+	havipattachment "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/havipattachment"
 	ipv4cidrblock "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/ipv4cidrblock"
 	ipv4gateway "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/ipv4gateway"
 	ipv6address "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/ipv6address"
@@ -122,6 +127,8 @@ import (
 	prefixlistvpc "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/prefixlist"
 	publicipaddresspool "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/publicipaddresspool"
 	publicipaddresspoolcidrblock "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/publicipaddresspoolcidrblock"
+	table "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/table"
+	tableattachment "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/tableattachment"
 	trafficmirrorfilter "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/trafficmirrorfilter"
 	trafficmirrorfilteregressrule "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/trafficmirrorfilteregressrule"
 	trafficmirrorfilteringressrule "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/vpc/trafficmirrorfilteringressrule"
@@ -145,8 +152,6 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		dedicatedhostcluster.Setup,
 		deploymentset.Setup,
 		disk.Setup,
-		disk.Setup,
-		diskattachment.Setup,
 		diskattachment.Setup,
 		elasticityassurance.Setup,
 		hpccluster.Setup,
@@ -237,13 +242,18 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		securitypreference.Setup,
 		user.Setup,
 		userpolicyattachment.Setup,
+		acl.Setup,
+		aclattachment.Setup,
+		aclentries.Setup,
+		ceninstancegrant.Setup,
 		dhcpoptionsset.Setup,
 		dhcpoptionssetattachment.Setup,
+		entry.Setup,
 		flowlog.Setup,
 		gatewayendpoint.Setup,
 		gatewayendpointroutetableattachment.Setup,
 		gatewayroutetableattachment.Setup,
-		havip.Setup,
+		havipattachment.Setup,
 		ipv4cidrblock.Setup,
 		ipv4gateway.Setup,
 		ipv6address.Setup,
@@ -256,6 +266,8 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		prefixlistvpc.Setup,
 		publicipaddresspool.Setup,
 		publicipaddresspoolcidrblock.Setup,
+		table.Setup,
+		tableattachment.Setup,
 		trafficmirrorfilter.Setup,
 		trafficmirrorfilteregressrule.Setup,
 		trafficmirrorfilteringressrule.Setup,

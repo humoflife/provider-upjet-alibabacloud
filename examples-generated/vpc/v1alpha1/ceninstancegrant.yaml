@@ -1,0 +1,30 @@
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: CenInstanceGrant
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/ceninstancegrant
+  labels:
+    testing.upbound.io/example-name: child_account
+  name: child-account
+spec:
+  forProvider:
+    cenId: ${alicloud_cen_instance.example.id}
+    cenOwnerId: ${data.alicloud_account.your_account.id}
+    childInstanceId: ${alicloud_vpc.child_account.id}
+    provider: ${alicloud.child_account}
+
+---
+
+apiVersion: vpc.alibabacloud.crossplane.io/v1alpha1
+kind: VPC
+metadata:
+  annotations:
+    meta.upbound.io/example-id: vpc/v1alpha1/ceninstancegrant
+  labels:
+    testing.upbound.io/example-name: child_account
+  name: child-account
+spec:
+  forProvider:
+    cidrBlock: 172.17.3.0/24
+    provider: ${alicloud.child_account}
+    vpcName: terraform-example
