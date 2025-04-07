@@ -47,17 +47,10 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"alicloud_image_import":                        config.IdentifierFromProvider,
 	"alicloud_image_share_permission":              config.IdentifierFromProvider,
 	"alicloud_instance":                            config.IdentifierFromProvider,
-	"alicloud_key_pair":                            config.IdentifierFromProvider,
-	"alicloud_key_pair_attachment":                 config.IdentifierFromProvider,
-	"alicloud_launch_template":                     config.IdentifierFromProvider,
-	"alicloud_network_interface":                   config.IdentifierFromProvider,
-	"alicloud_network_interface_attachment":        config.IdentifierFromProvider,
 	"alicloud_ram_role_attachment":                 config.IdentifierFromProvider,
 	"alicloud_reserved_instance":                   config.IdentifierFromProvider,
 	"alicloud_security_group":                      config.IdentifierFromProvider,
 	"alicloud_security_group_rule":                 config.IdentifierFromProvider,
-	"alicloud_snapshot":                            config.IdentifierFromProvider,
-	"alicloud_snapshot_policy":                     config.IdentifierFromProvider,
 
 	// KMS
 	"alicloud_kms_alias":                    config.IdentifierFromProvider,

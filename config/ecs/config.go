@@ -46,36 +46,6 @@ func Configure(p *config.Provider) {
 		// this resource, which would be Ecs
 		r.ShortGroup = Ecs
 	})
-	p.AddResourceConfigurator("alicloud_key_pair", func(r *config.Resource) {
-		// We need to override the default group that upjet generated for
-		// this resource, which would be Ecs
-		r.Kind = "KeyPair"
-		r.ShortGroup = Ecs
-	})
-	p.AddResourceConfigurator("alicloud_key_pair_attachment", func(r *config.Resource) {
-		// We need to override the default group that upjet generated for
-		// this resource, which would be Ecs
-		r.Kind = "KeyPairAttachment"
-		r.ShortGroup = Ecs
-	})
-	p.AddResourceConfigurator("alicloud_launch_template", func(r *config.Resource) {
-		// We need to override the default group that upjet generated for
-		// this resource, which would be Ecs
-		r.Kind = "LaunchTemplate"
-		r.ShortGroup = Ecs
-	})
-	p.AddResourceConfigurator("alicloud_network_interface", func(r *config.Resource) {
-		// We need to override the default group that upjet generated for
-		// this resource, which would be Ecs
-		r.Kind = "NetworkInterface"
-		r.ShortGroup = Ecs
-	})
-	p.AddResourceConfigurator("alicloud_network_interface_attachment", func(r *config.Resource) {
-		// We need to override the default group that upjet generated for
-		// this resource, which would be Ecs
-		r.Kind = "NetworkInterfaceAttachment"
-		r.ShortGroup = Ecs
-	})
 	p.AddResourceConfigurator("alicloud_ram_role_attachment", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
 		// this resource, which would be Ecs
@@ -107,17 +77,6 @@ func Configure(p *config.Provider) {
 		// We need to override the default group that upjet generated for
 		// this resource, which would be Ecs
 		r.Kind = "SecurityGroupRule"
-		r.ShortGroup = Ecs
-	})
-	p.AddResourceConfigurator("alicloud_snapshot", func(r *config.Resource) {
-		// We need to override the default group that upjet generated for
-		// this resource, which would be Ecs
-		r.ShortGroup = Ecs
-	})
-	p.AddResourceConfigurator("alicloud_snapshot_policy", func(r *config.Resource) {
-		// We need to override the default group that upjet generated for
-		// this resource, which would be Ecs
-		r.Kind = "SnapshotPolicy"
 		r.ShortGroup = Ecs
 	})
 }
