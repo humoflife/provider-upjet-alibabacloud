@@ -45,6 +45,12 @@ func Configure(p *config.Provider) {
 		// We need to override the default group that upjet generated for
 		// this resource, which would be Ecs
 		r.ShortGroup = Ecs
+		r.References["vpc_id"] = config.Reference{
+			TerraformName: "alicloud_vpc",
+		}
+		r.References["vswitch_id"] = config.Reference{
+			TerraformName: "alicloud_vswitch",
+		}
 	})
 	p.AddResourceConfigurator("alicloud_ram_role_attachment", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
