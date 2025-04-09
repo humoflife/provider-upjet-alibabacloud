@@ -13,23 +13,24 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type KeyPairInitParameters_2 struct {
+type KeyPairInitParameters struct {
 
-	// (ForceNew) The name of file to save your new key pair's private key. Strongly suggest you to specified it when you creating key pair, otherwise, you wouldn't get its private key ever.
+	// The key file.
 	KeyFile *string `json:"keyFile,omitempty" tf:"key_file,omitempty"`
 
-	// (ForceNew) The key pair's name. It is the only in one Alicloud account.
+	// Field key_name has been deprecated from provider version 1.121.0. New field key_pair_name instead.
 	KeyName *string `json:"keyName,omitempty" tf:"key_name,omitempty"`
 
-	// (ForceNew) The key pair name's prefix. It is conflict with key_name.
+	// The key pair name's prefix. It is conflict with key_pair_name.
 	KeyNamePrefix *string `json:"keyNamePrefix,omitempty" tf:"key_name_prefix,omitempty"`
 
+	// The name of the key pair. The name must be 2 to 128 characters in length. The name must start with a letter and cannot start with http:// or https://. The name can contain letters, digits, colons (:), underscores (_), and hyphens (-).
 	KeyPairName *string `json:"keyPairName,omitempty" tf:"key_pair_name,omitempty"`
 
-	// (ForceNew) You can import an existing public key and using Alicloud key pair to manage it. If this parameter is specified, resource_group_id is the key pair belongs.
+	// The public key of the key pair.
 	PublicKey *string `json:"publicKey,omitempty" tf:"public_key,omitempty"`
 
-	// The Id of resource group which the key pair belongs.
+	// The ID of the resource group to which to add the key pair.
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
 	// A mapping of tags to assign to the resource.
@@ -37,28 +38,32 @@ type KeyPairInitParameters_2 struct {
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 }
 
-type KeyPairObservation_2 struct {
+type KeyPairObservation struct {
+
+	// (Available since v1.237.0) The time when the key pair was created.
 	CreateTime *string `json:"createTime,omitempty" tf:"create_time,omitempty"`
 
+	// The fingerprint of the key pair.
 	FingerPrint *string `json:"fingerPrint,omitempty" tf:"finger_print,omitempty"`
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// (ForceNew) The name of file to save your new key pair's private key. Strongly suggest you to specified it when you creating key pair, otherwise, you wouldn't get its private key ever.
+	// The key file.
 	KeyFile *string `json:"keyFile,omitempty" tf:"key_file,omitempty"`
 
-	// (ForceNew) The key pair's name. It is the only in one Alicloud account.
+	// Field key_name has been deprecated from provider version 1.121.0. New field key_pair_name instead.
 	KeyName *string `json:"keyName,omitempty" tf:"key_name,omitempty"`
 
-	// (ForceNew) The key pair name's prefix. It is conflict with key_name.
+	// The key pair name's prefix. It is conflict with key_pair_name.
 	KeyNamePrefix *string `json:"keyNamePrefix,omitempty" tf:"key_name_prefix,omitempty"`
 
+	// The name of the key pair. The name must be 2 to 128 characters in length. The name must start with a letter and cannot start with http:// or https://. The name can contain letters, digits, colons (:), underscores (_), and hyphens (-).
 	KeyPairName *string `json:"keyPairName,omitempty" tf:"key_pair_name,omitempty"`
 
-	// (ForceNew) You can import an existing public key and using Alicloud key pair to manage it. If this parameter is specified, resource_group_id is the key pair belongs.
+	// The public key of the key pair.
 	PublicKey *string `json:"publicKey,omitempty" tf:"public_key,omitempty"`
 
-	// The Id of resource group which the key pair belongs.
+	// The ID of the resource group to which to add the key pair.
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
 	// A mapping of tags to assign to the resource.
@@ -66,28 +71,29 @@ type KeyPairObservation_2 struct {
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 }
 
-type KeyPairParameters_2 struct {
+type KeyPairParameters struct {
 
-	// (ForceNew) The name of file to save your new key pair's private key. Strongly suggest you to specified it when you creating key pair, otherwise, you wouldn't get its private key ever.
+	// The key file.
 	// +kubebuilder:validation:Optional
 	KeyFile *string `json:"keyFile,omitempty" tf:"key_file,omitempty"`
 
-	// (ForceNew) The key pair's name. It is the only in one Alicloud account.
+	// Field key_name has been deprecated from provider version 1.121.0. New field key_pair_name instead.
 	// +kubebuilder:validation:Optional
 	KeyName *string `json:"keyName,omitempty" tf:"key_name,omitempty"`
 
-	// (ForceNew) The key pair name's prefix. It is conflict with key_name.
+	// The key pair name's prefix. It is conflict with key_pair_name.
 	// +kubebuilder:validation:Optional
 	KeyNamePrefix *string `json:"keyNamePrefix,omitempty" tf:"key_name_prefix,omitempty"`
 
+	// The name of the key pair. The name must be 2 to 128 characters in length. The name must start with a letter and cannot start with http:// or https://. The name can contain letters, digits, colons (:), underscores (_), and hyphens (-).
 	// +kubebuilder:validation:Optional
 	KeyPairName *string `json:"keyPairName,omitempty" tf:"key_pair_name,omitempty"`
 
-	// (ForceNew) You can import an existing public key and using Alicloud key pair to manage it. If this parameter is specified, resource_group_id is the key pair belongs.
+	// The public key of the key pair.
 	// +kubebuilder:validation:Optional
 	PublicKey *string `json:"publicKey,omitempty" tf:"public_key,omitempty"`
 
-	// The Id of resource group which the key pair belongs.
+	// The ID of the resource group to which to add the key pair.
 	// +kubebuilder:validation:Optional
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
@@ -100,7 +106,7 @@ type KeyPairParameters_2 struct {
 // KeyPairSpec defines the desired state of KeyPair
 type KeyPairSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     KeyPairParameters_2 `json:"forProvider"`
+	ForProvider     KeyPairParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -111,20 +117,20 @@ type KeyPairSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider KeyPairInitParameters_2 `json:"initProvider,omitempty"`
+	InitProvider KeyPairInitParameters `json:"initProvider,omitempty"`
 }
 
 // KeyPairStatus defines the observed state of KeyPair.
 type KeyPairStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        KeyPairObservation_2 `json:"atProvider,omitempty"`
+	AtProvider        KeyPairObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// KeyPair is the Schema for the KeyPairs API. Provides a Alicloud key pair resource.
+// KeyPair is the Schema for the KeyPairs API. Provides a Alicloud ECS Key Pair resource.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"

@@ -33,7 +33,9 @@ spec:
     - ${alicloud_security_group.example.id}
     systemDiskCategory: cloud_efficiency
     userData: echo 'net.ipv4.ip_forward=1'>> /etc/sysctl.conf
-    vswitchId: ${alicloud_vswitch.example.id}
+    vswitchIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
 
 ---
 

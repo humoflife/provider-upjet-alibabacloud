@@ -16,7 +16,7 @@ import (
 
 // GetTerraformResourceType returns Terraform resource type for this KeyPair
 func (mg *KeyPair) GetTerraformResourceType() string {
-	return "alicloud_key_pair"
+	return "alicloud_ecs_key_pair"
 }
 
 // GetConnectionDetailsMapping for this KeyPair
@@ -113,7 +113,7 @@ func (tr *KeyPair) GetMergedParameters(shouldMergeInitProvider bool) (map[string
 // LateInitialize this KeyPair using its observed tfState.
 // returns True if there are any spec changes for the resource.
 func (tr *KeyPair) LateInitialize(attrs []byte) (bool, error) {
-	params := &KeyPairParameters_2{}
+	params := &KeyPairParameters{}
 	if err := json.TFParser.Unmarshal(attrs, params); err != nil {
 		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
 	}

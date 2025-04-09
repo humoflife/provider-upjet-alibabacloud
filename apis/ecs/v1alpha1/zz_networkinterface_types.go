@@ -13,202 +13,235 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type NetworkInterfaceInitParameters_2 struct {
+type NetworkInterfaceInitParameters struct {
 
-	// Description of the ENI. This description can have a string of 2 to 256 characters, It cannot begin with http:// or https://. Default value is null.
+	// The description of the ENI. The description must be 2 to 256 characters in length and cannot start with http:// or https://.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// The number of IPv4 prefixes that can be automatically created by ECS. Valid values: 1 to 10. NOTE: You cannot specify both the ipv4_prefixes and ipv4_prefix_count parameters.
 	IPv4PrefixCount *float64 `json:"ipv4PrefixCount,omitempty" tf:"ipv4_prefix_count,omitempty"`
 
+	// A list of IPv4 prefixes to be assigned to the ENI. Support up to 10.
 	// +listType=set
 	IPv4Prefixes []*string `json:"ipv4Prefixes,omitempty" tf:"ipv4_prefixes,omitempty"`
 
+	// The number of IPv6 addresses to randomly generate for the primary ENI. Valid values: 1 to 10. NOTE: You cannot specify both the ipv6_addresses and ipv6_address_count parameters.
 	IPv6AddressCount *float64 `json:"ipv6AddressCount,omitempty" tf:"ipv6_address_count,omitempty"`
 
+	// A list of IPv6 address to be assigned to the primary ENI. Support up to 10.
 	// +listType=set
 	IPv6Addresses []*string `json:"ipv6Addresses,omitempty" tf:"ipv6_addresses,omitempty"`
 
+	// The type of the ENI. Default value: Secondary. Valid values: Secondary, Trunk.
 	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
 
-	// Name of the ENI. This name can have a string of 2 to 128 characters, must contain only alphanumeric characters or hyphens, such as "-", ".", "_", and must not begin or end with a hyphen, and must not begin with http:// or https://. Default value is null.
+	// Field name has been deprecated from provider version 1.123.1. New field network_interface_name instead
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// Name of the ENI. This name can have a string of 2 to 128 characters, must contain only alphanumeric characters or hyphens, such as "-", ".", "_", and must not begin or end with a hyphen, and must not begin with http:// or https://. Default value is null.
+	// The name of the ENI. The name must be 2 to 128 characters in length, and can contain letters, digits, colons (:), underscores (_), and hyphens (-). It must start with a letter and cannot start with http:// or https://.
 	NetworkInterfaceName *string `json:"networkInterfaceName,omitempty" tf:"network_interface_name,omitempty"`
 
+	// The communication mode of the ENI. Default value: Standard. Valid values: Standard, HighPerformance.
 	NetworkInterfaceTrafficMode *string `json:"networkInterfaceTrafficMode,omitempty" tf:"network_interface_traffic_mode,omitempty"`
 
+	// The primary private IP address of the ENI. The specified IP address must be available within the CIDR block of the VSwitch. If this parameter is not specified, an available IP address is assigned from the VSwitch CIDR block at random.
 	PrimaryIPAddress *string `json:"primaryIpAddress,omitempty" tf:"primary_ip_address,omitempty"`
 
-	// The primary private IP of the ENI.
+	// Field private_ip has been deprecated from provider version 1.123.1. New field primary_ip_address instead
 	PrivateIP *string `json:"privateIp,omitempty" tf:"private_ip,omitempty"`
 
+	// Specifies secondary private IP address N of the ENI. This IP address must be an available IP address within the CIDR block of the VSwitch to which the ENI belongs.
 	// +listType=set
 	PrivateIPAddresses []*string `json:"privateIpAddresses,omitempty" tf:"private_ip_addresses,omitempty"`
 
-	// List of secondary private IPs to assign to the ENI. Don't use both private_ips and private_ips_count in the same ENI resource block.
+	// Field private_ips has been deprecated from provider version 1.123.1. New field private_ip_addresses instead
 	// +listType=set
 	PrivateIps []*string `json:"privateIps,omitempty" tf:"private_ips,omitempty"`
 
-	// Number of secondary private IPs to assign to the ENI. Don't use both private_ips and private_ips_count in the same ENI resource block.
+	// Field private_ips_count has been deprecated from provider version 1.123.1. New field secondary_private_ip_address_count instead
 	PrivateIpsCount *float64 `json:"privateIpsCount,omitempty" tf:"private_ips_count,omitempty"`
 
+	// The queue number of the ENI.
 	QueueNumber *float64 `json:"queueNumber,omitempty" tf:"queue_number,omitempty"`
 
-	// (ForceNew, ForceNew, Available in 1.57.0+) The Id of resource group which the network interface belongs.
+	// The resource group id.
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
+	// The number of private IP addresses that can be automatically created by ECS.
 	SecondaryPrivateIPAddressCount *float64 `json:"secondaryPrivateIpAddressCount,omitempty" tf:"secondary_private_ip_address_count,omitempty"`
 
+	// The ID of security group N. The security groups and the ENI must belong to the same VPC. The valid values of N are based on the maximum number of security groups to which an ENI can be added. NOTE: Either security_group_ids or security_groups must be set with valid security group IDs.
 	SecurityGroupIds []*string `json:"securityGroupIds,omitempty" tf:"security_group_ids,omitempty"`
 
-	// (Require) A list of security group ids to associate with.
+	// Field security_groups has been deprecated from provider version 1.123.1. New field security_group_ids instead. NOTE: Either security_group_ids or security_groups must be set with valid security group IDs.
 	SecurityGroups []*string `json:"securityGroups,omitempty" tf:"security_groups,omitempty"`
 
 	// A mapping of tags to assign to the resource.
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
-	// The VSwitch to create the ENI in.
+	// The ID of the VSwitch in the specified VPC. The private IP addresses assigned to the ENI must be available IP addresses within the CIDR block of the VSwitch.
 	VswitchID *string `json:"vswitchId,omitempty" tf:"vswitch_id,omitempty"`
 }
 
-type NetworkInterfaceObservation_2 struct {
+type NetworkInterfaceObservation struct {
 
-	// Description of the ENI. This description can have a string of 2 to 256 characters, It cannot begin with http:// or https://. Default value is null.
+	// The description of the ENI. The description must be 2 to 256 characters in length and cannot start with http:// or https://.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// The ENI ID.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// The number of IPv4 prefixes that can be automatically created by ECS. Valid values: 1 to 10. NOTE: You cannot specify both the ipv4_prefixes and ipv4_prefix_count parameters.
 	IPv4PrefixCount *float64 `json:"ipv4PrefixCount,omitempty" tf:"ipv4_prefix_count,omitempty"`
 
+	// A list of IPv4 prefixes to be assigned to the ENI. Support up to 10.
 	// +listType=set
 	IPv4Prefixes []*string `json:"ipv4Prefixes,omitempty" tf:"ipv4_prefixes,omitempty"`
 
+	// The number of IPv6 addresses to randomly generate for the primary ENI. Valid values: 1 to 10. NOTE: You cannot specify both the ipv6_addresses and ipv6_address_count parameters.
 	IPv6AddressCount *float64 `json:"ipv6AddressCount,omitempty" tf:"ipv6_address_count,omitempty"`
 
+	// A list of IPv6 address to be assigned to the primary ENI. Support up to 10.
 	// +listType=set
 	IPv6Addresses []*string `json:"ipv6Addresses,omitempty" tf:"ipv6_addresses,omitempty"`
 
+	// The type of the ENI. Default value: Secondary. Valid values: Secondary, Trunk.
 	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
 
-	// (Available in 1.54.0+) The MAC address of an ENI.
+	// The MAC address of the ENI.
 	Mac *string `json:"mac,omitempty" tf:"mac,omitempty"`
 
-	// Name of the ENI. This name can have a string of 2 to 128 characters, must contain only alphanumeric characters or hyphens, such as "-", ".", "_", and must not begin or end with a hyphen, and must not begin with http:// or https://. Default value is null.
+	// Field name has been deprecated from provider version 1.123.1. New field network_interface_name instead
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// Name of the ENI. This name can have a string of 2 to 128 characters, must contain only alphanumeric characters or hyphens, such as "-", ".", "_", and must not begin or end with a hyphen, and must not begin with http:// or https://. Default value is null.
+	// The name of the ENI. The name must be 2 to 128 characters in length, and can contain letters, digits, colons (:), underscores (_), and hyphens (-). It must start with a letter and cannot start with http:// or https://.
 	NetworkInterfaceName *string `json:"networkInterfaceName,omitempty" tf:"network_interface_name,omitempty"`
 
+	// The communication mode of the ENI. Default value: Standard. Valid values: Standard, HighPerformance.
 	NetworkInterfaceTrafficMode *string `json:"networkInterfaceTrafficMode,omitempty" tf:"network_interface_traffic_mode,omitempty"`
 
+	// The primary private IP address of the ENI. The specified IP address must be available within the CIDR block of the VSwitch. If this parameter is not specified, an available IP address is assigned from the VSwitch CIDR block at random.
 	PrimaryIPAddress *string `json:"primaryIpAddress,omitempty" tf:"primary_ip_address,omitempty"`
 
-	// The primary private IP of the ENI.
+	// Field private_ip has been deprecated from provider version 1.123.1. New field primary_ip_address instead
 	PrivateIP *string `json:"privateIp,omitempty" tf:"private_ip,omitempty"`
 
+	// Specifies secondary private IP address N of the ENI. This IP address must be an available IP address within the CIDR block of the VSwitch to which the ENI belongs.
 	// +listType=set
 	PrivateIPAddresses []*string `json:"privateIpAddresses,omitempty" tf:"private_ip_addresses,omitempty"`
 
-	// List of secondary private IPs to assign to the ENI. Don't use both private_ips and private_ips_count in the same ENI resource block.
+	// Field private_ips has been deprecated from provider version 1.123.1. New field private_ip_addresses instead
 	// +listType=set
 	PrivateIps []*string `json:"privateIps,omitempty" tf:"private_ips,omitempty"`
 
-	// Number of secondary private IPs to assign to the ENI. Don't use both private_ips and private_ips_count in the same ENI resource block.
+	// Field private_ips_count has been deprecated from provider version 1.123.1. New field secondary_private_ip_address_count instead
 	PrivateIpsCount *float64 `json:"privateIpsCount,omitempty" tf:"private_ips_count,omitempty"`
 
+	// The queue number of the ENI.
 	QueueNumber *float64 `json:"queueNumber,omitempty" tf:"queue_number,omitempty"`
 
-	// (ForceNew, ForceNew, Available in 1.57.0+) The Id of resource group which the network interface belongs.
+	// The resource group id.
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
+	// The number of private IP addresses that can be automatically created by ECS.
 	SecondaryPrivateIPAddressCount *float64 `json:"secondaryPrivateIpAddressCount,omitempty" tf:"secondary_private_ip_address_count,omitempty"`
 
+	// The ID of security group N. The security groups and the ENI must belong to the same VPC. The valid values of N are based on the maximum number of security groups to which an ENI can be added. NOTE: Either security_group_ids or security_groups must be set with valid security group IDs.
 	SecurityGroupIds []*string `json:"securityGroupIds,omitempty" tf:"security_group_ids,omitempty"`
 
-	// (Require) A list of security group ids to associate with.
+	// Field security_groups has been deprecated from provider version 1.123.1. New field security_group_ids instead. NOTE: Either security_group_ids or security_groups must be set with valid security group IDs.
 	SecurityGroups []*string `json:"securityGroups,omitempty" tf:"security_groups,omitempty"`
 
+	// The status of the ENI.
 	Status *string `json:"status,omitempty" tf:"status,omitempty"`
 
 	// A mapping of tags to assign to the resource.
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
-	// The VSwitch to create the ENI in.
+	// The ID of the VSwitch in the specified VPC. The private IP addresses assigned to the ENI must be available IP addresses within the CIDR block of the VSwitch.
 	VswitchID *string `json:"vswitchId,omitempty" tf:"vswitch_id,omitempty"`
 }
 
-type NetworkInterfaceParameters_2 struct {
+type NetworkInterfaceParameters struct {
 
-	// Description of the ENI. This description can have a string of 2 to 256 characters, It cannot begin with http:// or https://. Default value is null.
+	// The description of the ENI. The description must be 2 to 256 characters in length and cannot start with http:// or https://.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// The number of IPv4 prefixes that can be automatically created by ECS. Valid values: 1 to 10. NOTE: You cannot specify both the ipv4_prefixes and ipv4_prefix_count parameters.
 	// +kubebuilder:validation:Optional
 	IPv4PrefixCount *float64 `json:"ipv4PrefixCount,omitempty" tf:"ipv4_prefix_count,omitempty"`
 
+	// A list of IPv4 prefixes to be assigned to the ENI. Support up to 10.
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	IPv4Prefixes []*string `json:"ipv4Prefixes,omitempty" tf:"ipv4_prefixes,omitempty"`
 
+	// The number of IPv6 addresses to randomly generate for the primary ENI. Valid values: 1 to 10. NOTE: You cannot specify both the ipv6_addresses and ipv6_address_count parameters.
 	// +kubebuilder:validation:Optional
 	IPv6AddressCount *float64 `json:"ipv6AddressCount,omitempty" tf:"ipv6_address_count,omitempty"`
 
+	// A list of IPv6 address to be assigned to the primary ENI. Support up to 10.
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	IPv6Addresses []*string `json:"ipv6Addresses,omitempty" tf:"ipv6_addresses,omitempty"`
 
+	// The type of the ENI. Default value: Secondary. Valid values: Secondary, Trunk.
 	// +kubebuilder:validation:Optional
 	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
 
-	// Name of the ENI. This name can have a string of 2 to 128 characters, must contain only alphanumeric characters or hyphens, such as "-", ".", "_", and must not begin or end with a hyphen, and must not begin with http:// or https://. Default value is null.
+	// Field name has been deprecated from provider version 1.123.1. New field network_interface_name instead
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// Name of the ENI. This name can have a string of 2 to 128 characters, must contain only alphanumeric characters or hyphens, such as "-", ".", "_", and must not begin or end with a hyphen, and must not begin with http:// or https://. Default value is null.
+	// The name of the ENI. The name must be 2 to 128 characters in length, and can contain letters, digits, colons (:), underscores (_), and hyphens (-). It must start with a letter and cannot start with http:// or https://.
 	// +kubebuilder:validation:Optional
 	NetworkInterfaceName *string `json:"networkInterfaceName,omitempty" tf:"network_interface_name,omitempty"`
 
+	// The communication mode of the ENI. Default value: Standard. Valid values: Standard, HighPerformance.
 	// +kubebuilder:validation:Optional
 	NetworkInterfaceTrafficMode *string `json:"networkInterfaceTrafficMode,omitempty" tf:"network_interface_traffic_mode,omitempty"`
 
+	// The primary private IP address of the ENI. The specified IP address must be available within the CIDR block of the VSwitch. If this parameter is not specified, an available IP address is assigned from the VSwitch CIDR block at random.
 	// +kubebuilder:validation:Optional
 	PrimaryIPAddress *string `json:"primaryIpAddress,omitempty" tf:"primary_ip_address,omitempty"`
 
-	// The primary private IP of the ENI.
+	// Field private_ip has been deprecated from provider version 1.123.1. New field primary_ip_address instead
 	// +kubebuilder:validation:Optional
 	PrivateIP *string `json:"privateIp,omitempty" tf:"private_ip,omitempty"`
 
+	// Specifies secondary private IP address N of the ENI. This IP address must be an available IP address within the CIDR block of the VSwitch to which the ENI belongs.
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	PrivateIPAddresses []*string `json:"privateIpAddresses,omitempty" tf:"private_ip_addresses,omitempty"`
 
-	// List of secondary private IPs to assign to the ENI. Don't use both private_ips and private_ips_count in the same ENI resource block.
+	// Field private_ips has been deprecated from provider version 1.123.1. New field private_ip_addresses instead
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	PrivateIps []*string `json:"privateIps,omitempty" tf:"private_ips,omitempty"`
 
-	// Number of secondary private IPs to assign to the ENI. Don't use both private_ips and private_ips_count in the same ENI resource block.
+	// Field private_ips_count has been deprecated from provider version 1.123.1. New field secondary_private_ip_address_count instead
 	// +kubebuilder:validation:Optional
 	PrivateIpsCount *float64 `json:"privateIpsCount,omitempty" tf:"private_ips_count,omitempty"`
 
+	// The queue number of the ENI.
 	// +kubebuilder:validation:Optional
 	QueueNumber *float64 `json:"queueNumber,omitempty" tf:"queue_number,omitempty"`
 
-	// (ForceNew, ForceNew, Available in 1.57.0+) The Id of resource group which the network interface belongs.
+	// The resource group id.
 	// +kubebuilder:validation:Optional
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
+	// The number of private IP addresses that can be automatically created by ECS.
 	// +kubebuilder:validation:Optional
 	SecondaryPrivateIPAddressCount *float64 `json:"secondaryPrivateIpAddressCount,omitempty" tf:"secondary_private_ip_address_count,omitempty"`
 
+	// The ID of security group N. The security groups and the ENI must belong to the same VPC. The valid values of N are based on the maximum number of security groups to which an ENI can be added. NOTE: Either security_group_ids or security_groups must be set with valid security group IDs.
 	// +kubebuilder:validation:Optional
 	SecurityGroupIds []*string `json:"securityGroupIds,omitempty" tf:"security_group_ids,omitempty"`
 
-	// (Require) A list of security group ids to associate with.
+	// Field security_groups has been deprecated from provider version 1.123.1. New field security_group_ids instead. NOTE: Either security_group_ids or security_groups must be set with valid security group IDs.
 	// +kubebuilder:validation:Optional
 	SecurityGroups []*string `json:"securityGroups,omitempty" tf:"security_groups,omitempty"`
 
@@ -217,7 +250,7 @@ type NetworkInterfaceParameters_2 struct {
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
-	// The VSwitch to create the ENI in.
+	// The ID of the VSwitch in the specified VPC. The private IP addresses assigned to the ENI must be available IP addresses within the CIDR block of the VSwitch.
 	// +kubebuilder:validation:Optional
 	VswitchID *string `json:"vswitchId,omitempty" tf:"vswitch_id,omitempty"`
 }
@@ -225,7 +258,7 @@ type NetworkInterfaceParameters_2 struct {
 // NetworkInterfaceSpec defines the desired state of NetworkInterface
 type NetworkInterfaceSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     NetworkInterfaceParameters_2 `json:"forProvider"`
+	ForProvider     NetworkInterfaceParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -236,20 +269,20 @@ type NetworkInterfaceSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider NetworkInterfaceInitParameters_2 `json:"initProvider,omitempty"`
+	InitProvider NetworkInterfaceInitParameters `json:"initProvider,omitempty"`
 }
 
 // NetworkInterfaceStatus defines the observed state of NetworkInterface.
 type NetworkInterfaceStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        NetworkInterfaceObservation_2 `json:"atProvider,omitempty"`
+	AtProvider        NetworkInterfaceObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// NetworkInterface is the Schema for the NetworkInterfaces API. Provides an ECS Elastic Network Interface resource.
+// NetworkInterface is the Schema for the NetworkInterfaces API. Provides a Alicloud ECS Network Interface resource.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"

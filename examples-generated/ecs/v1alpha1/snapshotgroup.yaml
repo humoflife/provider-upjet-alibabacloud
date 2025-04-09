@@ -56,7 +56,9 @@ spec:
     internetMaxBandwidthOut: 10
     securityGroups:
     - ${alicloud_security_group.default.id}
-    vswitchId: ${alicloud_vswitch.default.id}
+    vswitchIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: default
 
 ---
 

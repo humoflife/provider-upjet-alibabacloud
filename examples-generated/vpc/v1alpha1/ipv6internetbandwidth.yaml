@@ -33,7 +33,9 @@ spec:
     ipv6AddressCount: 1
     securityGroups: ${alicloud_security_group.group.*.id}
     systemDiskCategory: cloud_efficiency
-    vswitchId: ${alicloud_vswitch.vsw.id}
+    vswitchIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: vsw
 
 ---
 

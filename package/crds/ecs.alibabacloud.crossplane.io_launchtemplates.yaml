@@ -35,7 +35,7 @@ spec:
     schema:
       openAPIV3Schema:
         description: LaunchTemplate is the Schema for the LaunchTemplates API. Provides
-          an ECS Launch Template resource.
+          a Alicloud ECS Launch Template resource.
         properties:
           apiVersion:
             description: |-
@@ -78,41 +78,42 @@ spec:
                       using the ISO8601 standard and in UTC time. The format is  YYYY-MM-DDTHH:MM:SSZ.
                     type: string
                   autoRenew:
+                    description: Specifies whether to enable auto-renewal for the
+                      instance. This parameter is valid only if internet_charge_type
+                      is set to PrePaid.
                     type: boolean
                   autoRenewPeriod:
+                    description: 'The auto-renewal period of the instance. Valid values
+                      when period_unit is set to Month: 1, 2, 3, 6, 12, 24, 36, 48,
+                      and 60. Default value: 1.'
                     type: number
                   dataDisks:
-                    description: The list of data disks created with instance.
+                    description: The list of data disks created with instance. See
+                      data_disks below.
                     items:
                       properties:
                         category:
-                          description: 'The category of the disk:'
+                          description: The category of the disk.
                           type: string
                         deleteWithInstance:
-                          description: Delete this data disk when the instance is
-                            destroyed. It only works on cloud, cloud_efficiency, cloud_ssd
-                            and cloud_essd disk. If the category of this data disk
-                            was ephemeral_ssd, please don't set this param.
+                          description: Indicates whether the data disk is released
+                            with the instance.
                           type: boolean
                         description:
-                          description: Description of instance launch template version
-                            1. It can be [2, 256] characters in length. It cannot
-                            start with "http://" or "https://". The default value
-                            is null.
+                          description: The description of the data disk.
                           type: string
                         device:
+                          description: The mount point of the data disk.
                           type: string
                         encrypted:
                           description: Encrypted the data in this disk.
                           type: boolean
                         name:
-                          description: Instance launch template name. Can contain
-                            [2, 128] characters in length. It must start with an English
-                            letter or Chinese, can contain numbers, periods (.), colons
-                            (:), underscores (_), and hyphens (-). It cannot start
-                            with "http://" or "https://".
+                          description: The name of the data disk.
                           type: string
                         performanceLevel:
+                          description: The performance level of the ESSD used as the
+                            data disk.
                           type: string
                         size:
                           description: The size of the data disk.
@@ -126,9 +127,11 @@ spec:
                       type: object
                     type: array
                   defaultVersionNumber:
+                    description: The version number of the default launch template
+                      version. Default to 1. It is conflict with update_default_version_number.
                     type: number
                   deploymentSetId:
-                    description: The Launch Template ID.
+                    description: The Deployment Set Id.
                     type: string
                   description:
                     description: Description of instance launch template version 1.
@@ -136,6 +139,7 @@ spec:
                       "http://" or "https://". The default value is null.
                     type: string
                   enableVmOsConfig:
+                    description: Whether to enable the instance operating system configuration.
                     type: boolean
                   hostName:
                     description: 'Instance host name.It cannot start or end with a
@@ -148,32 +152,41 @@ spec:
                       contain A-Z, a-z, numbers, and hyphens (-).'
                     type: string
                   httpEndpoint:
+                    description: 'Whether to enable access to instance metadata. Valid
+                      values:'
                     type: string
                   httpPutResponseHopLimit:
+                    description: The HTTP PUT response hop limit required for instance
+                      metadata requests.
                     type: number
                   httpTokens:
+                    description: 'Whether to use the hardened mode (IMDSv2) when accessing
+                      instance metadata. Valid values:'
                     type: string
                   imageId:
-                    description: Image ID.
+                    description: The Image ID.
                     type: string
                   imageOwnerAlias:
+                    description: 'Mirror source. Valid values: system, self, others,
+                      marketplace, "". Default to: "".'
                     type: string
                   instanceChargeType:
-                    description: 'Billing methods. Optional values:'
+                    description: 'Billing methods. Valid values: PostPaid, PrePaid.'
                     type: string
                   instanceName:
-                    description: The name of the instance. The name is a string of
-                      2 to 128 characters. It must begin with an English or a Chinese
-                      character. It can contain A-Z, a-z, Chinese characters, numbers,
-                      periods (.), colons (:), underscores (_), and hyphens (-).
+                    description: The name of the instance. The name must be 2 to 128
+                      characters in length. It must start with a letter and cannot
+                      start with http:// or https://. It can contain letters, digits,
+                      colons (:), underscores (_), periods (.), commas (,), brackets
+                      ([]), and hyphens (-).
                     type: string
                   instanceType:
                     description: Instance type. For more information, call resource_alicloud_instances
                       to obtain the latest instance type list.
                     type: string
                   internetChargeType:
-                    description: 'Internet bandwidth billing method. Optional values:
-                      PayByTraffic | PayByBandwidth.'
+                    description: 'Internet bandwidth billing method. Valid values:
+                      PayByTraffic, PayByBandwidth.'
                     type: string
                   internetMaxBandwidthIn:
                     description: 'The maximum inbound bandwidth from the Internet
@@ -185,84 +198,90 @@ spec:
                     type: number
                   ioOptimized:
                     description: 'Whether it is an I/O-optimized instance or not.
-                      Optional values:'
+                      Valid values: none, optimized.'
                     type: string
                   keyPairName:
                     description: The name of the key pair.
                     type: string
                   launchTemplateName:
-                    description: Instance launch template name. Can contain [2, 128]
-                      characters in length. It must start with an English letter or
-                      Chinese, can contain numbers, periods (.), colons (:), underscores
-                      (_), and hyphens (-). It cannot start with "http://" or "https://".
+                    description: The name of Launch Template.
                     type: string
                   name:
-                    description: Instance launch template name. Can contain [2, 128]
-                      characters in length. It must start with an English letter or
-                      Chinese, can contain numbers, periods (.), colons (:), underscores
-                      (_), and hyphens (-). It cannot start with "http://" or "https://".
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field launch_template_name instead.
                     type: string
                   networkInterfaces:
                     description: The list of network interfaces created with instance.
+                      See network_interfaces below.
                     items:
                       properties:
                         description:
-                          description: Description of instance launch template version
-                            1. It can be [2, 256] characters in length. It cannot
-                            start with "http://" or "https://". The default value
-                            is null.
+                          description: The ENI description.
                           type: string
                         name:
-                          description: Instance launch template name. Can contain
-                            [2, 128] characters in length. It must start with an English
-                            letter or Chinese, can contain numbers, periods (.), colons
-                            (:), underscores (_), and hyphens (-). It cannot start
-                            with "http://" or "https://".
+                          description: The ENI name.
                           type: string
                         primaryIp:
                           description: The primary private IP address of the ENI.
                           type: string
                         securityGroupId:
-                          description: The security group ID.
+                          description: The security group ID must be one in the same
+                            VPC.
                           type: string
                         vswitchId:
-                          description: When creating a VPC-Connected instance, you
-                            must specify its VSwitch ID.
+                          description: The VSwitch ID for ENI. The instance must be
+                            in the same zone of the same VPC network as the ENI, but
+                            they may belong to different VSwitches.
                           type: string
                       type: object
                     type: array
                   networkType:
-                    description: 'Network type of the instance. Value options: classic
-                      | vpc.'
+                    description: 'Network type of the instance. Valid values: classic,
+                      vpc.'
                     type: string
                   passwordInherit:
+                    description: Whether to use the password preset by the mirror.
                     type: boolean
                   period:
+                    description: 'The subscription period of the instance. Unit: months.
+                      This parameter takes effect and is required only when InstanceChargeType
+                      is set to PrePaid. If the DedicatedHostId parameter is specified,
+                      the value of the Period parameter must be within the subscription
+                      period of the dedicated host.'
                     type: number
                   periodUnit:
+                    description: 'The unit of the subscription period. Valid values:
+                      Month (default).'
                     type: string
                   privateIpAddress:
+                    description: The private IP address of the instance.
                     type: string
                   ramRoleName:
                     description: The RAM role name of the instance. You can use the
                       RAM API ListRoles to query instance RAM role names.
                     type: string
                   resourceGroupId:
-                    description: The Launch Template ID.
+                    description: The ID of the resource group to which to assign the
+                      instance, Elastic Block Storage (EBS) device, and ENI.
                     type: string
                   securityEnhancementStrategy:
                     description: 'Whether or not to activate the security enhancement
                       feature and install network security software free of charge.
-                      Optional values: Active | Deactive.'
+                      Valid values: Active, Deactive.'
                     type: string
                   securityGroupId:
                     description: The security group ID.
                     type: string
                   securityGroupIds:
+                    description: The ID of security group N to which to assign the
+                      instance.
                     items:
                       type: string
                     type: array
                   spotDuration:
+                    description: 'The protection period of the preemptible instance.
+                      Unit: hours. Valid values: 0, 1, 2, 3, 4, 5, and 6. Default
+                      to: 1.'
                     type: string
                   spotPriceLimit:
                     description: Sets the maximum hourly instance price. Supports
@@ -271,93 +290,100 @@ spec:
                   spotStrategy:
                     description: 'The spot strategy for a Pay-As-You-Go instance.
                       This parameter is valid and required only when InstanceChargeType
-                      is set to PostPaid. Value range:'
+                      is set to PostPaid. Valid values: NoSpot, SpotAsPriceGo, SpotWithPriceLimit.'
                     type: string
                   systemDisk:
+                    description: The System Disk. See system_disk below.
                     items:
                       properties:
                         category:
-                          description: 'The category of the disk:'
+                          description: 'The category of the system disk. System disk
+                            type. Valid values: all, cloud, ephemeral_ssd, cloud_essd,
+                            cloud_efficiency, cloud_ssd, local_disk.'
                           type: string
                         deleteWithInstance:
-                          description: Delete this data disk when the instance is
-                            destroyed. It only works on cloud, cloud_efficiency, cloud_ssd
-                            and cloud_essd disk. If the category of this data disk
-                            was ephemeral_ssd, please don't set this param.
+                          description: Specifies whether to release the system disk
+                            when the instance is released. Default to true.
                           type: boolean
                         description:
-                          description: Description of instance launch template version
-                            1. It can be [2, 256] characters in length. It cannot
-                            start with "http://" or "https://". The default value
-                            is null.
+                          description: System disk description. It cannot begin with
+                            http:// or https://.
                           type: string
                         encrypted:
-                          description: Encrypted the data in this disk.
+                          description: Specifies whether the system disk is encrypted.
                           type: boolean
                         iops:
+                          description: The Iops.
                           type: string
                         name:
-                          description: Instance launch template name. Can contain
-                            [2, 128] characters in length. It must start with an English
-                            letter or Chinese, can contain numbers, periods (.), colons
-                            (:), underscores (_), and hyphens (-). It cannot start
-                            with "http://" or "https://".
+                          description: System disk name. The name is a string of 2
+                            to 128 characters. It must begin with an English or a
+                            Chinese character. It can contain A-Z, a-z, Chinese characters,
+                            numbers, periods (.), colons (:), underscores (_), and
+                            hyphens (-).
                           type: string
                         performanceLevel:
+                          description: 'The performance level of the ESSD used as
+                            the system disk. Valid Values: PL0, PL1, PL2, and PL3.
+                            Default to: PL0.'
                           type: string
                         size:
-                          description: The size of the data disk.
+                          description: 'Size of the system disk, measured in GB. Value
+                            range: [20, 500].'
                           type: number
                       type: object
                     type: array
                   systemDiskCategory:
-                    description: 'The category of the system disk. System disk type.
-                      Optional values:'
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field system_disk instead.
                     type: string
                   systemDiskDescription:
-                    description: System disk description. It cannot begin with http://
-                      or https://.
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field system_disk instead.
                     type: string
                   systemDiskName:
-                    description: System disk name. The name is a string of 2 to 128
-                      characters. It must begin with an English or a Chinese character.
-                      It can contain A-Z, a-z, Chinese characters, numbers, periods
-                      (.), colons (:), underscores (_), and hyphens (-).
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field system_disk instead.
                     type: string
                   systemDiskSize:
-                    description: 'Size of the system disk, measured in GB. Value range:
-                      [20, 500].'
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field system_disk instead.
                     type: number
                   tags:
                     additionalProperties:
                       type: string
-                    description: A mapping of tags to assign to the resource.
+                    description: A mapping of tags to assign to instance, block storage,
+                      and elastic network.
                     type: object
                     x-kubernetes-map-type: granular
                   templateResourceGroupId:
-                    description: The Launch Template ID.
+                    description: The template resource group id.
                     type: string
                   templateTags:
                     additionalProperties:
                       type: string
-                    description: A mapping of tags to assign to the resource.
+                    description: A mapping of tags to assign to the launch template.
                     type: object
                     x-kubernetes-map-type: granular
                   updateDefaultVersionNumber:
+                    description: Whether to update the default version of the launch
+                      template to the latest version automatically. It is conflict
+                      with default_version_number.
                     type: boolean
                   userData:
+                    description: The User Data.
                     type: string
                   userdata:
-                    description: User data of the instance, which is Base64-encoded.
-                      Size of the raw data cannot exceed 16 KB.
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field user_data instead.
                     type: string
                   versionDescription:
-                    description: Description of instance launch template version 1.
-                      It can be [2, 256] characters in length. It cannot start with
-                      "http://" or "https://". The default value is null.
+                    description: The description of the launch template version. The
+                      description must be 2 to 256 characters in length and cannot
+                      start with http:// or https://.
                     type: string
                   vpcId:
-                    description: The Launch Template ID.
+                    description: The ID of the VPC.
                     type: string
                   vswitchId:
                     description: When creating a VPC-Connected instance, you must
@@ -385,41 +411,42 @@ spec:
                       using the ISO8601 standard and in UTC time. The format is  YYYY-MM-DDTHH:MM:SSZ.
                     type: string
                   autoRenew:
+                    description: Specifies whether to enable auto-renewal for the
+                      instance. This parameter is valid only if internet_charge_type
+                      is set to PrePaid.
                     type: boolean
                   autoRenewPeriod:
+                    description: 'The auto-renewal period of the instance. Valid values
+                      when period_unit is set to Month: 1, 2, 3, 6, 12, 24, 36, 48,
+                      and 60. Default value: 1.'
                     type: number
                   dataDisks:
-                    description: The list of data disks created with instance.
+                    description: The list of data disks created with instance. See
+                      data_disks below.
                     items:
                       properties:
                         category:
-                          description: 'The category of the disk:'
+                          description: The category of the disk.
                           type: string
                         deleteWithInstance:
-                          description: Delete this data disk when the instance is
-                            destroyed. It only works on cloud, cloud_efficiency, cloud_ssd
-                            and cloud_essd disk. If the category of this data disk
-                            was ephemeral_ssd, please don't set this param.
+                          description: Indicates whether the data disk is released
+                            with the instance.
                           type: boolean
                         description:
-                          description: Description of instance launch template version
-                            1. It can be [2, 256] characters in length. It cannot
-                            start with "http://" or "https://". The default value
-                            is null.
+                          description: The description of the data disk.
                           type: string
                         device:
+                          description: The mount point of the data disk.
                           type: string
                         encrypted:
                           description: Encrypted the data in this disk.
                           type: boolean
                         name:
-                          description: Instance launch template name. Can contain
-                            [2, 128] characters in length. It must start with an English
-                            letter or Chinese, can contain numbers, periods (.), colons
-                            (:), underscores (_), and hyphens (-). It cannot start
-                            with "http://" or "https://".
+                          description: The name of the data disk.
                           type: string
                         performanceLevel:
+                          description: The performance level of the ESSD used as the
+                            data disk.
                           type: string
                         size:
                           description: The size of the data disk.
@@ -433,9 +460,11 @@ spec:
                       type: object
                     type: array
                   defaultVersionNumber:
+                    description: The version number of the default launch template
+                      version. Default to 1. It is conflict with update_default_version_number.
                     type: number
                   deploymentSetId:
-                    description: The Launch Template ID.
+                    description: The Deployment Set Id.
                     type: string
                   description:
                     description: Description of instance launch template version 1.
@@ -443,6 +472,7 @@ spec:
                       "http://" or "https://". The default value is null.
                     type: string
                   enableVmOsConfig:
+                    description: Whether to enable the instance operating system configuration.
                     type: boolean
                   hostName:
                     description: 'Instance host name.It cannot start or end with a
@@ -455,32 +485,41 @@ spec:
                       contain A-Z, a-z, numbers, and hyphens (-).'
                     type: string
                   httpEndpoint:
+                    description: 'Whether to enable access to instance metadata. Valid
+                      values:'
                     type: string
                   httpPutResponseHopLimit:
+                    description: The HTTP PUT response hop limit required for instance
+                      metadata requests.
                     type: number
                   httpTokens:
+                    description: 'Whether to use the hardened mode (IMDSv2) when accessing
+                      instance metadata. Valid values:'
                     type: string
                   imageId:
-                    description: Image ID.
+                    description: The Image ID.
                     type: string
                   imageOwnerAlias:
+                    description: 'Mirror source. Valid values: system, self, others,
+                      marketplace, "". Default to: "".'
                     type: string
                   instanceChargeType:
-                    description: 'Billing methods. Optional values:'
+                    description: 'Billing methods. Valid values: PostPaid, PrePaid.'
                     type: string
                   instanceName:
-                    description: The name of the instance. The name is a string of
-                      2 to 128 characters. It must begin with an English or a Chinese
-                      character. It can contain A-Z, a-z, Chinese characters, numbers,
-                      periods (.), colons (:), underscores (_), and hyphens (-).
+                    description: The name of the instance. The name must be 2 to 128
+                      characters in length. It must start with a letter and cannot
+                      start with http:// or https://. It can contain letters, digits,
+                      colons (:), underscores (_), periods (.), commas (,), brackets
+                      ([]), and hyphens (-).
                     type: string
                   instanceType:
                     description: Instance type. For more information, call resource_alicloud_instances
                       to obtain the latest instance type list.
                     type: string
                   internetChargeType:
-                    description: 'Internet bandwidth billing method. Optional values:
-                      PayByTraffic | PayByBandwidth.'
+                    description: 'Internet bandwidth billing method. Valid values:
+                      PayByTraffic, PayByBandwidth.'
                     type: string
                   internetMaxBandwidthIn:
                     description: 'The maximum inbound bandwidth from the Internet
@@ -492,84 +531,90 @@ spec:
                     type: number
                   ioOptimized:
                     description: 'Whether it is an I/O-optimized instance or not.
-                      Optional values:'
+                      Valid values: none, optimized.'
                     type: string
                   keyPairName:
                     description: The name of the key pair.
                     type: string
                   launchTemplateName:
-                    description: Instance launch template name. Can contain [2, 128]
-                      characters in length. It must start with an English letter or
-                      Chinese, can contain numbers, periods (.), colons (:), underscores
-                      (_), and hyphens (-). It cannot start with "http://" or "https://".
+                    description: The name of Launch Template.
                     type: string
                   name:
-                    description: Instance launch template name. Can contain [2, 128]
-                      characters in length. It must start with an English letter or
-                      Chinese, can contain numbers, periods (.), colons (:), underscores
-                      (_), and hyphens (-). It cannot start with "http://" or "https://".
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field launch_template_name instead.
                     type: string
                   networkInterfaces:
                     description: The list of network interfaces created with instance.
+                      See network_interfaces below.
                     items:
                       properties:
                         description:
-                          description: Description of instance launch template version
-                            1. It can be [2, 256] characters in length. It cannot
-                            start with "http://" or "https://". The default value
-                            is null.
+                          description: The ENI description.
                           type: string
                         name:
-                          description: Instance launch template name. Can contain
-                            [2, 128] characters in length. It must start with an English
-                            letter or Chinese, can contain numbers, periods (.), colons
-                            (:), underscores (_), and hyphens (-). It cannot start
-                            with "http://" or "https://".
+                          description: The ENI name.
                           type: string
                         primaryIp:
                           description: The primary private IP address of the ENI.
                           type: string
                         securityGroupId:
-                          description: The security group ID.
+                          description: The security group ID must be one in the same
+                            VPC.
                           type: string
                         vswitchId:
-                          description: When creating a VPC-Connected instance, you
-                            must specify its VSwitch ID.
+                          description: The VSwitch ID for ENI. The instance must be
+                            in the same zone of the same VPC network as the ENI, but
+                            they may belong to different VSwitches.
                           type: string
                       type: object
                     type: array
                   networkType:
-                    description: 'Network type of the instance. Value options: classic
-                      | vpc.'
+                    description: 'Network type of the instance. Valid values: classic,
+                      vpc.'
                     type: string
                   passwordInherit:
+                    description: Whether to use the password preset by the mirror.
                     type: boolean
                   period:
+                    description: 'The subscription period of the instance. Unit: months.
+                      This parameter takes effect and is required only when InstanceChargeType
+                      is set to PrePaid. If the DedicatedHostId parameter is specified,
+                      the value of the Period parameter must be within the subscription
+                      period of the dedicated host.'
                     type: number
                   periodUnit:
+                    description: 'The unit of the subscription period. Valid values:
+                      Month (default).'
                     type: string
                   privateIpAddress:
+                    description: The private IP address of the instance.
                     type: string
                   ramRoleName:
                     description: The RAM role name of the instance. You can use the
                       RAM API ListRoles to query instance RAM role names.
                     type: string
                   resourceGroupId:
-                    description: The Launch Template ID.
+                    description: The ID of the resource group to which to assign the
+                      instance, Elastic Block Storage (EBS) device, and ENI.
                     type: string
                   securityEnhancementStrategy:
                     description: 'Whether or not to activate the security enhancement
                       feature and install network security software free of charge.
-                      Optional values: Active | Deactive.'
+                      Valid values: Active, Deactive.'
                     type: string
                   securityGroupId:
                     description: The security group ID.
                     type: string
                   securityGroupIds:
+                    description: The ID of security group N to which to assign the
+                      instance.
                     items:
                       type: string
                     type: array
                   spotDuration:
+                    description: 'The protection period of the preemptible instance.
+                      Unit: hours. Valid values: 0, 1, 2, 3, 4, 5, and 6. Default
+                      to: 1.'
                     type: string
                   spotPriceLimit:
                     description: Sets the maximum hourly instance price. Supports
@@ -578,93 +623,100 @@ spec:
                   spotStrategy:
                     description: 'The spot strategy for a Pay-As-You-Go instance.
                       This parameter is valid and required only when InstanceChargeType
-                      is set to PostPaid. Value range:'
+                      is set to PostPaid. Valid values: NoSpot, SpotAsPriceGo, SpotWithPriceLimit.'
                     type: string
                   systemDisk:
+                    description: The System Disk. See system_disk below.
                     items:
                       properties:
                         category:
-                          description: 'The category of the disk:'
+                          description: 'The category of the system disk. System disk
+                            type. Valid values: all, cloud, ephemeral_ssd, cloud_essd,
+                            cloud_efficiency, cloud_ssd, local_disk.'
                           type: string
                         deleteWithInstance:
-                          description: Delete this data disk when the instance is
-                            destroyed. It only works on cloud, cloud_efficiency, cloud_ssd
-                            and cloud_essd disk. If the category of this data disk
-                            was ephemeral_ssd, please don't set this param.
+                          description: Specifies whether to release the system disk
+                            when the instance is released. Default to true.
                           type: boolean
                         description:
-                          description: Description of instance launch template version
-                            1. It can be [2, 256] characters in length. It cannot
-                            start with "http://" or "https://". The default value
-                            is null.
+                          description: System disk description. It cannot begin with
+                            http:// or https://.
                           type: string
                         encrypted:
-                          description: Encrypted the data in this disk.
+                          description: Specifies whether the system disk is encrypted.
                           type: boolean
                         iops:
+                          description: The Iops.
                           type: string
                         name:
-                          description: Instance launch template name. Can contain
-                            [2, 128] characters in length. It must start with an English
-                            letter or Chinese, can contain numbers, periods (.), colons
-                            (:), underscores (_), and hyphens (-). It cannot start
-                            with "http://" or "https://".
+                          description: System disk name. The name is a string of 2
+                            to 128 characters. It must begin with an English or a
+                            Chinese character. It can contain A-Z, a-z, Chinese characters,
+                            numbers, periods (.), colons (:), underscores (_), and
+                            hyphens (-).
                           type: string
                         performanceLevel:
+                          description: 'The performance level of the ESSD used as
+                            the system disk. Valid Values: PL0, PL1, PL2, and PL3.
+                            Default to: PL0.'
                           type: string
                         size:
-                          description: The size of the data disk.
+                          description: 'Size of the system disk, measured in GB. Value
+                            range: [20, 500].'
                           type: number
                       type: object
                     type: array
                   systemDiskCategory:
-                    description: 'The category of the system disk. System disk type.
-                      Optional values:'
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field system_disk instead.
                     type: string
                   systemDiskDescription:
-                    description: System disk description. It cannot begin with http://
-                      or https://.
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field system_disk instead.
                     type: string
                   systemDiskName:
-                    description: System disk name. The name is a string of 2 to 128
-                      characters. It must begin with an English or a Chinese character.
-                      It can contain A-Z, a-z, Chinese characters, numbers, periods
-                      (.), colons (:), underscores (_), and hyphens (-).
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field system_disk instead.
                     type: string
                   systemDiskSize:
-                    description: 'Size of the system disk, measured in GB. Value range:
-                      [20, 500].'
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field system_disk instead.
                     type: number
                   tags:
                     additionalProperties:
                       type: string
-                    description: A mapping of tags to assign to the resource.
+                    description: A mapping of tags to assign to instance, block storage,
+                      and elastic network.
                     type: object
                     x-kubernetes-map-type: granular
                   templateResourceGroupId:
-                    description: The Launch Template ID.
+                    description: The template resource group id.
                     type: string
                   templateTags:
                     additionalProperties:
                       type: string
-                    description: A mapping of tags to assign to the resource.
+                    description: A mapping of tags to assign to the launch template.
                     type: object
                     x-kubernetes-map-type: granular
                   updateDefaultVersionNumber:
+                    description: Whether to update the default version of the launch
+                      template to the latest version automatically. It is conflict
+                      with default_version_number.
                     type: boolean
                   userData:
+                    description: The User Data.
                     type: string
                   userdata:
-                    description: User data of the instance, which is Base64-encoded.
-                      Size of the raw data cannot exceed 16 KB.
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field user_data instead.
                     type: string
                   versionDescription:
-                    description: Description of instance launch template version 1.
-                      It can be [2, 256] characters in length. It cannot start with
-                      "http://" or "https://". The default value is null.
+                    description: The description of the launch template version. The
+                      description must be 2 to 256 characters in length and cannot
+                      start with http:// or https://.
                     type: string
                   vpcId:
-                    description: The Launch Template ID.
+                    description: The ID of the VPC.
                     type: string
                   vswitchId:
                     description: When creating a VPC-Connected instance, you must
@@ -851,41 +903,42 @@ spec:
                       using the ISO8601 standard and in UTC time. The format is  YYYY-MM-DDTHH:MM:SSZ.
                     type: string
                   autoRenew:
+                    description: Specifies whether to enable auto-renewal for the
+                      instance. This parameter is valid only if internet_charge_type
+                      is set to PrePaid.
                     type: boolean
                   autoRenewPeriod:
+                    description: 'The auto-renewal period of the instance. Valid values
+                      when period_unit is set to Month: 1, 2, 3, 6, 12, 24, 36, 48,
+                      and 60. Default value: 1.'
                     type: number
                   dataDisks:
-                    description: The list of data disks created with instance.
+                    description: The list of data disks created with instance. See
+                      data_disks below.
                     items:
                       properties:
                         category:
-                          description: 'The category of the disk:'
+                          description: The category of the disk.
                           type: string
                         deleteWithInstance:
-                          description: Delete this data disk when the instance is
-                            destroyed. It only works on cloud, cloud_efficiency, cloud_ssd
-                            and cloud_essd disk. If the category of this data disk
-                            was ephemeral_ssd, please don't set this param.
+                          description: Indicates whether the data disk is released
+                            with the instance.
                           type: boolean
                         description:
-                          description: Description of instance launch template version
-                            1. It can be [2, 256] characters in length. It cannot
-                            start with "http://" or "https://". The default value
-                            is null.
+                          description: The description of the data disk.
                           type: string
                         device:
+                          description: The mount point of the data disk.
                           type: string
                         encrypted:
                           description: Encrypted the data in this disk.
                           type: boolean
                         name:
-                          description: Instance launch template name. Can contain
-                            [2, 128] characters in length. It must start with an English
-                            letter or Chinese, can contain numbers, periods (.), colons
-                            (:), underscores (_), and hyphens (-). It cannot start
-                            with "http://" or "https://".
+                          description: The name of the data disk.
                           type: string
                         performanceLevel:
+                          description: The performance level of the ESSD used as the
+                            data disk.
                           type: string
                         size:
                           description: The size of the data disk.
@@ -899,9 +952,11 @@ spec:
                       type: object
                     type: array
                   defaultVersionNumber:
+                    description: The version number of the default launch template
+                      version. Default to 1. It is conflict with update_default_version_number.
                     type: number
                   deploymentSetId:
-                    description: The Launch Template ID.
+                    description: The Deployment Set Id.
                     type: string
                   description:
                     description: Description of instance launch template version 1.
@@ -909,6 +964,7 @@ spec:
                       "http://" or "https://". The default value is null.
                     type: string
                   enableVmOsConfig:
+                    description: Whether to enable the instance operating system configuration.
                     type: boolean
                   hostName:
                     description: 'Instance host name.It cannot start or end with a
@@ -921,35 +977,43 @@ spec:
                       contain A-Z, a-z, numbers, and hyphens (-).'
                     type: string
                   httpEndpoint:
+                    description: 'Whether to enable access to instance metadata. Valid
+                      values:'
                     type: string
                   httpPutResponseHopLimit:
+                    description: The HTTP PUT response hop limit required for instance
+                      metadata requests.
                     type: number
                   httpTokens:
+                    description: 'Whether to use the hardened mode (IMDSv2) when accessing
+                      instance metadata. Valid values:'
                     type: string
                   id:
-                    description: The Launch Template ID.
                     type: string
                   imageId:
-                    description: Image ID.
+                    description: The Image ID.
                     type: string
                   imageOwnerAlias:
+                    description: 'Mirror source. Valid values: system, self, others,
+                      marketplace, "". Default to: "".'
                     type: string
                   instanceChargeType:
-                    description: 'Billing methods. Optional values:'
+                    description: 'Billing methods. Valid values: PostPaid, PrePaid.'
                     type: string
                   instanceName:
-                    description: The name of the instance. The name is a string of
-                      2 to 128 characters. It must begin with an English or a Chinese
-                      character. It can contain A-Z, a-z, Chinese characters, numbers,
-                      periods (.), colons (:), underscores (_), and hyphens (-).
+                    description: The name of the instance. The name must be 2 to 128
+                      characters in length. It must start with a letter and cannot
+                      start with http:// or https://. It can contain letters, digits,
+                      colons (:), underscores (_), periods (.), commas (,), brackets
+                      ([]), and hyphens (-).
                     type: string
                   instanceType:
                     description: Instance type. For more information, call resource_alicloud_instances
                       to obtain the latest instance type list.
                     type: string
                   internetChargeType:
-                    description: 'Internet bandwidth billing method. Optional values:
-                      PayByTraffic | PayByBandwidth.'
+                    description: 'Internet bandwidth billing method. Valid values:
+                      PayByTraffic, PayByBandwidth.'
                     type: string
                   internetMaxBandwidthIn:
                     description: 'The maximum inbound bandwidth from the Internet
@@ -961,86 +1025,93 @@ spec:
                     type: number
                   ioOptimized:
                     description: 'Whether it is an I/O-optimized instance or not.
-                      Optional values:'
+                      Valid values: none, optimized.'
                     type: string
                   keyPairName:
                     description: The name of the key pair.
                     type: string
                   latestVersionNumber:
+                    description: The latest version number of the launch template.
                     type: number
                   launchTemplateName:
-                    description: Instance launch template name. Can contain [2, 128]
-                      characters in length. It must start with an English letter or
-                      Chinese, can contain numbers, periods (.), colons (:), underscores
-                      (_), and hyphens (-). It cannot start with "http://" or "https://".
+                    description: The name of Launch Template.
                     type: string
                   name:
-                    description: Instance launch template name. Can contain [2, 128]
-                      characters in length. It must start with an English letter or
-                      Chinese, can contain numbers, periods (.), colons (:), underscores
-                      (_), and hyphens (-). It cannot start with "http://" or "https://".
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field launch_template_name instead.
                     type: string
                   networkInterfaces:
                     description: The list of network interfaces created with instance.
+                      See network_interfaces below.
                     items:
                       properties:
                         description:
-                          description: Description of instance launch template version
-                            1. It can be [2, 256] characters in length. It cannot
-                            start with "http://" or "https://". The default value
-                            is null.
+                          description: The ENI description.
                           type: string
                         name:
-                          description: Instance launch template name. Can contain
-                            [2, 128] characters in length. It must start with an English
-                            letter or Chinese, can contain numbers, periods (.), colons
-                            (:), underscores (_), and hyphens (-). It cannot start
-                            with "http://" or "https://".
+                          description: The ENI name.
                           type: string
                         primaryIp:
                           description: The primary private IP address of the ENI.
                           type: string
                         securityGroupId:
-                          description: The security group ID.
+                          description: The security group ID must be one in the same
+                            VPC.
                           type: string
                         vswitchId:
-                          description: When creating a VPC-Connected instance, you
-                            must specify its VSwitch ID.
+                          description: The VSwitch ID for ENI. The instance must be
+                            in the same zone of the same VPC network as the ENI, but
+                            they may belong to different VSwitches.
                           type: string
                       type: object
                     type: array
                   networkType:
-                    description: 'Network type of the instance. Value options: classic
-                      | vpc.'
+                    description: 'Network type of the instance. Valid values: classic,
+                      vpc.'
                     type: string
                   passwordInherit:
+                    description: Whether to use the password preset by the mirror.
                     type: boolean
                   period:
+                    description: 'The subscription period of the instance. Unit: months.
+                      This parameter takes effect and is required only when InstanceChargeType
+                      is set to PrePaid. If the DedicatedHostId parameter is specified,
+                      the value of the Period parameter must be within the subscription
+                      period of the dedicated host.'
                     type: number
                   periodUnit:
+                    description: 'The unit of the subscription period. Valid values:
+                      Month (default).'
                     type: string
                   privateIpAddress:
+                    description: The private IP address of the instance.
                     type: string
                   ramRoleName:
                     description: The RAM role name of the instance. You can use the
                       RAM API ListRoles to query instance RAM role names.
                     type: string
                   resourceGroupId:
-                    description: The Launch Template ID.
+                    description: The ID of the resource group to which to assign the
+                      instance, Elastic Block Storage (EBS) device, and ENI.
                     type: string
                   securityEnhancementStrategy:
                     description: 'Whether or not to activate the security enhancement
                       feature and install network security software free of charge.
-                      Optional values: Active | Deactive.'
+                      Valid values: Active, Deactive.'
                     type: string
                   securityGroupId:
                     description: The security group ID.
                     type: string
                   securityGroupIds:
+                    description: The ID of security group N to which to assign the
+                      instance.
                     items:
                       type: string
                     type: array
                   spotDuration:
+                    description: 'The protection period of the preemptible instance.
+                      Unit: hours. Valid values: 0, 1, 2, 3, 4, 5, and 6. Default
+                      to: 1.'
                     type: string
                   spotPriceLimit:
                     description: Sets the maximum hourly instance price. Supports
@@ -1049,93 +1120,100 @@ spec:
                   spotStrategy:
                     description: 'The spot strategy for a Pay-As-You-Go instance.
                       This parameter is valid and required only when InstanceChargeType
-                      is set to PostPaid. Value range:'
+                      is set to PostPaid. Valid values: NoSpot, SpotAsPriceGo, SpotWithPriceLimit.'
                     type: string
                   systemDisk:
+                    description: The System Disk. See system_disk below.
                     items:
                       properties:
                         category:
-                          description: 'The category of the disk:'
+                          description: 'The category of the system disk. System disk
+                            type. Valid values: all, cloud, ephemeral_ssd, cloud_essd,
+                            cloud_efficiency, cloud_ssd, local_disk.'
                           type: string
                         deleteWithInstance:
-                          description: Delete this data disk when the instance is
-                            destroyed. It only works on cloud, cloud_efficiency, cloud_ssd
-                            and cloud_essd disk. If the category of this data disk
-                            was ephemeral_ssd, please don't set this param.
+                          description: Specifies whether to release the system disk
+                            when the instance is released. Default to true.
                           type: boolean
                         description:
-                          description: Description of instance launch template version
-                            1. It can be [2, 256] characters in length. It cannot
-                            start with "http://" or "https://". The default value
-                            is null.
+                          description: System disk description. It cannot begin with
+                            http:// or https://.
                           type: string
                         encrypted:
-                          description: Encrypted the data in this disk.
+                          description: Specifies whether the system disk is encrypted.
                           type: boolean
                         iops:
+                          description: The Iops.
                           type: string
                         name:
-                          description: Instance launch template name. Can contain
-                            [2, 128] characters in length. It must start with an English
-                            letter or Chinese, can contain numbers, periods (.), colons
-                            (:), underscores (_), and hyphens (-). It cannot start
-                            with "http://" or "https://".
+                          description: System disk name. The name is a string of 2
+                            to 128 characters. It must begin with an English or a
+                            Chinese character. It can contain A-Z, a-z, Chinese characters,
+                            numbers, periods (.), colons (:), underscores (_), and
+                            hyphens (-).
                           type: string
                         performanceLevel:
+                          description: 'The performance level of the ESSD used as
+                            the system disk. Valid Values: PL0, PL1, PL2, and PL3.
+                            Default to: PL0.'
                           type: string
                         size:
-                          description: The size of the data disk.
+                          description: 'Size of the system disk, measured in GB. Value
+                            range: [20, 500].'
                           type: number
                       type: object
                     type: array
                   systemDiskCategory:
-                    description: 'The category of the system disk. System disk type.
-                      Optional values:'
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field system_disk instead.
                     type: string
                   systemDiskDescription:
-                    description: System disk description. It cannot begin with http://
-                      or https://.
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field system_disk instead.
                     type: string
                   systemDiskName:
-                    description: System disk name. The name is a string of 2 to 128
-                      characters. It must begin with an English or a Chinese character.
-                      It can contain A-Z, a-z, Chinese characters, numbers, periods
-                      (.), colons (:), underscores (_), and hyphens (-).
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field system_disk instead.
                     type: string
                   systemDiskSize:
-                    description: 'Size of the system disk, measured in GB. Value range:
-                      [20, 500].'
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field system_disk instead.
                     type: number
                   tags:
                     additionalProperties:
                       type: string
-                    description: A mapping of tags to assign to the resource.
+                    description: A mapping of tags to assign to instance, block storage,
+                      and elastic network.
                     type: object
                     x-kubernetes-map-type: granular
                   templateResourceGroupId:
-                    description: The Launch Template ID.
+                    description: The template resource group id.
                     type: string
                   templateTags:
                     additionalProperties:
                       type: string
-                    description: A mapping of tags to assign to the resource.
+                    description: A mapping of tags to assign to the launch template.
                     type: object
                     x-kubernetes-map-type: granular
                   updateDefaultVersionNumber:
+                    description: Whether to update the default version of the launch
+                      template to the latest version automatically. It is conflict
+                      with default_version_number.
                     type: boolean
                   userData:
+                    description: The User Data.
                     type: string
                   userdata:
-                    description: User data of the instance, which is Base64-encoded.
-                      Size of the raw data cannot exceed 16 KB.
+                    description: (Deprecated) It has been deprecated from version
+                      1.120.0, and use field user_data instead.
                     type: string
                   versionDescription:
-                    description: Description of instance launch template version 1.
-                      It can be [2, 256] characters in length. It cannot start with
-                      "http://" or "https://". The default value is null.
+                    description: The description of the launch template version. The
+                      description must be 2 to 256 characters in length and cannot
+                      start with http:// or https://.
                     type: string
                   vpcId:
-                    description: The Launch Template ID.
+                    description: The ID of the VPC.
                     type: string
                   vswitchId:
                     description: When creating a VPC-Connected instance, you must

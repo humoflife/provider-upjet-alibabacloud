@@ -16,7 +16,7 @@ import (
 
 // GetTerraformResourceType returns Terraform resource type for this LaunchTemplate
 func (mg *LaunchTemplate) GetTerraformResourceType() string {
-	return "alicloud_launch_template"
+	return "alicloud_ecs_launch_template"
 }
 
 // GetConnectionDetailsMapping for this LaunchTemplate
@@ -113,7 +113,7 @@ func (tr *LaunchTemplate) GetMergedParameters(shouldMergeInitProvider bool) (map
 // LateInitialize this LaunchTemplate using its observed tfState.
 // returns True if there are any spec changes for the resource.
 func (tr *LaunchTemplate) LateInitialize(attrs []byte) (bool, error) {
-	params := &LaunchTemplateParameters_2{}
+	params := &LaunchTemplateParameters{}
 	if err := json.TFParser.Unmarshal(attrs, params); err != nil {
 		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
 	}

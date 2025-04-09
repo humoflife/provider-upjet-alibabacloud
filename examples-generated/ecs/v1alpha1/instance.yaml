@@ -24,7 +24,9 @@ spec:
     systemDiskCategory: cloud_efficiency
     systemDiskDescription: test_foo_system_disk_description
     systemDiskName: ${var.name}
-    vswitchId: ${alicloud_vswitch.vswitch.id}
+    vswitchIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: vswitch
 
 ---
 

@@ -35,8 +35,7 @@ spec:
     schema:
       openAPIV3Schema:
         description: NetworkInterfaceAttachment is the Schema for the NetworkInterfaceAttachments
-          API. Provides an Alicloud ECS Elastic Network Interface Attachment as a
-          resource to attach ENI to or detach ENI from ECS Instances.
+          API. Provides a Alicloud ECS Network Interface Attachment resource.
         properties:
           apiVersion:
             description: |-
@@ -76,17 +75,19 @@ spec:
               forProvider:
                 properties:
                   instanceId:
-                    description: The instance ID to attach.
+                    description: The ID of the ECS instance.
                     type: string
                   networkCardIndex:
+                    description: The index of the network card.
                     type: number
                   networkInterfaceId:
-                    description: The ENI ID to attach.
+                    description: The ID of the network interface.
                     type: string
                   trunkNetworkInstanceId:
-                    description: The instance ID to attach.
+                    description: The ID of the trunk network instance.
                     type: string
                   waitForNetworkConfigurationReady:
+                    description: The wait for network configuration ready.
                     type: boolean
                 type: object
               initProvider:
@@ -103,17 +104,19 @@ spec:
                   autoscaler.
                 properties:
                   instanceId:
-                    description: The instance ID to attach.
+                    description: The ID of the ECS instance.
                     type: string
                   networkCardIndex:
+                    description: The index of the network card.
                     type: number
                   networkInterfaceId:
-                    description: The ENI ID to attach.
+                    description: The ID of the network interface.
                     type: string
                   trunkNetworkInstanceId:
-                    description: The instance ID to attach.
+                    description: The ID of the trunk network instance.
                     type: string
                   waitForNetworkConfigurationReady:
+                    description: The wait for network configuration ready.
                     type: boolean
                 type: object
               managementPolicies:
@@ -299,20 +302,22 @@ spec:
               atProvider:
                 properties:
                   id:
-                    description: The ID of the resource, formatted as <network_interface_id>:<instance_id>.
+                    description: It formats as <network_interface_id>:<instance_id>.
                     type: string
                   instanceId:
-                    description: The instance ID to attach.
+                    description: The ID of the ECS instance.
                     type: string
                   networkCardIndex:
+                    description: The index of the network card.
                     type: number
                   networkInterfaceId:
-                    description: The ENI ID to attach.
+                    description: The ID of the network interface.
                     type: string
                   trunkNetworkInstanceId:
-                    description: The instance ID to attach.
+                    description: The ID of the trunk network instance.
                     type: string
                   waitForNetworkConfigurationReady:
+                    description: The wait for network configuration ready.
                     type: boolean
                 type: object
               conditions:

@@ -13,41 +13,44 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type KeyPairAttachmentInitParameters_2 struct {
+type KeyPairAttachmentInitParameters struct {
 
-	// (ForceNew) Set it to true and it will reboot instances which attached with the key pair to make key pair affect immediately.
+	// Set it to true and it will reboot instances which attached with the key pair to make key pair affect immediately.
 	Force *bool `json:"force,omitempty" tf:"force,omitempty"`
 
 	// The list of ECS instance's IDs.
 	// +listType=set
 	InstanceIds []*string `json:"instanceIds,omitempty" tf:"instance_ids,omitempty"`
 
-	// The name of key pair used to bind.
+	// (Deprecated since v1.121.0+) New field 'key_pair_name' instead.
 	KeyName *string `json:"keyName,omitempty" tf:"key_name,omitempty"`
 
+	// The name of key pair used to bind.
 	KeyPairName *string `json:"keyPairName,omitempty" tf:"key_pair_name,omitempty"`
 }
 
-type KeyPairAttachmentObservation_2 struct {
+type KeyPairAttachmentObservation struct {
 
-	// (ForceNew) Set it to true and it will reboot instances which attached with the key pair to make key pair affect immediately.
+	// Set it to true and it will reboot instances which attached with the key pair to make key pair affect immediately.
 	Force *bool `json:"force,omitempty" tf:"force,omitempty"`
 
+	// The resource ID of Key Pair Attachment. The value is formatted <key_pair_name>:<instance_ids>.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// The list of ECS instance's IDs.
 	// +listType=set
 	InstanceIds []*string `json:"instanceIds,omitempty" tf:"instance_ids,omitempty"`
 
-	// The name of key pair used to bind.
+	// (Deprecated since v1.121.0+) New field 'key_pair_name' instead.
 	KeyName *string `json:"keyName,omitempty" tf:"key_name,omitempty"`
 
+	// The name of key pair used to bind.
 	KeyPairName *string `json:"keyPairName,omitempty" tf:"key_pair_name,omitempty"`
 }
 
-type KeyPairAttachmentParameters_2 struct {
+type KeyPairAttachmentParameters struct {
 
-	// (ForceNew) Set it to true and it will reboot instances which attached with the key pair to make key pair affect immediately.
+	// Set it to true and it will reboot instances which attached with the key pair to make key pair affect immediately.
 	// +kubebuilder:validation:Optional
 	Force *bool `json:"force,omitempty" tf:"force,omitempty"`
 
@@ -56,10 +59,11 @@ type KeyPairAttachmentParameters_2 struct {
 	// +listType=set
 	InstanceIds []*string `json:"instanceIds,omitempty" tf:"instance_ids,omitempty"`
 
-	// The name of key pair used to bind.
+	// (Deprecated since v1.121.0+) New field 'key_pair_name' instead.
 	// +kubebuilder:validation:Optional
 	KeyName *string `json:"keyName,omitempty" tf:"key_name,omitempty"`
 
+	// The name of key pair used to bind.
 	// +kubebuilder:validation:Optional
 	KeyPairName *string `json:"keyPairName,omitempty" tf:"key_pair_name,omitempty"`
 }
@@ -67,7 +71,7 @@ type KeyPairAttachmentParameters_2 struct {
 // KeyPairAttachmentSpec defines the desired state of KeyPairAttachment
 type KeyPairAttachmentSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     KeyPairAttachmentParameters_2 `json:"forProvider"`
+	ForProvider     KeyPairAttachmentParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -78,20 +82,20 @@ type KeyPairAttachmentSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider KeyPairAttachmentInitParameters_2 `json:"initProvider,omitempty"`
+	InitProvider KeyPairAttachmentInitParameters `json:"initProvider,omitempty"`
 }
 
 // KeyPairAttachmentStatus defines the observed state of KeyPairAttachment.
 type KeyPairAttachmentStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        KeyPairAttachmentObservation_2 `json:"atProvider,omitempty"`
+	AtProvider        KeyPairAttachmentObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// KeyPairAttachment is the Schema for the KeyPairAttachments API. Provides a Alicloud key pair attachment resource to bind key pair for several ECS instances.
+// KeyPairAttachment is the Schema for the KeyPairAttachments API. Provides a Alicloud ECS Key Pair Attachment resource.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"

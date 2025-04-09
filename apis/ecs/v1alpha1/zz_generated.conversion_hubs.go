@@ -121,7 +121,4 @@ func (tr *Snapshot) Hub() {}
 func (tr *SnapshotGroup) Hub() {}
 
 // Hub marks this type as a conversion hub.
-func (tr *SnapshotPolicy) Hub() {}
-
-// Hub marks this type as a conversion hub.
 func (tr *StorageCapacityUnit) Hub() {}

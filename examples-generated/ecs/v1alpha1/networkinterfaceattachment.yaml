@@ -4,36 +4,12 @@ metadata:
   annotations:
     meta.upbound.io/example-id: ecs/v1alpha1/networkinterfaceattachment
   labels:
-    testing.upbound.io/example-name: attachment
-  name: attachment
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
-    count: ${var.number}
-    instanceId: ${element(alicloud_instance.instance.*.id, count.index)}
-    networkInterfaceId: ${element(alicloud_network_interface.interface.*.id, count.index)}
-
----
-
-apiVersion: ecs.alibabacloud.crossplane.io/v1alpha1
-kind: Instance
-metadata:
-  annotations:
-    meta.upbound.io/example-id: ecs/v1alpha1/networkinterfaceattachment
-  labels:
-    testing.upbound.io/example-name: instance
-  name: instance
-spec:
-  forProvider:
-    availabilityZone: ${data.alicloud_zones.default.zones[0].id}
-    count: ${var.number}
-    imageId: ${data.alicloud_images.default.images[0].id}
-    instanceName: ${var.name}
-    instanceType: ${data.alicloud_instance_types.instance_type.instance_types[0].id}
-    internetMaxBandwidthOut: 10
-    securityGroups:
-    - ${alicloud_security_group.group.id}
-    systemDiskCategory: cloud_efficiency
-    vswitchId: ${alicloud_vswitch.vswitch.id}
+    instanceId: ${alicloud_instance.default.id}
+    networkInterfaceId: ${alicloud_ecs_network_interface.default.id}
 
 ---
 
@@ -43,15 +19,43 @@ metadata:
   annotations:
     meta.upbound.io/example-id: ecs/v1alpha1/networkinterfaceattachment
   labels:
-    testing.upbound.io/example-name: interface
-  name: interface
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
-    count: ${var.number}
-    name: ${var.name}
+    description: Basic example
+    networkInterfaceName: ${var.name}
+    primaryIpAddress: 192.168.0.2
+    resourceGroupId: ${data.alicloud_resource_manager_resource_groups.default.ids.0}
+    securityGroupIds:
+    - ${alicloud_security_group.default.id}
+    tags:
+      Created: TF
+      For: example
+    vswitchId: ${alicloud_vswitch.default.id}
+
+---
+
+apiVersion: ecs.alibabacloud.crossplane.io/v1alpha1
+kind: Instance
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ecs/v1alpha1/networkinterfaceattachment
+  labels:
+    testing.upbound.io/example-name: default
+  name: default
+spec:
+  forProvider:
+    availabilityZone: ${data.alicloud_zones.default.zones.0.id}
+    hostName: tf-example
+    imageId: ${data.alicloud_images.default.images.0.id}
+    instanceName: ${var.name}
+    instanceType: ${data.alicloud_instance_types.default.instance_types.0.id}
     securityGroups:
-    - ${alicloud_security_group.group.id}
-    vswitchId: ${alicloud_vswitch.vswitch.id}
+    - ${alicloud_security_group.default.id}
+    vswitchIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: default
 
 ---
 
@@ -61,14 +65,15 @@ metadata:
   annotations:
     meta.upbound.io/example-id: ecs/v1alpha1/networkinterfaceattachment
   labels:
-    testing.upbound.io/example-name: group
-  name: group
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
+    description: New security group
     name: ${var.name}
     vpcIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: vpc
+        testing.upbound.io/example-name: default
 
 ---
 
@@ -78,12 +83,12 @@ metadata:
   annotations:
     meta.upbound.io/example-id: ecs/v1alpha1/networkinterfaceattachment
   labels:
-    testing.upbound.io/example-name: vpc
-  name: vpc
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
     cidrBlock: 192.168.0.0/24
-    name: ${var.name}
+    vpcName: ${var.name}
 
 ---
 
@@ -93,13 +98,13 @@ metadata:
   annotations:
     meta.upbound.io/example-id: ecs/v1alpha1/networkinterfaceattachment
   labels:
-    testing.upbound.io/example-name: vswitch
-  name: vswitch
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
     cidrBlock: 192.168.0.0/24
     vpcIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: vpc
+        testing.upbound.io/example-name: default
     vswitchName: ${var.name}
-    zoneId: ${data.alicloud_zones.default.zones[0].id}
+    zoneId: ${data.alicloud_zones.default.zones.0.id}

@@ -35,8 +35,7 @@ spec:
     schema:
       openAPIV3Schema:
         description: KeyPairAttachment is the Schema for the KeyPairAttachments API.
-          Provides a Alicloud key pair attachment resource to bind key pair for several
-          ECS instances.
+          Provides a Alicloud ECS Key Pair Attachment resource.
         properties:
           apiVersion:
             description: |-
@@ -75,8 +74,8 @@ spec:
               forProvider:
                 properties:
                   force:
-                    description: (ForceNew) Set it to true and it will reboot instances
-                      which attached with the key pair to make key pair affect immediately.
+                    description: Set it to true and it will reboot instances which
+                      attached with the key pair to make key pair affect immediately.
                     type: boolean
                   instanceIds:
                     description: The list of ECS instance's IDs.
@@ -85,9 +84,11 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   keyName:
-                    description: The name of key pair used to bind.
+                    description: (Deprecated since v1.121.0+) New field 'key_pair_name'
+                      instead.
                     type: string
                   keyPairName:
+                    description: The name of key pair used to bind.
                     type: string
                 type: object
               initProvider:
@@ -104,8 +105,8 @@ spec:
                   autoscaler.
                 properties:
                   force:
-                    description: (ForceNew) Set it to true and it will reboot instances
-                      which attached with the key pair to make key pair affect immediately.
+                    description: Set it to true and it will reboot instances which
+                      attached with the key pair to make key pair affect immediately.
                     type: boolean
                   instanceIds:
                     description: The list of ECS instance's IDs.
@@ -114,9 +115,11 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   keyName:
-                    description: The name of key pair used to bind.
+                    description: (Deprecated since v1.121.0+) New field 'key_pair_name'
+                      instead.
                     type: string
                   keyPairName:
+                    description: The name of key pair used to bind.
                     type: string
                 type: object
               managementPolicies:
@@ -297,10 +300,12 @@ spec:
               atProvider:
                 properties:
                   force:
-                    description: (ForceNew) Set it to true and it will reboot instances
-                      which attached with the key pair to make key pair affect immediately.
+                    description: Set it to true and it will reboot instances which
+                      attached with the key pair to make key pair affect immediately.
                     type: boolean
                   id:
+                    description: The resource ID of Key Pair Attachment. The value
+                      is formatted <key_pair_name>:<instance_ids>.
                     type: string
                   instanceIds:
                     description: The list of ECS instance's IDs.
@@ -309,9 +314,11 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   keyName:
-                    description: The name of key pair used to bind.
+                    description: (Deprecated since v1.121.0+) New field 'key_pair_name'
+                      instead.
                     type: string
                   keyPairName:
+                    description: The name of key pair used to bind.
                     type: string
                 type: object
               conditions:

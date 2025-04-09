@@ -13,25 +13,27 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type LaunchTemplateDataDisksInitParameters_2 struct {
+type LaunchTemplateDataDisksInitParameters struct {
 
-	// The category of the disk:
+	// The category of the disk.
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
-	// Delete this data disk when the instance is destroyed. It only works on cloud, cloud_efficiency, cloud_ssd and cloud_essd disk. If the category of this data disk was ephemeral_ssd, please don't set this param.
+	// Indicates whether the data disk is released with the instance.
 	DeleteWithInstance *bool `json:"deleteWithInstance,omitempty" tf:"delete_with_instance,omitempty"`
 
-	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
+	// The description of the data disk.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// The mount point of the data disk.
 	Device *string `json:"device,omitempty" tf:"device,omitempty"`
 
 	// Encrypted the data in this disk.
 	Encrypted *bool `json:"encrypted,omitempty" tf:"encrypted,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// The name of the data disk.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The performance level of the ESSD used as the data disk.
 	PerformanceLevel *string `json:"performanceLevel,omitempty" tf:"performance_level,omitempty"`
 
 	// The size of the data disk.
@@ -41,25 +43,27 @@ type LaunchTemplateDataDisksInitParameters_2 struct {
 	SnapshotID *string `json:"snapshotId,omitempty" tf:"snapshot_id,omitempty"`
 }
 
-type LaunchTemplateDataDisksObservation_2 struct {
+type LaunchTemplateDataDisksObservation struct {
 
-	// The category of the disk:
+	// The category of the disk.
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
-	// Delete this data disk when the instance is destroyed. It only works on cloud, cloud_efficiency, cloud_ssd and cloud_essd disk. If the category of this data disk was ephemeral_ssd, please don't set this param.
+	// Indicates whether the data disk is released with the instance.
 	DeleteWithInstance *bool `json:"deleteWithInstance,omitempty" tf:"delete_with_instance,omitempty"`
 
-	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
+	// The description of the data disk.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// The mount point of the data disk.
 	Device *string `json:"device,omitempty" tf:"device,omitempty"`
 
 	// Encrypted the data in this disk.
 	Encrypted *bool `json:"encrypted,omitempty" tf:"encrypted,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// The name of the data disk.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The performance level of the ESSD used as the data disk.
 	PerformanceLevel *string `json:"performanceLevel,omitempty" tf:"performance_level,omitempty"`
 
 	// The size of the data disk.
@@ -69,20 +73,21 @@ type LaunchTemplateDataDisksObservation_2 struct {
 	SnapshotID *string `json:"snapshotId,omitempty" tf:"snapshot_id,omitempty"`
 }
 
-type LaunchTemplateDataDisksParameters_2 struct {
+type LaunchTemplateDataDisksParameters struct {
 
-	// The category of the disk:
+	// The category of the disk.
 	// +kubebuilder:validation:Optional
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
-	// Delete this data disk when the instance is destroyed. It only works on cloud, cloud_efficiency, cloud_ssd and cloud_essd disk. If the category of this data disk was ephemeral_ssd, please don't set this param.
+	// Indicates whether the data disk is released with the instance.
 	// +kubebuilder:validation:Optional
 	DeleteWithInstance *bool `json:"deleteWithInstance,omitempty" tf:"delete_with_instance,omitempty"`
 
-	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
+	// The description of the data disk.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// The mount point of the data disk.
 	// +kubebuilder:validation:Optional
 	Device *string `json:"device,omitempty" tf:"device,omitempty"`
 
@@ -90,10 +95,11 @@ type LaunchTemplateDataDisksParameters_2 struct {
 	// +kubebuilder:validation:Optional
 	Encrypted *bool `json:"encrypted,omitempty" tf:"encrypted,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// The name of the data disk.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The performance level of the ESSD used as the data disk.
 	// +kubebuilder:validation:Optional
 	PerformanceLevel *string `json:"performanceLevel,omitempty" tf:"performance_level,omitempty"`
 
@@ -106,52 +112,60 @@ type LaunchTemplateDataDisksParameters_2 struct {
 	SnapshotID *string `json:"snapshotId,omitempty" tf:"snapshot_id,omitempty"`
 }
 
-type LaunchTemplateInitParameters_2 struct {
+type LaunchTemplateInitParameters struct {
 
 	// Instance auto release time. The time is presented using the ISO8601 standard and in UTC time. The format is  YYYY-MM-DDTHH:MM:SSZ.
 	AutoReleaseTime *string `json:"autoReleaseTime,omitempty" tf:"auto_release_time,omitempty"`
 
+	// Specifies whether to enable auto-renewal for the instance. This parameter is valid only if internet_charge_type is set to PrePaid.
 	AutoRenew *bool `json:"autoRenew,omitempty" tf:"auto_renew,omitempty"`
 
+	// The auto-renewal period of the instance. Valid values when period_unit is set to Month: 1, 2, 3, 6, 12, 24, 36, 48, and 60. Default value: 1.
 	AutoRenewPeriod *float64 `json:"autoRenewPeriod,omitempty" tf:"auto_renew_period,omitempty"`
 
-	// The list of data disks created with instance.
-	DataDisks []LaunchTemplateDataDisksInitParameters_2 `json:"dataDisks,omitempty" tf:"data_disks,omitempty"`
+	// The list of data disks created with instance. See data_disks below.
+	DataDisks []LaunchTemplateDataDisksInitParameters `json:"dataDisks,omitempty" tf:"data_disks,omitempty"`
 
+	// The version number of the default launch template version. Default to 1. It is conflict with update_default_version_number.
 	DefaultVersionNumber *float64 `json:"defaultVersionNumber,omitempty" tf:"default_version_number,omitempty"`
 
-	// The Launch Template ID.
+	// The Deployment Set Id.
 	DeploymentSetID *string `json:"deploymentSetId,omitempty" tf:"deployment_set_id,omitempty"`
 
 	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// Whether to enable the instance operating system configuration.
 	EnableVMOsConfig *bool `json:"enableVmOsConfig,omitempty" tf:"enable_vm_os_config,omitempty"`
 
+	// Whether to enable access to instance metadata. Valid values:
 	HTTPEndpoint *string `json:"httpEndpoint,omitempty" tf:"http_endpoint,omitempty"`
 
+	// The HTTP PUT response hop limit required for instance metadata requests.
 	HTTPPutResponseHopLimit *float64 `json:"httpPutResponseHopLimit,omitempty" tf:"http_put_response_hop_limit,omitempty"`
 
+	// Whether to use the hardened mode (IMDSv2) when accessing instance metadata. Valid values:
 	HTTPTokens *string `json:"httpTokens,omitempty" tf:"http_tokens,omitempty"`
 
 	// Instance host name.It cannot start or end with a period (.) or a hyphen (-) and it cannot have two or more consecutive periods (.) or hyphens (-).For Windows: The host name can be [2, 15] characters in length. It can contain A-Z, a-z, numbers, periods (.), and hyphens (-). It cannot only contain numbers. For other operating systems: The host name can be [2, 64] characters in length. It can be segments separated by periods (.). It can contain A-Z, a-z, numbers, and hyphens (-).
 	HostName *string `json:"hostName,omitempty" tf:"host_name,omitempty"`
 
-	// Image ID.
+	// The Image ID.
 	ImageID *string `json:"imageId,omitempty" tf:"image_id,omitempty"`
 
+	// Mirror source. Valid values: system, self, others, marketplace, "". Default to: "".
 	ImageOwnerAlias *string `json:"imageOwnerAlias,omitempty" tf:"image_owner_alias,omitempty"`
 
-	// Billing methods. Optional values:
+	// Billing methods. Valid values: PostPaid, PrePaid.
 	InstanceChargeType *string `json:"instanceChargeType,omitempty" tf:"instance_charge_type,omitempty"`
 
-	// The name of the instance. The name is a string of 2 to 128 characters. It must begin with an English or a Chinese character. It can contain A-Z, a-z, Chinese characters, numbers, periods (.), colons (:), underscores (_), and hyphens (-).
+	// The name of the instance. The name must be 2 to 128 characters in length. It must start with a letter and cannot start with http:// or https://. It can contain letters, digits, colons (:), underscores (_), periods (.), commas (,), brackets ([]), and hyphens (-).
 	InstanceName *string `json:"instanceName,omitempty" tf:"instance_name,omitempty"`
 
 	// Instance type. For more information, call resource_alicloud_instances to obtain the latest instance type list.
 	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
 
-	// Internet bandwidth billing method. Optional values: PayByTraffic | PayByBandwidth.
+	// Internet bandwidth billing method. Valid values: PayByTraffic, PayByBandwidth.
 	InternetChargeType *string `json:"internetChargeType,omitempty" tf:"internet_charge_type,omitempty"`
 
 	// The maximum inbound bandwidth from the Internet network, measured in Mbit/s. Value range: [1, 200].
@@ -160,90 +174,99 @@ type LaunchTemplateInitParameters_2 struct {
 	// Maximum outbound bandwidth from the Internet, its unit of measurement is Mbit/s. Value range: [0, 100].
 	InternetMaxBandwidthOut *float64 `json:"internetMaxBandwidthOut,omitempty" tf:"internet_max_bandwidth_out,omitempty"`
 
-	// Whether it is an I/O-optimized instance or not. Optional values:
+	// Whether it is an I/O-optimized instance or not. Valid values: none, optimized.
 	IoOptimized *string `json:"ioOptimized,omitempty" tf:"io_optimized,omitempty"`
 
 	// The name of the key pair.
 	KeyPairName *string `json:"keyPairName,omitempty" tf:"key_pair_name,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// The name of Launch Template.
 	LaunchTemplateName *string `json:"launchTemplateName,omitempty" tf:"launch_template_name,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field launch_template_name instead.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The list of network interfaces created with instance.
-	NetworkInterfaces []LaunchTemplateNetworkInterfacesInitParameters_2 `json:"networkInterfaces,omitempty" tf:"network_interfaces,omitempty"`
+	// The list of network interfaces created with instance. See network_interfaces below.
+	NetworkInterfaces []LaunchTemplateNetworkInterfacesInitParameters `json:"networkInterfaces,omitempty" tf:"network_interfaces,omitempty"`
 
-	// Network type of the instance. Value options: classic | vpc.
+	// Network type of the instance. Valid values: classic, vpc.
 	NetworkType *string `json:"networkType,omitempty" tf:"network_type,omitempty"`
 
+	// Whether to use the password preset by the mirror.
 	PasswordInherit *bool `json:"passwordInherit,omitempty" tf:"password_inherit,omitempty"`
 
+	// The subscription period of the instance. Unit: months. This parameter takes effect and is required only when InstanceChargeType is set to PrePaid. If the DedicatedHostId parameter is specified, the value of the Period parameter must be within the subscription period of the dedicated host.
 	Period *float64 `json:"period,omitempty" tf:"period,omitempty"`
 
+	// The unit of the subscription period. Valid values: Month (default).
 	PeriodUnit *string `json:"periodUnit,omitempty" tf:"period_unit,omitempty"`
 
+	// The private IP address of the instance.
 	PrivateIPAddress *string `json:"privateIpAddress,omitempty" tf:"private_ip_address,omitempty"`
 
 	// The RAM role name of the instance. You can use the RAM API ListRoles to query instance RAM role names.
 	RAMRoleName *string `json:"ramRoleName,omitempty" tf:"ram_role_name,omitempty"`
 
-	// The Launch Template ID.
+	// The ID of the resource group to which to assign the instance, Elastic Block Storage (EBS) device, and ENI.
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
-	// Whether or not to activate the security enhancement feature and install network security software free of charge. Optional values: Active | Deactive.
+	// Whether or not to activate the security enhancement feature and install network security software free of charge. Valid values: Active, Deactive.
 	SecurityEnhancementStrategy *string `json:"securityEnhancementStrategy,omitempty" tf:"security_enhancement_strategy,omitempty"`
 
 	// The security group ID.
 	SecurityGroupID *string `json:"securityGroupId,omitempty" tf:"security_group_id,omitempty"`
 
+	// The ID of security group N to which to assign the instance.
 	SecurityGroupIds []*string `json:"securityGroupIds,omitempty" tf:"security_group_ids,omitempty"`
 
+	// The protection period of the preemptible instance. Unit: hours. Valid values: 0, 1, 2, 3, 4, 5, and 6. Default to: 1.
 	SpotDuration *string `json:"spotDuration,omitempty" tf:"spot_duration,omitempty"`
 
 	// Sets the maximum hourly instance price. Supports up to three decimal places.
 	SpotPriceLimit *float64 `json:"spotPriceLimit,omitempty" tf:"spot_price_limit,omitempty"`
 
-	// The spot strategy for a Pay-As-You-Go instance. This parameter is valid and required only when InstanceChargeType is set to PostPaid. Value range:
+	// The spot strategy for a Pay-As-You-Go instance. This parameter is valid and required only when InstanceChargeType is set to PostPaid. Valid values: NoSpot, SpotAsPriceGo, SpotWithPriceLimit.
 	SpotStrategy *string `json:"spotStrategy,omitempty" tf:"spot_strategy,omitempty"`
 
-	SystemDisk []LaunchTemplateSystemDiskInitParameters `json:"systemDisk,omitempty" tf:"system_disk,omitempty"`
+	// The System Disk. See system_disk below.
+	SystemDisk []SystemDiskInitParameters `json:"systemDisk,omitempty" tf:"system_disk,omitempty"`
 
-	// The category of the system disk. System disk type. Optional values:
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field system_disk instead.
 	SystemDiskCategory *string `json:"systemDiskCategory,omitempty" tf:"system_disk_category,omitempty"`
 
-	// System disk description. It cannot begin with http:// or https://.
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field system_disk instead.
 	SystemDiskDescription *string `json:"systemDiskDescription,omitempty" tf:"system_disk_description,omitempty"`
 
-	// System disk name. The name is a string of 2 to 128 characters. It must begin with an English or a Chinese character. It can contain A-Z, a-z, Chinese characters, numbers, periods (.), colons (:), underscores (_), and hyphens (-).
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field system_disk instead.
 	SystemDiskName *string `json:"systemDiskName,omitempty" tf:"system_disk_name,omitempty"`
 
-	// Size of the system disk, measured in GB. Value range: [20, 500].
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field system_disk instead.
 	SystemDiskSize *float64 `json:"systemDiskSize,omitempty" tf:"system_disk_size,omitempty"`
 
-	// A mapping of tags to assign to the resource.
+	// A mapping of tags to assign to instance, block storage, and elastic network.
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
-	// The Launch Template ID.
+	// The template resource group id.
 	TemplateResourceGroupID *string `json:"templateResourceGroupId,omitempty" tf:"template_resource_group_id,omitempty"`
 
-	// A mapping of tags to assign to the resource.
+	// A mapping of tags to assign to the launch template.
 	// +mapType=granular
 	TemplateTags map[string]*string `json:"templateTags,omitempty" tf:"template_tags,omitempty"`
 
+	// Whether to update the default version of the launch template to the latest version automatically. It is conflict with default_version_number.
 	UpdateDefaultVersionNumber *bool `json:"updateDefaultVersionNumber,omitempty" tf:"update_default_version_number,omitempty"`
 
+	// The User Data.
 	UserData *string `json:"userData,omitempty" tf:"user_data,omitempty"`
 
-	// User data of the instance, which is Base64-encoded. Size of the raw data cannot exceed 16 KB.
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field user_data instead.
 	Userdata *string `json:"userdata,omitempty" tf:"userdata,omitempty"`
 
-	// The Launch Template ID.
+	// The ID of the VPC.
 	VPCID *string `json:"vpcId,omitempty" tf:"vpc_id,omitempty"`
 
-	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
+	// The description of the launch template version. The description must be 2 to 256 characters in length and cannot start with http:// or https://.
 	VersionDescription *string `json:"versionDescription,omitempty" tf:"version_description,omitempty"`
 
 	// When creating a VPC-Connected instance, you must specify its VSwitch ID.
@@ -253,49 +276,49 @@ type LaunchTemplateInitParameters_2 struct {
 	ZoneID *string `json:"zoneId,omitempty" tf:"zone_id,omitempty"`
 }
 
-type LaunchTemplateNetworkInterfacesInitParameters_2 struct {
+type LaunchTemplateNetworkInterfacesInitParameters struct {
 
-	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
+	// The ENI description.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// The ENI name.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// The primary private IP address of the ENI.
 	PrimaryIP *string `json:"primaryIp,omitempty" tf:"primary_ip,omitempty"`
 
-	// The security group ID.
+	// The security group ID must be one in the same VPC.
 	SecurityGroupID *string `json:"securityGroupId,omitempty" tf:"security_group_id,omitempty"`
 
-	// When creating a VPC-Connected instance, you must specify its VSwitch ID.
+	// The VSwitch ID for ENI. The instance must be in the same zone of the same VPC network as the ENI, but they may belong to different VSwitches.
 	VswitchID *string `json:"vswitchId,omitempty" tf:"vswitch_id,omitempty"`
 }
 
-type LaunchTemplateNetworkInterfacesObservation_2 struct {
+type LaunchTemplateNetworkInterfacesObservation struct {
 
-	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
+	// The ENI description.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// The ENI name.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// The primary private IP address of the ENI.
 	PrimaryIP *string `json:"primaryIp,omitempty" tf:"primary_ip,omitempty"`
 
-	// The security group ID.
+	// The security group ID must be one in the same VPC.
 	SecurityGroupID *string `json:"securityGroupId,omitempty" tf:"security_group_id,omitempty"`
 
-	// When creating a VPC-Connected instance, you must specify its VSwitch ID.
+	// The VSwitch ID for ENI. The instance must be in the same zone of the same VPC network as the ENI, but they may belong to different VSwitches.
 	VswitchID *string `json:"vswitchId,omitempty" tf:"vswitch_id,omitempty"`
 }
 
-type LaunchTemplateNetworkInterfacesParameters_2 struct {
+type LaunchTemplateNetworkInterfacesParameters struct {
 
-	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
+	// The ENI description.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// The ENI name.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
@@ -303,64 +326,71 @@ type LaunchTemplateNetworkInterfacesParameters_2 struct {
 	// +kubebuilder:validation:Optional
 	PrimaryIP *string `json:"primaryIp,omitempty" tf:"primary_ip,omitempty"`
 
-	// The security group ID.
+	// The security group ID must be one in the same VPC.
 	// +kubebuilder:validation:Optional
 	SecurityGroupID *string `json:"securityGroupId,omitempty" tf:"security_group_id,omitempty"`
 
-	// When creating a VPC-Connected instance, you must specify its VSwitch ID.
+	// The VSwitch ID for ENI. The instance must be in the same zone of the same VPC network as the ENI, but they may belong to different VSwitches.
 	// +kubebuilder:validation:Optional
 	VswitchID *string `json:"vswitchId,omitempty" tf:"vswitch_id,omitempty"`
 }
 
-type LaunchTemplateObservation_2 struct {
+type LaunchTemplateObservation struct {
 
 	// Instance auto release time. The time is presented using the ISO8601 standard and in UTC time. The format is  YYYY-MM-DDTHH:MM:SSZ.
 	AutoReleaseTime *string `json:"autoReleaseTime,omitempty" tf:"auto_release_time,omitempty"`
 
+	// Specifies whether to enable auto-renewal for the instance. This parameter is valid only if internet_charge_type is set to PrePaid.
 	AutoRenew *bool `json:"autoRenew,omitempty" tf:"auto_renew,omitempty"`
 
+	// The auto-renewal period of the instance. Valid values when period_unit is set to Month: 1, 2, 3, 6, 12, 24, 36, 48, and 60. Default value: 1.
 	AutoRenewPeriod *float64 `json:"autoRenewPeriod,omitempty" tf:"auto_renew_period,omitempty"`
 
-	// The list of data disks created with instance.
-	DataDisks []LaunchTemplateDataDisksObservation_2 `json:"dataDisks,omitempty" tf:"data_disks,omitempty"`
+	// The list of data disks created with instance. See data_disks below.
+	DataDisks []LaunchTemplateDataDisksObservation `json:"dataDisks,omitempty" tf:"data_disks,omitempty"`
 
+	// The version number of the default launch template version. Default to 1. It is conflict with update_default_version_number.
 	DefaultVersionNumber *float64 `json:"defaultVersionNumber,omitempty" tf:"default_version_number,omitempty"`
 
-	// The Launch Template ID.
+	// The Deployment Set Id.
 	DeploymentSetID *string `json:"deploymentSetId,omitempty" tf:"deployment_set_id,omitempty"`
 
 	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// Whether to enable the instance operating system configuration.
 	EnableVMOsConfig *bool `json:"enableVmOsConfig,omitempty" tf:"enable_vm_os_config,omitempty"`
 
+	// Whether to enable access to instance metadata. Valid values:
 	HTTPEndpoint *string `json:"httpEndpoint,omitempty" tf:"http_endpoint,omitempty"`
 
+	// The HTTP PUT response hop limit required for instance metadata requests.
 	HTTPPutResponseHopLimit *float64 `json:"httpPutResponseHopLimit,omitempty" tf:"http_put_response_hop_limit,omitempty"`
 
+	// Whether to use the hardened mode (IMDSv2) when accessing instance metadata. Valid values:
 	HTTPTokens *string `json:"httpTokens,omitempty" tf:"http_tokens,omitempty"`
 
 	// Instance host name.It cannot start or end with a period (.) or a hyphen (-) and it cannot have two or more consecutive periods (.) or hyphens (-).For Windows: The host name can be [2, 15] characters in length. It can contain A-Z, a-z, numbers, periods (.), and hyphens (-). It cannot only contain numbers. For other operating systems: The host name can be [2, 64] characters in length. It can be segments separated by periods (.). It can contain A-Z, a-z, numbers, and hyphens (-).
 	HostName *string `json:"hostName,omitempty" tf:"host_name,omitempty"`
 
-	// The Launch Template ID.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// Image ID.
+	// The Image ID.
 	ImageID *string `json:"imageId,omitempty" tf:"image_id,omitempty"`
 
+	// Mirror source. Valid values: system, self, others, marketplace, "". Default to: "".
 	ImageOwnerAlias *string `json:"imageOwnerAlias,omitempty" tf:"image_owner_alias,omitempty"`
 
-	// Billing methods. Optional values:
+	// Billing methods. Valid values: PostPaid, PrePaid.
 	InstanceChargeType *string `json:"instanceChargeType,omitempty" tf:"instance_charge_type,omitempty"`
 
-	// The name of the instance. The name is a string of 2 to 128 characters. It must begin with an English or a Chinese character. It can contain A-Z, a-z, Chinese characters, numbers, periods (.), colons (:), underscores (_), and hyphens (-).
+	// The name of the instance. The name must be 2 to 128 characters in length. It must start with a letter and cannot start with http:// or https://. It can contain letters, digits, colons (:), underscores (_), periods (.), commas (,), brackets ([]), and hyphens (-).
 	InstanceName *string `json:"instanceName,omitempty" tf:"instance_name,omitempty"`
 
 	// Instance type. For more information, call resource_alicloud_instances to obtain the latest instance type list.
 	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
 
-	// Internet bandwidth billing method. Optional values: PayByTraffic | PayByBandwidth.
+	// Internet bandwidth billing method. Valid values: PayByTraffic, PayByBandwidth.
 	InternetChargeType *string `json:"internetChargeType,omitempty" tf:"internet_charge_type,omitempty"`
 
 	// The maximum inbound bandwidth from the Internet network, measured in Mbit/s. Value range: [1, 200].
@@ -369,92 +399,102 @@ type LaunchTemplateObservation_2 struct {
 	// Maximum outbound bandwidth from the Internet, its unit of measurement is Mbit/s. Value range: [0, 100].
 	InternetMaxBandwidthOut *float64 `json:"internetMaxBandwidthOut,omitempty" tf:"internet_max_bandwidth_out,omitempty"`
 
-	// Whether it is an I/O-optimized instance or not. Optional values:
+	// Whether it is an I/O-optimized instance or not. Valid values: none, optimized.
 	IoOptimized *string `json:"ioOptimized,omitempty" tf:"io_optimized,omitempty"`
 
 	// The name of the key pair.
 	KeyPairName *string `json:"keyPairName,omitempty" tf:"key_pair_name,omitempty"`
 
+	// The latest version number of the launch template.
 	LatestVersionNumber *float64 `json:"latestVersionNumber,omitempty" tf:"latest_version_number,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// The name of Launch Template.
 	LaunchTemplateName *string `json:"launchTemplateName,omitempty" tf:"launch_template_name,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field launch_template_name instead.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The list of network interfaces created with instance.
-	NetworkInterfaces []LaunchTemplateNetworkInterfacesObservation_2 `json:"networkInterfaces,omitempty" tf:"network_interfaces,omitempty"`
+	// The list of network interfaces created with instance. See network_interfaces below.
+	NetworkInterfaces []LaunchTemplateNetworkInterfacesObservation `json:"networkInterfaces,omitempty" tf:"network_interfaces,omitempty"`
 
-	// Network type of the instance. Value options: classic | vpc.
+	// Network type of the instance. Valid values: classic, vpc.
 	NetworkType *string `json:"networkType,omitempty" tf:"network_type,omitempty"`
 
+	// Whether to use the password preset by the mirror.
 	PasswordInherit *bool `json:"passwordInherit,omitempty" tf:"password_inherit,omitempty"`
 
+	// The subscription period of the instance. Unit: months. This parameter takes effect and is required only when InstanceChargeType is set to PrePaid. If the DedicatedHostId parameter is specified, the value of the Period parameter must be within the subscription period of the dedicated host.
 	Period *float64 `json:"period,omitempty" tf:"period,omitempty"`
 
+	// The unit of the subscription period. Valid values: Month (default).
 	PeriodUnit *string `json:"periodUnit,omitempty" tf:"period_unit,omitempty"`
 
+	// The private IP address of the instance.
 	PrivateIPAddress *string `json:"privateIpAddress,omitempty" tf:"private_ip_address,omitempty"`
 
 	// The RAM role name of the instance. You can use the RAM API ListRoles to query instance RAM role names.
 	RAMRoleName *string `json:"ramRoleName,omitempty" tf:"ram_role_name,omitempty"`
 
-	// The Launch Template ID.
+	// The ID of the resource group to which to assign the instance, Elastic Block Storage (EBS) device, and ENI.
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
-	// Whether or not to activate the security enhancement feature and install network security software free of charge. Optional values: Active | Deactive.
+	// Whether or not to activate the security enhancement feature and install network security software free of charge. Valid values: Active, Deactive.
 	SecurityEnhancementStrategy *string `json:"securityEnhancementStrategy,omitempty" tf:"security_enhancement_strategy,omitempty"`
 
 	// The security group ID.
 	SecurityGroupID *string `json:"securityGroupId,omitempty" tf:"security_group_id,omitempty"`
 
+	// The ID of security group N to which to assign the instance.
 	SecurityGroupIds []*string `json:"securityGroupIds,omitempty" tf:"security_group_ids,omitempty"`
 
+	// The protection period of the preemptible instance. Unit: hours. Valid values: 0, 1, 2, 3, 4, 5, and 6. Default to: 1.
 	SpotDuration *string `json:"spotDuration,omitempty" tf:"spot_duration,omitempty"`
 
 	// Sets the maximum hourly instance price. Supports up to three decimal places.
 	SpotPriceLimit *float64 `json:"spotPriceLimit,omitempty" tf:"spot_price_limit,omitempty"`
 
-	// The spot strategy for a Pay-As-You-Go instance. This parameter is valid and required only when InstanceChargeType is set to PostPaid. Value range:
+	// The spot strategy for a Pay-As-You-Go instance. This parameter is valid and required only when InstanceChargeType is set to PostPaid. Valid values: NoSpot, SpotAsPriceGo, SpotWithPriceLimit.
 	SpotStrategy *string `json:"spotStrategy,omitempty" tf:"spot_strategy,omitempty"`
 
-	SystemDisk []LaunchTemplateSystemDiskObservation `json:"systemDisk,omitempty" tf:"system_disk,omitempty"`
+	// The System Disk. See system_disk below.
+	SystemDisk []SystemDiskObservation `json:"systemDisk,omitempty" tf:"system_disk,omitempty"`
 
-	// The category of the system disk. System disk type. Optional values:
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field system_disk instead.
 	SystemDiskCategory *string `json:"systemDiskCategory,omitempty" tf:"system_disk_category,omitempty"`
 
-	// System disk description. It cannot begin with http:// or https://.
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field system_disk instead.
 	SystemDiskDescription *string `json:"systemDiskDescription,omitempty" tf:"system_disk_description,omitempty"`
 
-	// System disk name. The name is a string of 2 to 128 characters. It must begin with an English or a Chinese character. It can contain A-Z, a-z, Chinese characters, numbers, periods (.), colons (:), underscores (_), and hyphens (-).
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field system_disk instead.
 	SystemDiskName *string `json:"systemDiskName,omitempty" tf:"system_disk_name,omitempty"`
 
-	// Size of the system disk, measured in GB. Value range: [20, 500].
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field system_disk instead.
 	SystemDiskSize *float64 `json:"systemDiskSize,omitempty" tf:"system_disk_size,omitempty"`
 
-	// A mapping of tags to assign to the resource.
+	// A mapping of tags to assign to instance, block storage, and elastic network.
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
-	// The Launch Template ID.
+	// The template resource group id.
 	TemplateResourceGroupID *string `json:"templateResourceGroupId,omitempty" tf:"template_resource_group_id,omitempty"`
 
-	// A mapping of tags to assign to the resource.
+	// A mapping of tags to assign to the launch template.
 	// +mapType=granular
 	TemplateTags map[string]*string `json:"templateTags,omitempty" tf:"template_tags,omitempty"`
 
+	// Whether to update the default version of the launch template to the latest version automatically. It is conflict with default_version_number.
 	UpdateDefaultVersionNumber *bool `json:"updateDefaultVersionNumber,omitempty" tf:"update_default_version_number,omitempty"`
 
+	// The User Data.
 	UserData *string `json:"userData,omitempty" tf:"user_data,omitempty"`
 
-	// User data of the instance, which is Base64-encoded. Size of the raw data cannot exceed 16 KB.
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field user_data instead.
 	Userdata *string `json:"userdata,omitempty" tf:"userdata,omitempty"`
 
-	// The Launch Template ID.
+	// The ID of the VPC.
 	VPCID *string `json:"vpcId,omitempty" tf:"vpc_id,omitempty"`
 
-	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
+	// The description of the launch template version. The description must be 2 to 256 characters in length and cannot start with http:// or https://.
 	VersionDescription *string `json:"versionDescription,omitempty" tf:"version_description,omitempty"`
 
 	// When creating a VPC-Connected instance, you must specify its VSwitch ID.
@@ -464,26 +504,29 @@ type LaunchTemplateObservation_2 struct {
 	ZoneID *string `json:"zoneId,omitempty" tf:"zone_id,omitempty"`
 }
 
-type LaunchTemplateParameters_2 struct {
+type LaunchTemplateParameters struct {
 
 	// Instance auto release time. The time is presented using the ISO8601 standard and in UTC time. The format is  YYYY-MM-DDTHH:MM:SSZ.
 	// +kubebuilder:validation:Optional
 	AutoReleaseTime *string `json:"autoReleaseTime,omitempty" tf:"auto_release_time,omitempty"`
 
+	// Specifies whether to enable auto-renewal for the instance. This parameter is valid only if internet_charge_type is set to PrePaid.
 	// +kubebuilder:validation:Optional
 	AutoRenew *bool `json:"autoRenew,omitempty" tf:"auto_renew,omitempty"`
 
+	// The auto-renewal period of the instance. Valid values when period_unit is set to Month: 1, 2, 3, 6, 12, 24, 36, 48, and 60. Default value: 1.
 	// +kubebuilder:validation:Optional
 	AutoRenewPeriod *float64 `json:"autoRenewPeriod,omitempty" tf:"auto_renew_period,omitempty"`
 
-	// The list of data disks created with instance.
+	// The list of data disks created with instance. See data_disks below.
 	// +kubebuilder:validation:Optional
-	DataDisks []LaunchTemplateDataDisksParameters_2 `json:"dataDisks,omitempty" tf:"data_disks,omitempty"`
+	DataDisks []LaunchTemplateDataDisksParameters `json:"dataDisks,omitempty" tf:"data_disks,omitempty"`
 
+	// The version number of the default launch template version. Default to 1. It is conflict with update_default_version_number.
 	// +kubebuilder:validation:Optional
 	DefaultVersionNumber *float64 `json:"defaultVersionNumber,omitempty" tf:"default_version_number,omitempty"`
 
-	// The Launch Template ID.
+	// The Deployment Set Id.
 	// +kubebuilder:validation:Optional
 	DeploymentSetID *string `json:"deploymentSetId,omitempty" tf:"deployment_set_id,omitempty"`
 
@@ -491,15 +534,19 @@ type LaunchTemplateParameters_2 struct {
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// Whether to enable the instance operating system configuration.
 	// +kubebuilder:validation:Optional
 	EnableVMOsConfig *bool `json:"enableVmOsConfig,omitempty" tf:"enable_vm_os_config,omitempty"`
 
+	// Whether to enable access to instance metadata. Valid values:
 	// +kubebuilder:validation:Optional
 	HTTPEndpoint *string `json:"httpEndpoint,omitempty" tf:"http_endpoint,omitempty"`
 
+	// The HTTP PUT response hop limit required for instance metadata requests.
 	// +kubebuilder:validation:Optional
 	HTTPPutResponseHopLimit *float64 `json:"httpPutResponseHopLimit,omitempty" tf:"http_put_response_hop_limit,omitempty"`
 
+	// Whether to use the hardened mode (IMDSv2) when accessing instance metadata. Valid values:
 	// +kubebuilder:validation:Optional
 	HTTPTokens *string `json:"httpTokens,omitempty" tf:"http_tokens,omitempty"`
 
@@ -507,18 +554,19 @@ type LaunchTemplateParameters_2 struct {
 	// +kubebuilder:validation:Optional
 	HostName *string `json:"hostName,omitempty" tf:"host_name,omitempty"`
 
-	// Image ID.
+	// The Image ID.
 	// +kubebuilder:validation:Optional
 	ImageID *string `json:"imageId,omitempty" tf:"image_id,omitempty"`
 
+	// Mirror source. Valid values: system, self, others, marketplace, "". Default to: "".
 	// +kubebuilder:validation:Optional
 	ImageOwnerAlias *string `json:"imageOwnerAlias,omitempty" tf:"image_owner_alias,omitempty"`
 
-	// Billing methods. Optional values:
+	// Billing methods. Valid values: PostPaid, PrePaid.
 	// +kubebuilder:validation:Optional
 	InstanceChargeType *string `json:"instanceChargeType,omitempty" tf:"instance_charge_type,omitempty"`
 
-	// The name of the instance. The name is a string of 2 to 128 characters. It must begin with an English or a Chinese character. It can contain A-Z, a-z, Chinese characters, numbers, periods (.), colons (:), underscores (_), and hyphens (-).
+	// The name of the instance. The name must be 2 to 128 characters in length. It must start with a letter and cannot start with http:// or https://. It can contain letters, digits, colons (:), underscores (_), periods (.), commas (,), brackets ([]), and hyphens (-).
 	// +kubebuilder:validation:Optional
 	InstanceName *string `json:"instanceName,omitempty" tf:"instance_name,omitempty"`
 
@@ -526,7 +574,7 @@ type LaunchTemplateParameters_2 struct {
 	// +kubebuilder:validation:Optional
 	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
 
-	// Internet bandwidth billing method. Optional values: PayByTraffic | PayByBandwidth.
+	// Internet bandwidth billing method. Valid values: PayByTraffic, PayByBandwidth.
 	// +kubebuilder:validation:Optional
 	InternetChargeType *string `json:"internetChargeType,omitempty" tf:"internet_charge_type,omitempty"`
 
@@ -538,7 +586,7 @@ type LaunchTemplateParameters_2 struct {
 	// +kubebuilder:validation:Optional
 	InternetMaxBandwidthOut *float64 `json:"internetMaxBandwidthOut,omitempty" tf:"internet_max_bandwidth_out,omitempty"`
 
-	// Whether it is an I/O-optimized instance or not. Optional values:
+	// Whether it is an I/O-optimized instance or not. Valid values: none, optimized.
 	// +kubebuilder:validation:Optional
 	IoOptimized *string `json:"ioOptimized,omitempty" tf:"io_optimized,omitempty"`
 
@@ -546,31 +594,35 @@ type LaunchTemplateParameters_2 struct {
 	// +kubebuilder:validation:Optional
 	KeyPairName *string `json:"keyPairName,omitempty" tf:"key_pair_name,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// The name of Launch Template.
 	// +kubebuilder:validation:Optional
 	LaunchTemplateName *string `json:"launchTemplateName,omitempty" tf:"launch_template_name,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field launch_template_name instead.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The list of network interfaces created with instance.
+	// The list of network interfaces created with instance. See network_interfaces below.
 	// +kubebuilder:validation:Optional
-	NetworkInterfaces []LaunchTemplateNetworkInterfacesParameters_2 `json:"networkInterfaces,omitempty" tf:"network_interfaces,omitempty"`
+	NetworkInterfaces []LaunchTemplateNetworkInterfacesParameters `json:"networkInterfaces,omitempty" tf:"network_interfaces,omitempty"`
 
-	// Network type of the instance. Value options: classic | vpc.
+	// Network type of the instance. Valid values: classic, vpc.
 	// +kubebuilder:validation:Optional
 	NetworkType *string `json:"networkType,omitempty" tf:"network_type,omitempty"`
 
+	// Whether to use the password preset by the mirror.
 	// +kubebuilder:validation:Optional
 	PasswordInherit *bool `json:"passwordInherit,omitempty" tf:"password_inherit,omitempty"`
 
+	// The subscription period of the instance. Unit: months. This parameter takes effect and is required only when InstanceChargeType is set to PrePaid. If the DedicatedHostId parameter is specified, the value of the Period parameter must be within the subscription period of the dedicated host.
 	// +kubebuilder:validation:Optional
 	Period *float64 `json:"period,omitempty" tf:"period,omitempty"`
 
+	// The unit of the subscription period. Valid values: Month (default).
 	// +kubebuilder:validation:Optional
 	PeriodUnit *string `json:"periodUnit,omitempty" tf:"period_unit,omitempty"`
 
+	// The private IP address of the instance.
 	// +kubebuilder:validation:Optional
 	PrivateIPAddress *string `json:"privateIpAddress,omitempty" tf:"private_ip_address,omitempty"`
 
@@ -578,11 +630,11 @@ type LaunchTemplateParameters_2 struct {
 	// +kubebuilder:validation:Optional
 	RAMRoleName *string `json:"ramRoleName,omitempty" tf:"ram_role_name,omitempty"`
 
-	// The Launch Template ID.
+	// The ID of the resource group to which to assign the instance, Elastic Block Storage (EBS) device, and ENI.
 	// +kubebuilder:validation:Optional
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
-	// Whether or not to activate the security enhancement feature and install network security software free of charge. Optional values: Active | Deactive.
+	// Whether or not to activate the security enhancement feature and install network security software free of charge. Valid values: Active, Deactive.
 	// +kubebuilder:validation:Optional
 	SecurityEnhancementStrategy *string `json:"securityEnhancementStrategy,omitempty" tf:"security_enhancement_strategy,omitempty"`
 
@@ -590,9 +642,11 @@ type LaunchTemplateParameters_2 struct {
 	// +kubebuilder:validation:Optional
 	SecurityGroupID *string `json:"securityGroupId,omitempty" tf:"security_group_id,omitempty"`
 
+	// The ID of security group N to which to assign the instance.
 	// +kubebuilder:validation:Optional
 	SecurityGroupIds []*string `json:"securityGroupIds,omitempty" tf:"security_group_ids,omitempty"`
 
+	// The protection period of the preemptible instance. Unit: hours. Valid values: 0, 1, 2, 3, 4, 5, and 6. Default to: 1.
 	// +kubebuilder:validation:Optional
 	SpotDuration *string `json:"spotDuration,omitempty" tf:"spot_duration,omitempty"`
 
@@ -600,58 +654,61 @@ type LaunchTemplateParameters_2 struct {
 	// +kubebuilder:validation:Optional
 	SpotPriceLimit *float64 `json:"spotPriceLimit,omitempty" tf:"spot_price_limit,omitempty"`
 
-	// The spot strategy for a Pay-As-You-Go instance. This parameter is valid and required only when InstanceChargeType is set to PostPaid. Value range:
+	// The spot strategy for a Pay-As-You-Go instance. This parameter is valid and required only when InstanceChargeType is set to PostPaid. Valid values: NoSpot, SpotAsPriceGo, SpotWithPriceLimit.
 	// +kubebuilder:validation:Optional
 	SpotStrategy *string `json:"spotStrategy,omitempty" tf:"spot_strategy,omitempty"`
 
+	// The System Disk. See system_disk below.
 	// +kubebuilder:validation:Optional
-	SystemDisk []LaunchTemplateSystemDiskParameters `json:"systemDisk,omitempty" tf:"system_disk,omitempty"`
+	SystemDisk []SystemDiskParameters `json:"systemDisk,omitempty" tf:"system_disk,omitempty"`
 
-	// The category of the system disk. System disk type. Optional values:
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field system_disk instead.
 	// +kubebuilder:validation:Optional
 	SystemDiskCategory *string `json:"systemDiskCategory,omitempty" tf:"system_disk_category,omitempty"`
 
-	// System disk description. It cannot begin with http:// or https://.
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field system_disk instead.
 	// +kubebuilder:validation:Optional
 	SystemDiskDescription *string `json:"systemDiskDescription,omitempty" tf:"system_disk_description,omitempty"`
 
-	// System disk name. The name is a string of 2 to 128 characters. It must begin with an English or a Chinese character. It can contain A-Z, a-z, Chinese characters, numbers, periods (.), colons (:), underscores (_), and hyphens (-).
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field system_disk instead.
 	// +kubebuilder:validation:Optional
 	SystemDiskName *string `json:"systemDiskName,omitempty" tf:"system_disk_name,omitempty"`
 
-	// Size of the system disk, measured in GB. Value range: [20, 500].
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field system_disk instead.
 	// +kubebuilder:validation:Optional
 	SystemDiskSize *float64 `json:"systemDiskSize,omitempty" tf:"system_disk_size,omitempty"`
 
-	// A mapping of tags to assign to the resource.
+	// A mapping of tags to assign to instance, block storage, and elastic network.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 
-	// The Launch Template ID.
+	// The template resource group id.
 	// +kubebuilder:validation:Optional
 	TemplateResourceGroupID *string `json:"templateResourceGroupId,omitempty" tf:"template_resource_group_id,omitempty"`
 
-	// A mapping of tags to assign to the resource.
+	// A mapping of tags to assign to the launch template.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	TemplateTags map[string]*string `json:"templateTags,omitempty" tf:"template_tags,omitempty"`
 
+	// Whether to update the default version of the launch template to the latest version automatically. It is conflict with default_version_number.
 	// +kubebuilder:validation:Optional
 	UpdateDefaultVersionNumber *bool `json:"updateDefaultVersionNumber,omitempty" tf:"update_default_version_number,omitempty"`
 
+	// The User Data.
 	// +kubebuilder:validation:Optional
 	UserData *string `json:"userData,omitempty" tf:"user_data,omitempty"`
 
-	// User data of the instance, which is Base64-encoded. Size of the raw data cannot exceed 16 KB.
+	// (Deprecated) It has been deprecated from version 1.120.0, and use field user_data instead.
 	// +kubebuilder:validation:Optional
 	Userdata *string `json:"userdata,omitempty" tf:"userdata,omitempty"`
 
-	// The Launch Template ID.
+	// The ID of the VPC.
 	// +kubebuilder:validation:Optional
 	VPCID *string `json:"vpcId,omitempty" tf:"vpc_id,omitempty"`
 
-	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
+	// The description of the launch template version. The description must be 2 to 256 characters in length and cannot start with http:// or https://.
 	// +kubebuilder:validation:Optional
 	VersionDescription *string `json:"versionDescription,omitempty" tf:"version_description,omitempty"`
 
@@ -664,85 +721,91 @@ type LaunchTemplateParameters_2 struct {
 	ZoneID *string `json:"zoneId,omitempty" tf:"zone_id,omitempty"`
 }
 
-type LaunchTemplateSystemDiskInitParameters struct {
+type SystemDiskInitParameters struct {
 
-	// The category of the disk:
+	// The category of the system disk. System disk type. Valid values: all, cloud, ephemeral_ssd, cloud_essd, cloud_efficiency, cloud_ssd, local_disk.
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
-	// Delete this data disk when the instance is destroyed. It only works on cloud, cloud_efficiency, cloud_ssd and cloud_essd disk. If the category of this data disk was ephemeral_ssd, please don't set this param.
+	// Specifies whether to release the system disk when the instance is released. Default to true.
 	DeleteWithInstance *bool `json:"deleteWithInstance,omitempty" tf:"delete_with_instance,omitempty"`
 
-	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
+	// System disk description. It cannot begin with http:// or https://.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// Encrypted the data in this disk.
+	// Specifies whether the system disk is encrypted.
 	Encrypted *bool `json:"encrypted,omitempty" tf:"encrypted,omitempty"`
 
+	// The Iops.
 	Iops *string `json:"iops,omitempty" tf:"iops,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// System disk name. The name is a string of 2 to 128 characters. It must begin with an English or a Chinese character. It can contain A-Z, a-z, Chinese characters, numbers, periods (.), colons (:), underscores (_), and hyphens (-).
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The performance level of the ESSD used as the system disk. Valid Values: PL0, PL1, PL2, and PL3. Default to: PL0.
 	PerformanceLevel *string `json:"performanceLevel,omitempty" tf:"performance_level,omitempty"`
 
-	// The size of the data disk.
+	// Size of the system disk, measured in GB. Value range: [20, 500].
 	Size *float64 `json:"size,omitempty" tf:"size,omitempty"`
 }
 
-type LaunchTemplateSystemDiskObservation struct {
+type SystemDiskObservation struct {
 
-	// The category of the disk:
+	// The category of the system disk. System disk type. Valid values: all, cloud, ephemeral_ssd, cloud_essd, cloud_efficiency, cloud_ssd, local_disk.
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
-	// Delete this data disk when the instance is destroyed. It only works on cloud, cloud_efficiency, cloud_ssd and cloud_essd disk. If the category of this data disk was ephemeral_ssd, please don't set this param.
+	// Specifies whether to release the system disk when the instance is released. Default to true.
 	DeleteWithInstance *bool `json:"deleteWithInstance,omitempty" tf:"delete_with_instance,omitempty"`
 
-	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
+	// System disk description. It cannot begin with http:// or https://.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// Encrypted the data in this disk.
+	// Specifies whether the system disk is encrypted.
 	Encrypted *bool `json:"encrypted,omitempty" tf:"encrypted,omitempty"`
 
+	// The Iops.
 	Iops *string `json:"iops,omitempty" tf:"iops,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// System disk name. The name is a string of 2 to 128 characters. It must begin with an English or a Chinese character. It can contain A-Z, a-z, Chinese characters, numbers, periods (.), colons (:), underscores (_), and hyphens (-).
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The performance level of the ESSD used as the system disk. Valid Values: PL0, PL1, PL2, and PL3. Default to: PL0.
 	PerformanceLevel *string `json:"performanceLevel,omitempty" tf:"performance_level,omitempty"`
 
-	// The size of the data disk.
+	// Size of the system disk, measured in GB. Value range: [20, 500].
 	Size *float64 `json:"size,omitempty" tf:"size,omitempty"`
 }
 
-type LaunchTemplateSystemDiskParameters struct {
+type SystemDiskParameters struct {
 
-	// The category of the disk:
+	// The category of the system disk. System disk type. Valid values: all, cloud, ephemeral_ssd, cloud_essd, cloud_efficiency, cloud_ssd, local_disk.
 	// +kubebuilder:validation:Optional
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
-	// Delete this data disk when the instance is destroyed. It only works on cloud, cloud_efficiency, cloud_ssd and cloud_essd disk. If the category of this data disk was ephemeral_ssd, please don't set this param.
+	// Specifies whether to release the system disk when the instance is released. Default to true.
 	// +kubebuilder:validation:Optional
 	DeleteWithInstance *bool `json:"deleteWithInstance,omitempty" tf:"delete_with_instance,omitempty"`
 
-	// Description of instance launch template version 1. It can be [2, 256] characters in length. It cannot start with "http://" or "https://". The default value is null.
+	// System disk description. It cannot begin with http:// or https://.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// Encrypted the data in this disk.
+	// Specifies whether the system disk is encrypted.
 	// +kubebuilder:validation:Optional
 	Encrypted *bool `json:"encrypted,omitempty" tf:"encrypted,omitempty"`
 
+	// The Iops.
 	// +kubebuilder:validation:Optional
 	Iops *string `json:"iops,omitempty" tf:"iops,omitempty"`
 
-	// Instance launch template name. Can contain [2, 128] characters in length. It must start with an English letter or Chinese, can contain numbers, periods (.), colons (:), underscores (_), and hyphens (-). It cannot start with "http://" or "https://".
+	// System disk name. The name is a string of 2 to 128 characters. It must begin with an English or a Chinese character. It can contain A-Z, a-z, Chinese characters, numbers, periods (.), colons (:), underscores (_), and hyphens (-).
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
+	// The performance level of the ESSD used as the system disk. Valid Values: PL0, PL1, PL2, and PL3. Default to: PL0.
 	// +kubebuilder:validation:Optional
 	PerformanceLevel *string `json:"performanceLevel,omitempty" tf:"performance_level,omitempty"`
 
-	// The size of the data disk.
+	// Size of the system disk, measured in GB. Value range: [20, 500].
 	// +kubebuilder:validation:Optional
 	Size *float64 `json:"size,omitempty" tf:"size,omitempty"`
 }
@@ -750,7 +813,7 @@ type LaunchTemplateSystemDiskParameters struct {
 // LaunchTemplateSpec defines the desired state of LaunchTemplate
 type LaunchTemplateSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     LaunchTemplateParameters_2 `json:"forProvider"`
+	ForProvider     LaunchTemplateParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -761,20 +824,20 @@ type LaunchTemplateSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider LaunchTemplateInitParameters_2 `json:"initProvider,omitempty"`
+	InitProvider LaunchTemplateInitParameters `json:"initProvider,omitempty"`
 }
 
 // LaunchTemplateStatus defines the observed state of LaunchTemplate.
 type LaunchTemplateStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        LaunchTemplateObservation_2 `json:"atProvider,omitempty"`
+	AtProvider        LaunchTemplateObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// LaunchTemplate is the Schema for the LaunchTemplates API. Provides an ECS Launch Template resource.
+// LaunchTemplate is the Schema for the LaunchTemplates API. Provides a Alicloud ECS Launch Template resource.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"

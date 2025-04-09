@@ -35,7 +35,9 @@ spec:
     securityGroups:
     - ${alicloud_security_group.default.id}
     systemDiskCategory: cloud_efficiency
-    vswitchId: ${alicloud_vswitch.default.id}
+    vswitchIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: default
 
 ---
 

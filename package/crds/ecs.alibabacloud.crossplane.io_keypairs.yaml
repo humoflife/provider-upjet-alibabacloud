@@ -35,7 +35,7 @@ spec:
     schema:
       openAPIV3Schema:
         description: KeyPair is the Schema for the KeyPairs API. Provides a Alicloud
-          key pair resource.
+          ECS Key Pair resource.
         properties:
           apiVersion:
             description: |-
@@ -74,28 +74,27 @@ spec:
               forProvider:
                 properties:
                   keyFile:
-                    description: (ForceNew) The name of file to save your new key
-                      pair's private key. Strongly suggest you to specified it when
-                      you creating key pair, otherwise, you wouldn't get its private
-                      key ever.
+                    description: The key file.
                     type: string
                   keyName:
-                    description: (ForceNew) The key pair's name. It is the only in
-                      one Alicloud account.
+                    description: Field key_name has been deprecated from provider
+                      version 1.121.0. New field key_pair_name instead.
                     type: string
                   keyNamePrefix:
-                    description: (ForceNew) The key pair name's prefix. It is conflict
-                      with key_name.
+                    description: The key pair name's prefix. It is conflict with key_pair_name.
                     type: string
                   keyPairName:
+                    description: The name of the key pair. The name must be 2 to 128
+                      characters in length. The name must start with a letter and
+                      cannot start with http:// or https://. The name can contain
+                      letters, digits, colons (:), underscores (_), and hyphens (-).
                     type: string
                   publicKey:
-                    description: (ForceNew) You can import an existing public key
-                      and using Alicloud key pair to manage it. If this parameter
-                      is specified, resource_group_id is the key pair belongs.
+                    description: The public key of the key pair.
                     type: string
                   resourceGroupId:
-                    description: The Id of resource group which the key pair belongs.
+                    description: The ID of the resource group to which to add the
+                      key pair.
                     type: string
                   tags:
                     additionalProperties:
@@ -118,28 +117,27 @@ spec:
                   autoscaler.
                 properties:
                   keyFile:
-                    description: (ForceNew) The name of file to save your new key
-                      pair's private key. Strongly suggest you to specified it when
-                      you creating key pair, otherwise, you wouldn't get its private
-                      key ever.
+                    description: The key file.
                     type: string
                   keyName:
-                    description: (ForceNew) The key pair's name. It is the only in
-                      one Alicloud account.
+                    description: Field key_name has been deprecated from provider
+                      version 1.121.0. New field key_pair_name instead.
                     type: string
                   keyNamePrefix:
-                    description: (ForceNew) The key pair name's prefix. It is conflict
-                      with key_name.
+                    description: The key pair name's prefix. It is conflict with key_pair_name.
                     type: string
                   keyPairName:
+                    description: The name of the key pair. The name must be 2 to 128
+                      characters in length. The name must start with a letter and
+                      cannot start with http:// or https://. The name can contain
+                      letters, digits, colons (:), underscores (_), and hyphens (-).
                     type: string
                   publicKey:
-                    description: (ForceNew) You can import an existing public key
-                      and using Alicloud key pair to manage it. If this parameter
-                      is specified, resource_group_id is the key pair belongs.
+                    description: The public key of the key pair.
                     type: string
                   resourceGroupId:
-                    description: The Id of resource group which the key pair belongs.
+                    description: The ID of the resource group to which to add the
+                      key pair.
                     type: string
                   tags:
                     additionalProperties:
@@ -321,34 +319,36 @@ spec:
               atProvider:
                 properties:
                   createTime:
+                    description: (Available since v1.237.0) The time when the key
+                      pair was created.
                     type: string
                   fingerPrint:
+                    description: The fingerprint of the key pair.
                     type: string
                   id:
                     type: string
                   keyFile:
-                    description: (ForceNew) The name of file to save your new key
-                      pair's private key. Strongly suggest you to specified it when
-                      you creating key pair, otherwise, you wouldn't get its private
-                      key ever.
+                    description: The key file.
                     type: string
                   keyName:
-                    description: (ForceNew) The key pair's name. It is the only in
-                      one Alicloud account.
+                    description: Field key_name has been deprecated from provider
+                      version 1.121.0. New field key_pair_name instead.
                     type: string
                   keyNamePrefix:
-                    description: (ForceNew) The key pair name's prefix. It is conflict
-                      with key_name.
+                    description: The key pair name's prefix. It is conflict with key_pair_name.
                     type: string
                   keyPairName:
+                    description: The name of the key pair. The name must be 2 to 128
+                      characters in length. The name must start with a letter and
+                      cannot start with http:// or https://. The name can contain
+                      letters, digits, colons (:), underscores (_), and hyphens (-).
                     type: string
                   publicKey:
-                    description: (ForceNew) You can import an existing public key
-                      and using Alicloud key pair to manage it. If this parameter
-                      is specified, resource_group_id is the key pair belongs.
+                    description: The public key of the key pair.
                     type: string
                   resourceGroupId:
-                    description: The Id of resource group which the key pair belongs.
+                    description: The ID of the resource group to which to add the
+                      key pair.
                     type: string
                   tags:
                     additionalProperties:

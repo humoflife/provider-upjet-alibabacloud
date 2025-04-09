@@ -13,58 +13,64 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type NetworkInterfaceAttachmentInitParameters_2 struct {
+type NetworkInterfaceAttachmentInitParameters struct {
 
-	// The instance ID to attach.
+	// The ID of the ECS instance.
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
 
+	// The index of the network card.
 	NetworkCardIndex *float64 `json:"networkCardIndex,omitempty" tf:"network_card_index,omitempty"`
 
-	// The ENI ID to attach.
+	// The ID of the network interface.
 	NetworkInterfaceID *string `json:"networkInterfaceId,omitempty" tf:"network_interface_id,omitempty"`
 
-	// The instance ID to attach.
+	// The ID of the trunk network instance.
 	TrunkNetworkInstanceID *string `json:"trunkNetworkInstanceId,omitempty" tf:"trunk_network_instance_id,omitempty"`
 
+	// The wait for network configuration ready.
 	WaitForNetworkConfigurationReady *bool `json:"waitForNetworkConfigurationReady,omitempty" tf:"wait_for_network_configuration_ready,omitempty"`
 }
 
-type NetworkInterfaceAttachmentObservation_2 struct {
+type NetworkInterfaceAttachmentObservation struct {
 
-	// The ID of the resource, formatted as <network_interface_id>:<instance_id>.
+	// It formats as <network_interface_id>:<instance_id>.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// The instance ID to attach.
+	// The ID of the ECS instance.
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
 
+	// The index of the network card.
 	NetworkCardIndex *float64 `json:"networkCardIndex,omitempty" tf:"network_card_index,omitempty"`
 
-	// The ENI ID to attach.
+	// The ID of the network interface.
 	NetworkInterfaceID *string `json:"networkInterfaceId,omitempty" tf:"network_interface_id,omitempty"`
 
-	// The instance ID to attach.
+	// The ID of the trunk network instance.
 	TrunkNetworkInstanceID *string `json:"trunkNetworkInstanceId,omitempty" tf:"trunk_network_instance_id,omitempty"`
 
+	// The wait for network configuration ready.
 	WaitForNetworkConfigurationReady *bool `json:"waitForNetworkConfigurationReady,omitempty" tf:"wait_for_network_configuration_ready,omitempty"`
 }
 
-type NetworkInterfaceAttachmentParameters_2 struct {
+type NetworkInterfaceAttachmentParameters struct {
 
-	// The instance ID to attach.
+	// The ID of the ECS instance.
 	// +kubebuilder:validation:Optional
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
 
+	// The index of the network card.
 	// +kubebuilder:validation:Optional
 	NetworkCardIndex *float64 `json:"networkCardIndex,omitempty" tf:"network_card_index,omitempty"`
 
-	// The ENI ID to attach.
+	// The ID of the network interface.
 	// +kubebuilder:validation:Optional
 	NetworkInterfaceID *string `json:"networkInterfaceId,omitempty" tf:"network_interface_id,omitempty"`
 
-	// The instance ID to attach.
+	// The ID of the trunk network instance.
 	// +kubebuilder:validation:Optional
 	TrunkNetworkInstanceID *string `json:"trunkNetworkInstanceId,omitempty" tf:"trunk_network_instance_id,omitempty"`
 
+	// The wait for network configuration ready.
 	// +kubebuilder:validation:Optional
 	WaitForNetworkConfigurationReady *bool `json:"waitForNetworkConfigurationReady,omitempty" tf:"wait_for_network_configuration_ready,omitempty"`
 }
@@ -72,7 +78,7 @@ type NetworkInterfaceAttachmentParameters_2 struct {
 // NetworkInterfaceAttachmentSpec defines the desired state of NetworkInterfaceAttachment
 type NetworkInterfaceAttachmentSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     NetworkInterfaceAttachmentParameters_2 `json:"forProvider"`
+	ForProvider     NetworkInterfaceAttachmentParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -83,20 +89,20 @@ type NetworkInterfaceAttachmentSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider NetworkInterfaceAttachmentInitParameters_2 `json:"initProvider,omitempty"`
+	InitProvider NetworkInterfaceAttachmentInitParameters `json:"initProvider,omitempty"`
 }
 
 // NetworkInterfaceAttachmentStatus defines the observed state of NetworkInterfaceAttachment.
 type NetworkInterfaceAttachmentStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        NetworkInterfaceAttachmentObservation_2 `json:"atProvider,omitempty"`
+	AtProvider        NetworkInterfaceAttachmentObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// NetworkInterfaceAttachment is the Schema for the NetworkInterfaceAttachments API. Provides an Alicloud ECS Elastic Network Interface Attachment as a resource to attach ENI to or detach ENI from ECS Instances.
+// NetworkInterfaceAttachment is the Schema for the NetworkInterfaceAttachments API. Provides a Alicloud ECS Network Interface Attachment resource.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"

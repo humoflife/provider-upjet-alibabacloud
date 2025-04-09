@@ -47,7 +47,6 @@ import (
 	sessionmanagerstatus "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/ecs/sessionmanagerstatus"
 	snapshot "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/ecs/snapshot"
 	snapshotgroup "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/ecs/snapshotgroup"
-	snapshotpolicy "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/ecs/snapshotpolicy"
 	storagecapacityunit "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/ecs/storagecapacityunit"
 	alias "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/kms/alias"
 	applicationaccesspoint "github.com/crossplane-contrib/provider-upjet-alibabacloud/internal/controller/kms/applicationaccesspoint"
@@ -167,14 +166,9 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		instanceset.Setup,
 		invocation.Setup,
 		keypair.Setup,
-		keypair.Setup,
-		keypairattachment.Setup,
 		keypairattachment.Setup,
 		launchtemplate.Setup,
-		launchtemplate.Setup,
 		networkinterface.Setup,
-		networkinterface.Setup,
-		networkinterfaceattachment.Setup,
 		networkinterfaceattachment.Setup,
 		networkinterfacepermission.Setup,
 		prefixlist.Setup,
@@ -184,9 +178,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		securitygrouprule.Setup,
 		sessionmanagerstatus.Setup,
 		snapshot.Setup,
-		snapshot.Setup,
 		snapshotgroup.Setup,
-		snapshotpolicy.Setup,
 		storagecapacityunit.Setup,
 		alias.Setup,
 		applicationaccesspoint.Setup,

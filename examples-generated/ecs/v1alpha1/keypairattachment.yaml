@@ -45,7 +45,9 @@ spec:
     internetChargeType: PayByBandwidth
     securityGroups:
     - ${alicloud_security_group.example.id}
-    vswitchId: ${alicloud_vswitch.example.id}
+    vswitchIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
 
 ---
 

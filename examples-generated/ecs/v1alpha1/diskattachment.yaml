@@ -54,7 +54,9 @@ spec:
     instanceType: ${data.alicloud_instance_types.default.instance_types.0.id}
     securityGroups:
     - ${alicloud_security_group.default.id}
-    vswitchId: ${alicloud_vswitch.default.id}
+    vswitchIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: default
 
 ---
 

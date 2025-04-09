@@ -16,7 +16,7 @@ import (
 
 // GetTerraformResourceType returns Terraform resource type for this NetworkInterfaceAttachment
 func (mg *NetworkInterfaceAttachment) GetTerraformResourceType() string {
-	return "alicloud_network_interface_attachment"
+	return "alicloud_ecs_network_interface_attachment"
 }
 
 // GetConnectionDetailsMapping for this NetworkInterfaceAttachment
@@ -113,7 +113,7 @@ func (tr *NetworkInterfaceAttachment) GetMergedParameters(shouldMergeInitProvide
 // LateInitialize this NetworkInterfaceAttachment using its observed tfState.
 // returns True if there are any spec changes for the resource.
 func (tr *NetworkInterfaceAttachment) LateInitialize(attrs []byte) (bool, error) {
-	params := &NetworkInterfaceAttachmentParameters_2{}
+	params := &NetworkInterfaceAttachmentParameters{}
 	if err := json.TFParser.Unmarshal(attrs, params); err != nil {
 		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
 	}

@@ -13,32 +13,36 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type SnapshotInitParameters_2 struct {
+type SnapshotInitParameters struct {
+
+	// The category of the snapshot. Valid values:
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
-	// Description of the snapshot. This description can have a string of 2 to 256 characters, It cannot begin with http:// or https://. Default value is null.
+	// The description of the snapshot.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// The source disk ID.
+	// The ID of the disk.
 	DiskID *string `json:"diskId,omitempty" tf:"disk_id,omitempty"`
 
+	// Specifies whether to force delete the snapshot that has been used to create disks. Valid values:
 	Force *bool `json:"force,omitempty" tf:"force,omitempty"`
 
+	// Field instant_access has been deprecated from provider version 1.231.0.
 	InstantAccess *bool `json:"instantAccess,omitempty" tf:"instant_access,omitempty"`
 
+	// Field instant_access_retention_days has been deprecated from provider version 1.231.0.
 	InstantAccessRetentionDays *float64 `json:"instantAccessRetentionDays,omitempty" tf:"instant_access_retention_days,omitempty"`
 
-	// The name of the snapshot to be created. The name must be 2 to 128 characters in length. It must start with a letter and cannot start with http:// or https://. It can contain letters, digits, colons (:), underscores (_), and hyphens (-).
-	// It cannot start with auto, because snapshot names starting with auto are recognized as automatic snapshots.
+	// Field name has been deprecated from provider version 1.120.0. New field snapshot_name instead.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The ID of the resource group.
+	// The ID of the resource group. NOTE: From version 1.239.0, resource_group_id can be modified.
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
+	// The retention period of the snapshot. Valid values: 1 to 65536. NOTE: From version 1.231.0, retention_days can be modified.
 	RetentionDays *float64 `json:"retentionDays,omitempty" tf:"retention_days,omitempty"`
 
-	// The name of the snapshot to be created. The name must be 2 to 128 characters in length. It must start with a letter and cannot start with http:// or https://. It can contain letters, digits, colons (:), underscores (_), and hyphens (-).
-	// It cannot start with auto, because snapshot names starting with auto are recognized as automatic snapshots.
+	// The name of the snapshot.
 	SnapshotName *string `json:"snapshotName,omitempty" tf:"snapshot_name,omitempty"`
 
 	// A mapping of tags to assign to the resource.
@@ -46,42 +50,47 @@ type SnapshotInitParameters_2 struct {
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 }
 
-type SnapshotObservation_2 struct {
+type SnapshotObservation struct {
+
+	// The category of the snapshot. Valid values:
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
+	// (Available since v1.239.0) The time when the snapshot was created.
 	CreateTime *string `json:"createTime,omitempty" tf:"create_time,omitempty"`
 
-	// Description of the snapshot. This description can have a string of 2 to 256 characters, It cannot begin with http:// or https://. Default value is null.
+	// The description of the snapshot.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// The source disk ID.
+	// The ID of the disk.
 	DiskID *string `json:"diskId,omitempty" tf:"disk_id,omitempty"`
 
+	// Specifies whether to force delete the snapshot that has been used to create disks. Valid values:
 	Force *bool `json:"force,omitempty" tf:"force,omitempty"`
 
-	// The snapshot ID.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// Field instant_access has been deprecated from provider version 1.231.0.
 	InstantAccess *bool `json:"instantAccess,omitempty" tf:"instant_access,omitempty"`
 
+	// Field instant_access_retention_days has been deprecated from provider version 1.231.0.
 	InstantAccessRetentionDays *float64 `json:"instantAccessRetentionDays,omitempty" tf:"instant_access_retention_days,omitempty"`
 
-	// The name of the snapshot to be created. The name must be 2 to 128 characters in length. It must start with a letter and cannot start with http:// or https://. It can contain letters, digits, colons (:), underscores (_), and hyphens (-).
-	// It cannot start with auto, because snapshot names starting with auto are recognized as automatic snapshots.
+	// Field name has been deprecated from provider version 1.120.0. New field snapshot_name instead.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The snapshot ID.
+	// (Available since v1.239.0) The region ID of the snapshot.
 	RegionID *string `json:"regionId,omitempty" tf:"region_id,omitempty"`
 
-	// The ID of the resource group.
+	// The ID of the resource group. NOTE: From version 1.239.0, resource_group_id can be modified.
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
+	// The retention period of the snapshot. Valid values: 1 to 65536. NOTE: From version 1.231.0, retention_days can be modified.
 	RetentionDays *float64 `json:"retentionDays,omitempty" tf:"retention_days,omitempty"`
 
-	// The name of the snapshot to be created. The name must be 2 to 128 characters in length. It must start with a letter and cannot start with http:// or https://. It can contain letters, digits, colons (:), underscores (_), and hyphens (-).
-	// It cannot start with auto, because snapshot names starting with auto are recognized as automatic snapshots.
+	// The name of the snapshot.
 	SnapshotName *string `json:"snapshotName,omitempty" tf:"snapshot_name,omitempty"`
 
+	// The status of the Snapshot.
 	Status *string `json:"status,omitempty" tf:"status,omitempty"`
 
 	// A mapping of tags to assign to the resource.
@@ -89,42 +98,45 @@ type SnapshotObservation_2 struct {
 	Tags map[string]*string `json:"tags,omitempty" tf:"tags,omitempty"`
 }
 
-type SnapshotParameters_2 struct {
+type SnapshotParameters struct {
 
+	// The category of the snapshot. Valid values:
 	// +kubebuilder:validation:Optional
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
-	// Description of the snapshot. This description can have a string of 2 to 256 characters, It cannot begin with http:// or https://. Default value is null.
+	// The description of the snapshot.
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// The source disk ID.
+	// The ID of the disk.
 	// +kubebuilder:validation:Optional
 	DiskID *string `json:"diskId,omitempty" tf:"disk_id,omitempty"`
 
+	// Specifies whether to force delete the snapshot that has been used to create disks. Valid values:
 	// +kubebuilder:validation:Optional
 	Force *bool `json:"force,omitempty" tf:"force,omitempty"`
 
+	// Field instant_access has been deprecated from provider version 1.231.0.
 	// +kubebuilder:validation:Optional
 	InstantAccess *bool `json:"instantAccess,omitempty" tf:"instant_access,omitempty"`
 
+	// Field instant_access_retention_days has been deprecated from provider version 1.231.0.
 	// +kubebuilder:validation:Optional
 	InstantAccessRetentionDays *float64 `json:"instantAccessRetentionDays,omitempty" tf:"instant_access_retention_days,omitempty"`
 
-	// The name of the snapshot to be created. The name must be 2 to 128 characters in length. It must start with a letter and cannot start with http:// or https://. It can contain letters, digits, colons (:), underscores (_), and hyphens (-).
-	// It cannot start with auto, because snapshot names starting with auto are recognized as automatic snapshots.
+	// Field name has been deprecated from provider version 1.120.0. New field snapshot_name instead.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// The ID of the resource group.
+	// The ID of the resource group. NOTE: From version 1.239.0, resource_group_id can be modified.
 	// +kubebuilder:validation:Optional
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
+	// The retention period of the snapshot. Valid values: 1 to 65536. NOTE: From version 1.231.0, retention_days can be modified.
 	// +kubebuilder:validation:Optional
 	RetentionDays *float64 `json:"retentionDays,omitempty" tf:"retention_days,omitempty"`
 
-	// The name of the snapshot to be created. The name must be 2 to 128 characters in length. It must start with a letter and cannot start with http:// or https://. It can contain letters, digits, colons (:), underscores (_), and hyphens (-).
-	// It cannot start with auto, because snapshot names starting with auto are recognized as automatic snapshots.
+	// The name of the snapshot.
 	// +kubebuilder:validation:Optional
 	SnapshotName *string `json:"snapshotName,omitempty" tf:"snapshot_name,omitempty"`
 
@@ -137,7 +149,7 @@ type SnapshotParameters_2 struct {
 // SnapshotSpec defines the desired state of Snapshot
 type SnapshotSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     SnapshotParameters_2 `json:"forProvider"`
+	ForProvider     SnapshotParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -148,20 +160,20 @@ type SnapshotSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider SnapshotInitParameters_2 `json:"initProvider,omitempty"`
+	InitProvider SnapshotInitParameters `json:"initProvider,omitempty"`
 }
 
 // SnapshotStatus defines the observed state of Snapshot.
 type SnapshotStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        SnapshotObservation_2 `json:"atProvider,omitempty"`
+	AtProvider        SnapshotObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// Snapshot is the Schema for the Snapshots API. Provides an ECS snapshot resource.
+// Snapshot is the Schema for the Snapshots API. Provides a Alicloud ECS Snapshot resource.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
