@@ -120,6 +120,8 @@ fallthrough: submodules
 # we ensure image is present in daemon.
 xpkg.build.provider-alibabacloud: do.build.images
 
+xpkg.build.provider-alibabacloud-family: do.build.image.provider-alibabacloud-config do.build.provider-alibabacloud-ram
+
 # NOTE(hasheddan): we ensure up is installed prior to running platform-specific
 # build steps in parallel to avoid encountering an installation race condition.
 build.init: $(UP) check-terraform-version
@@ -246,6 +248,7 @@ uptest: $(UPTEST) $(KUBECTL) $(KUTTL)
 	@$(OK) running automated tests
 
 build-provider.%:
+	@$(INFO) Building and loading provider SUBPACKAGES "$$(tr ',' ' ' <<< $*)"
 	@$(MAKE) build SUBPACKAGES="$$(tr ',' ' ' <<< $*)" LOAD_PACKAGES=true
 
 XPKG_SKIP_DEP_RESOLUTION := true
@@ -267,25 +270,28 @@ family-e2e:
 	@rm -fR $(OUTPUT_DIR)/cache
 	@$(INFO) Installing APIs
 	@(INSTALL_APIS=""; \
-	for m in $$(tr ',' ' ' <<< $${UPTEST_EXAMPLE_LIST}); do \
+	for m in $$(tr ',' ' ' <<< $(UPTEST_EXAMPLE_LIST)); do \
 		$(INFO) Processing the example manifest "$${m}"; \
 		for api in $$(sed -nE 's/^apiVersion: *(.+)/\1/p' "$${m}" | cut -d. -f1); do \
-		    if [[ $${api} == "v1" ]]; then \
-		        $(INFO) v1 is not a valid provider. Skipping...; \
-		        continue; \
-		    fi; \
+			if [[ $${api} == "v1" ]]; then \
+		        	$(INFO) v1 is not a valid provider. Skipping...; \
+		        	continue; \
+			fi; \
 			if [[ $${INSTALL_APIS} =~ " $${api} " ]]; then \
-				$(INFO) Resource provider $(PROJECT_NAME)-$${api} is already installed. Skipping...; \
+				$(INFO) Resource provider $(PROJECT_NAME)-$${api} is already marked for installation. Skipping...; \
 				continue; \
 			fi; \
-			$(INFO) Installing the family resource $(PROJECT_NAME)-$${api} for the test file: $${m}; \
+			$(INFO) Marking installation for the family resource $(PROJECT_NAME)-$${api} for the test file: $${m}; \
 			INSTALL_APIS="$${INSTALL_APIS} $${api} "; \
 		done; \
 	done; \
-	INSTALL_APIS="config,$$(tr ' ' ',' <<< $${INSTALL_APIS})"; \
+	INSTALL_APIS="config,$$(tr ',' ' ' <<< $${INSTALL_APIS})"; \
 	INSTALL_APIS="$$(tr -s ',' <<< "$${INSTALL_APIS}")"; \
 	$(INFO) Building and deploying resource providers for the short API groups: $${INSTALL_APIS}; \
-	$(MAKE) build-provider.$${INSTALL_APIS} local-deploy.$${INSTALL_APIS}) || $(FAIL)
+	for api in $${INSTALL_APIS}; do \
+		$(INFO) build-provider.$${api} local-deploy.$${api}; \
+		$(MAKE) build-provider.$${api} local-deploy.$${api} || $(FAIL) \
+	done;)
 	$(MAKE) uptest
 
 e2e: family-e2e
