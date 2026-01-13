@@ -91,7 +91,7 @@ spec:
                   cloneDataPoint:
                     description: |-
                       The time point of data to be cloned. Valid values are LATEST,BackupID,Timestamp.Value options can refer to the latest docs CreateDBCluster CloneDataPoint.
-                      -> NOTE: If CreationOption is set to CloneFromRDS, the value of this parameter must be LATEST.
+                      -> NOTE: If CreationOption is set to CloneFromRDS, the value of this parameter must be LATEST. When clone to a historical backup set, you must specify a specific backup set ID. When clone to a specific point in time, specify a YYYY-MM-DDThh:mm:ssZ format UTC timestamp.
                     type: string
                   collectorStatus:
                     description: Specifies whether to enable or disable SQL data collector.
@@ -185,7 +185,7 @@ spec:
                   deletionLock:
                     description: |-
                       turn on table deletion_lock. Valid values are 0, 1. 1 means to open the cluster protection lock, 0 means to close the cluster protection lock
-                      -> NOTE:  Cannot modify after created when pay_type is Prepaid .deletion_lock the cluster protection lock can be turned on or off when pay_type is Postpaid.
+                      -> NOTE:  Cannot modify after created when pay_type is PrePaid .deletion_lock the cluster protection lock can be turned on or off when pay_type is PostPaid.
                     type: number
                   description:
                     description: The description of cluster.
@@ -570,8 +570,8 @@ spec:
                       -> NOTE: standby_az is required when hot_standby_cluster is EQUAL.
                     type: string
                   storagePayType:
-                    description: The billing method of the storage. Valid values Postpaid,
-                      Prepaid.
+                    description: The billing method of the storage. Valid values PostPaid,
+                      PrePaid.
                     type: string
                   storageSpace:
                     description: |-
@@ -807,7 +807,7 @@ spec:
                   cloneDataPoint:
                     description: |-
                       The time point of data to be cloned. Valid values are LATEST,BackupID,Timestamp.Value options can refer to the latest docs CreateDBCluster CloneDataPoint.
-                      -> NOTE: If CreationOption is set to CloneFromRDS, the value of this parameter must be LATEST.
+                      -> NOTE: If CreationOption is set to CloneFromRDS, the value of this parameter must be LATEST. When clone to a historical backup set, you must specify a specific backup set ID. When clone to a specific point in time, specify a YYYY-MM-DDThh:mm:ssZ format UTC timestamp.
                     type: string
                   collectorStatus:
                     description: Specifies whether to enable or disable SQL data collector.
@@ -901,7 +901,7 @@ spec:
                   deletionLock:
                     description: |-
                       turn on table deletion_lock. Valid values are 0, 1. 1 means to open the cluster protection lock, 0 means to close the cluster protection lock
-                      -> NOTE:  Cannot modify after created when pay_type is Prepaid .deletion_lock the cluster protection lock can be turned on or off when pay_type is Postpaid.
+                      -> NOTE:  Cannot modify after created when pay_type is PrePaid .deletion_lock the cluster protection lock can be turned on or off when pay_type is PostPaid.
                     type: number
                   description:
                     description: The description of cluster.
@@ -1282,8 +1282,8 @@ spec:
                       -> NOTE: standby_az is required when hot_standby_cluster is EQUAL.
                     type: string
                   storagePayType:
-                    description: The billing method of the storage. Valid values Postpaid,
-                      Prepaid.
+                    description: The billing method of the storage. Valid values PostPaid,
+                      PrePaid.
                     type: string
                   storageSpace:
                     description: |-
@@ -1691,7 +1691,7 @@ spec:
                   cloneDataPoint:
                     description: |-
                       The time point of data to be cloned. Valid values are LATEST,BackupID,Timestamp.Value options can refer to the latest docs CreateDBCluster CloneDataPoint.
-                      -> NOTE: If CreationOption is set to CloneFromRDS, the value of this parameter must be LATEST.
+                      -> NOTE: If CreationOption is set to CloneFromRDS, the value of this parameter must be LATEST. When clone to a historical backup set, you must specify a specific backup set ID. When clone to a specific point in time, specify a YYYY-MM-DDThh:mm:ssZ format UTC timestamp.
                     type: string
                   collectorStatus:
                     description: Specifies whether to enable or disable SQL data collector.
@@ -1818,7 +1818,7 @@ spec:
                   deletionLock:
                     description: |-
                       turn on table deletion_lock. Valid values are 0, 1. 1 means to open the cluster protection lock, 0 means to close the cluster protection lock
-                      -> NOTE:  Cannot modify after created when pay_type is Prepaid .deletion_lock the cluster protection lock can be turned on or off when pay_type is Postpaid.
+                      -> NOTE:  Cannot modify after created when pay_type is PrePaid .deletion_lock the cluster protection lock can be turned on or off when pay_type is PostPaid.
                     type: number
                   description:
                     description: The description of cluster.
@@ -2057,8 +2057,8 @@ spec:
                     description: (Available since 1.204.1) PolarDB cluster status.
                     type: string
                   storagePayType:
-                    description: The billing method of the storage. Valid values Postpaid,
-                      Prepaid.
+                    description: The billing method of the storage. Valid values PostPaid,
+                      PrePaid.
                     type: string
                   storageSpace:
                     description: |-

@@ -76,6 +76,21 @@ var GroupMap = map[string]GroupKindCalculator{
 	// CLOUDMONITORSERVICE - Cloud Monitor Service resources
 	"alicloud_cms_alarm_contact_group": ReplaceGroupWords("cloudmonitorservice", 1),
 
+	// CR - Container Registry resources
+	"alicloud_cr_chain":                       ReplaceGroupWords("cr", 1),
+	"alicloud_cr_chart_namespace":             ReplaceGroupWords("cr", 1),
+	"alicloud_cr_chart_repository":            ReplaceGroupWords("cr", 1),
+	"alicloud_cr_ee_instance":                 ReplaceGroupWords("cr", 1),
+	"alicloud_cr_ee_namespace":                ReplaceGroupWords("cr", 1),
+	"alicloud_cr_ee_repo":                     ReplaceGroupWords("cr", 1),
+	"alicloud_cr_ee_sync_rule":                ReplaceGroupWords("cr", 1),
+	"alicloud_cr_endpoint_acl_policy":         ReplaceGroupWords("cr", 1),
+	"alicloud_cr_namespace":                   ReplaceGroupWords("cr", 1),
+	"alicloud_cr_repo":                        ReplaceGroupWords("cr", 1),
+	"alicloud_cr_scan_rule":                   ReplaceGroupWords("cr", 1),
+	"alicloud_cr_storage_domain_routing_rule": ReplaceGroupWords("cr", 1),
+	"alicloud_cr_vpc_endpoint_linked_vpc":     ReplaceGroupWords("cr", 1),
+
 	// ECS - Elastic Compute Service resources
 	"alicloud_instance":                            ReplaceGroupWords("ecs", 0),
 	"alicloud_security_group":                      ReplaceGroupWords("ecs", 0),

@@ -1,0 +1,76 @@
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: StorageDomainRoutingRule
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-storage-routing-1
+  labels:
+    testing.crossplane.io/example-name: test-storage-routing-1
+  name: test-storage-routing-1
+spec:
+  forProvider:
+    instanceIdSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-instance-for-storage-1
+    namespaceNameSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-namespace-for-storage-1
+    repoNameSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-repo-for-storage-1
+    storageDomain: oss
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: EeRepo
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-ee-repo-for-storage-1
+  labels:
+    testing.crossplane.io/example-name: test-ee-repo-for-storage-1
+  name: test-ee-repo-for-storage-1
+spec:
+  forProvider:
+    detail: Test EE repository for storage routing
+    instanceIdSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-instance-for-storage-1
+    name: test-ee-repo-for-storage-1
+    namespaceSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-namespace-for-storage-1
+    repoType: PUBLIC
+    summary: Test EE repository for storage routing
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: EeNamespace
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-ee-namespace-for-storage-1
+  labels:
+    testing.crossplane.io/example-name: test-ee-namespace-for-storage-1
+  name: test-ee-namespace-for-storage-1
+spec:
+  forProvider:
+    autoCreate: false
+    defaultVisibility: PUBLIC
+    instanceIdSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-instance-for-storage-1
+    name: test-ee-namespace-for-storage-1
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: EeInstance
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-ee-instance-for-storage-1
+  labels:
+    testing.crossplane.io/example-name: test-ee-instance-for-storage-1
+  name: test-ee-instance-for-storage-1
+spec:
+  forProvider:
+    instanceName: test-ee-instance-for-storage-1
+    instanceType: Advanced
+    paymentType: Subscription
+    period: 1
+    renewPeriod: 1
+    renewalStatus: AutoRenewal

@@ -9,6 +9,7 @@ const (
 	ALIDNS              = ShortGroup("alidns")
 	CDN                 = ShortGroup("cdn")
 	CLOUDMONITORSERVICE = ShortGroup("cloudmonitorservice")
+	CR                  = ShortGroup("cr")
 	ECS                 = ShortGroup("ecs")
 	FCV3                = ShortGroup("fcv3")
 	KMS                 = ShortGroup("kms")

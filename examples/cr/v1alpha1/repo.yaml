@@ -1,0 +1,32 @@
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: Repo
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-repo-1
+  labels:
+    testing.crossplane.io/example-name: test-repo-1
+  name: test-repo-1
+spec:
+  forProvider:
+    detail: This is a test repository created by provider-upjet-alibabacloud.
+    name: test-repo-1
+    namespaceSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-namespace-for-repo-1
+    repoType: PRIVATE
+    summary: Test repository for Container Registry
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: Namespace
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-namespace-for-repo-1
+  labels:
+    testing.crossplane.io/example-name: test-namespace-for-repo-1
+  name: test-namespace-for-repo-1
+spec:
+  forProvider:
+    autoCreate: false
+    defaultVisibility: PUBLIC
+    name: test-namespace-for-repo-1

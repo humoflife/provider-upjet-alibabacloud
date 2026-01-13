@@ -19,10 +19,10 @@ TERRAFORM_VERSION_VALID := $(shell [ "$(TERRAFORM_VERSION)" = "`printf "$(TERRAF
 
 export TERRAFORM_PROVIDER_SOURCE ?= aliyun/alicloud
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/aliyun/terraform-provider-alicloud
-export TERRAFORM_PROVIDER_VERSION ?= 1.261.0
+export TERRAFORM_PROVIDER_VERSION ?= 1.267.0
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-alicloud
 export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= https://releases.hashicorp.com/$(TERRAFORM_PROVIDER_DOWNLOAD_NAME)/$(TERRAFORM_PROVIDER_VERSION)
-export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-alicloud_v1.261.0
+export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-alicloud_v1.267.0
 export TERRAFORM_DOCS_PATH ?= website/docs/r
 
 
@@ -229,6 +229,7 @@ ACKONE=./examples/ackone/v1alpha1
 ALB=./examples/alb/v1alpha1
 ALIDNS=./examples/alidns/v1alpha1
 CDN=./examples/cdn/v1alpha1
+CR=./examples/cr/v1alpha1
 ECS=./examples/ecs/v1alpha1
 KMS=./examples/kms/v1alpha1
 MESSAGESERVICE=./examples/messageservice/v1alpha1
@@ -244,6 +245,7 @@ UPTEST_EXAMPLE_LIST_ACKONE=$(ACKONE)/cluster.yaml,$(ACKONE)/membershipattachment
 UPTEST_EXAMPLE_LIST_ALB=$(ALB)/acl.yaml,$(ALB)/aclentryattachment.yaml,$(ALB)/ascript.yaml,$(ALB)/healthchecktemplate.yaml,$(ALB)/listener.yaml,$(ALB)/listeneraclattachment.yaml,$(ALB)/loadbalancer.yaml,$(ALB)/loadbalancersecuritygroupattachment.yaml,$(ALB)/loadbalancerzoneshiftedattachment.yaml,$(ALB)/rule.yaml,$(ALB)/securitupolicy.yaml,$(ALB)/servergroup.yaml
 UPTEST_EXAMPLE_LIST_ALIDNS=$(ALIDNS)/addreddpool.yaml,$(ALIDNS)/customline.yaml,$(ALIDNS)/domain.yaml,$(ALIDNS)/domainattachment.yaml,$(ALIDNS)/domaingroup.yaml,$(ALIDNS)/gtminstance.yaml,$(ALIDNS)/instance.yaml,$(ALIDNS)/monitorconfig.yaml,$(ALIDNS)/record.yaml
 UPTEST_EXAMPLE_LIST_CDN=$(CDN)/domain.yaml,$(CDN)/domainconfig.yaml,$(CDN)/fctrigger.yaml
+UPTEST_EXAMPLE_LIST_CR=$(CR)/chain.yaml,$(CR)/chartnamespace.yaml,$(CR)/chartrepository.yaml,$(CR)/eeinstance.yaml,$(CR)/eenamespace.yaml,$(CR)/eerepo.yaml,$(CR)/eesyncrule.yaml,$(CR)/endpointaclpolicy.yaml,$(CR)/namespace.yaml,$(CR)/repo.yaml,$(CR)/scanrule.yaml,$(CR)/storagedomainroutingrule.yaml,$(CR)/vpcendpointlinkedvpc.yaml
 UPTEST_EXAMPLE_LIST_ECS=$(ECS)/command.yaml,$(ECS)/disk.yaml,$(ECS)/diskattachment.yaml,$(ECS)/instance.yaml,$(ECS)/keypair.yaml,$(ECS)/keypairattachment.yaml,$(ECS)/launchtemplate.yaml,$(ECS)/networkinterface.yaml,$(ECS)/networkinterfaceattachment.yaml,$(ECS)/networkinterfacepermissionspermission.yaml,$(ECS)/securitygroup.yaml,$(ECS)/securitygrouprule.yaml
 UPTEST_EXAMPLE_LIST_KMS=$(KMS)/alias.yaml,$(KMS)/key.yaml,$(KMS)/instance.yaml,$(KMS)/secret.yaml
 UPTEST_EXAMPLE_LIST_MESSAGESERVICE=$(MESSAGESERVICE)/endpoint.yaml,$(MESSAGESERVICE)/endpointacl.yaml,$(MESSAGESERVICE)/queue.yaml,$(MESSAGESERVICE)/subscription.yaml,$(MESSAGESERVICE)/topic.yaml
@@ -254,7 +256,7 @@ UPTEST_EXAMPLE_LIST_QUOTAS=$(QUOTAS)/quotaalarm.yaml,$(QUOTAS)/quotaapplication.
 UPTEST_EXAMPLE_LIST_RAM=$(RAM)/accesskey.yaml,$(RAM)/accountalias.yaml,$(RAM)/accountpasswordpolicy.yaml,$(RAM)/group.yaml,$(RAM)/groupmembership.yaml,$(RAM)/grouppolicyattachment.yaml,$(RAM)/loginprofile.yaml,$(RAM)/passwordpolicy.yaml,$(RAM)/policy.yaml,$(RAM)/role.yaml,$(RAM)/rolepolicyattachment.yaml,$(RAM)/samlprovider.yaml,$(RAM)/user.yaml,$(RAM)/usergroupattachment.yaml,$(RAM)/userpolicyattachment.yaml
 UPTEST_EXAMPLE_LIST_TAIR=$(TAIR)/account.yaml,$(TAIR)/auditlogconfig.yaml,$(TAIR)/connection.yaml,$(TAIR)/instance.yaml,$(TAIR)/tairinstance.yaml
 UPTEST_EXAMPLE_LIST_VPC=$(VPC)/vpc.yaml
-UPTEST_EXAMPLE_LIST=$(VPC)/vpc.yaml
+UPTEST_EXAMPLE_LIST=$(CR)/chain.yaml
 uptest: $(UPTEST) $(KUBECTL) $(CHAINSAW)
 	@$(INFO) running automated tests
 	@KUBECTL=$(KUBECTL) CHAINSAW=$(CHAINSAW) CROSSPLANE_NAMESPACE=$(CROSSPLANE_NAMESPACE) $(UPTEST) e2e "${UPTEST_EXAMPLE_LIST}" --data-source="${UPTEST_DATASOURCE_PATH}" --setup-script=cluster/test/setup.sh --default-conditions="Test" || $(FAIL)

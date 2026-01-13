@@ -1,0 +1,51 @@
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: ScanRule
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-scan-rule-1
+  labels:
+    testing.crossplane.io/example-name: test-scan-rule-1
+  name: test-scan-rule-1
+spec:
+  forProvider:
+    namespaceSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-namespace-for-scan-1
+    repoSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-repo-for-scan-1
+    scanOnPush: true
+    tagFilter: .*
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: Repo
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-repo-for-scan-1
+  labels:
+    testing.crossplane.io/example-name: test-repo-for-scan-1
+  name: test-repo-for-scan-1
+spec:
+  forProvider:
+    detail: Test repository for scan rule
+    name: test-repo-for-scan-1
+    namespaceSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-namespace-for-scan-1
+    repoType: PRIVATE
+    summary: Test repository for scan rule
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: Namespace
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-namespace-for-scan-1
+  labels:
+    testing.crossplane.io/example-name: test-namespace-for-scan-1
+  name: test-namespace-for-scan-1
+spec:
+  forProvider:
+    autoCreate: false
+    defaultVisibility: PUBLIC
+    name: test-namespace-for-scan-1

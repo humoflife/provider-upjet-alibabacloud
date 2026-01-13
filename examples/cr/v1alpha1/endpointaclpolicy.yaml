@@ -1,0 +1,33 @@
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: EndpointAclPolicy
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-endpoint-acl-1
+  labels:
+    testing.crossplane.io/example-name: test-endpoint-acl-1
+  name: test-endpoint-acl-1
+spec:
+  forProvider:
+    entry: 192.168.1.0/24
+    instanceIdSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-instance-for-acl-1
+    moduleName: Registry
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: EeInstance
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-ee-instance-for-acl-1
+  labels:
+    testing.crossplane.io/example-name: test-ee-instance-for-acl-1
+  name: test-ee-instance-for-acl-1
+spec:
+  forProvider:
+    instanceName: test-ee-instance-for-acl-1
+    instanceType: Advanced
+    paymentType: Subscription
+    period: 1
+    renewPeriod: 1
+    renewalStatus: AutoRenewal

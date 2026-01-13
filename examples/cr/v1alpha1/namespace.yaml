@@ -1,0 +1,14 @@
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: Namespace
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-namespace-1
+  labels:
+    testing.crossplane.io/example-name: test-namespace-1
+  name: test-namespace-1
+spec:
+  forProvider:
+    autoCreate: false
+    defaultVisibility: PUBLIC
+    name: test-namespace-1

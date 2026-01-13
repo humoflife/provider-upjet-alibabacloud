@@ -44,6 +44,19 @@ import (
 	domainconfig "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cdn/domainconfig"
 	fctrigger "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cdn/fctrigger"
 	alarmcontactgroup "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cloudmonitorservice/alarmcontactgroup"
+	chain "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/chain"
+	chartnamespace "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/chartnamespace"
+	chartrepository "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/chartrepository"
+	eeinstance "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/eeinstance"
+	eenamespace "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/eenamespace"
+	eerepo "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/eerepo"
+	eesyncrule "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/eesyncrule"
+	endpointaclpolicy "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/endpointaclpolicy"
+	namespace "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/namespace"
+	repo "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/repo"
+	scanrule "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/scanrule"
+	storagedomainroutingrule "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/storagedomainroutingrule"
+	vpcendpointlinkedvpc "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/vpcendpointlinkedvpc"
 	activation "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/ecs/activation"
 	autoprovisioninggroup "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/ecs/autoprovisioninggroup"
 	autosnapshotpolicy "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/ecs/autosnapshotpolicy"
@@ -217,6 +230,19 @@ func Setup_monolith(mgr ctrl.Manager, o controller.Options) error {
 		domainconfig.Setup,
 		fctrigger.Setup,
 		alarmcontactgroup.Setup,
+		chain.Setup,
+		chartnamespace.Setup,
+		chartrepository.Setup,
+		eeinstance.Setup,
+		eenamespace.Setup,
+		eerepo.Setup,
+		eesyncrule.Setup,
+		endpointaclpolicy.Setup,
+		namespace.Setup,
+		repo.Setup,
+		scanrule.Setup,
+		storagedomainroutingrule.Setup,
+		vpcendpointlinkedvpc.Setup,
 		activation.Setup,
 		autoprovisioninggroup.Setup,
 		autosnapshotpolicy.Setup,

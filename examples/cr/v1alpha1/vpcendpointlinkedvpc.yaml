@@ -1,0 +1,35 @@
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: VpcEndpointLinkedVpc
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-vpc-endpoint-1
+  labels:
+    testing.crossplane.io/example-name: test-vpc-endpoint-1
+  name: test-vpc-endpoint-1
+spec:
+  forProvider:
+    enableCreateDnsRecordInPvzt: true
+    instanceIdSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-instance-for-vpc-endpoint-1
+    moduleName: Registry
+    vpcId: vpc-xxxxxxxxxxxxxx
+    vswitchId: vsw-xxxxxxxxxxxxxx
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: EeInstance
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-ee-instance-for-vpc-endpoint-1
+  labels:
+    testing.crossplane.io/example-name: test-ee-instance-for-vpc-endpoint-1
+  name: test-ee-instance-for-vpc-endpoint-1
+spec:
+  forProvider:
+    instanceName: test-ee-instance-for-vpc-endpoint-1
+    instanceType: Advanced
+    paymentType: Subscription
+    period: 1
+    renewPeriod: 1
+    renewalStatus: AutoRenewal

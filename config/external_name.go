@@ -62,6 +62,21 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	// CloudMonitorService
 	"alicloud_cms_alarm_contact_group": config.IdentifierFromProvider,
 
+	// CR - Container Registry
+	"alicloud_cr_chain":                       config.IdentifierFromProvider,
+	"alicloud_cr_chart_namespace":             config.IdentifierFromProvider,
+	"alicloud_cr_chart_repository":            config.IdentifierFromProvider,
+	"alicloud_cr_ee_instance":                 config.IdentifierFromProvider,
+	"alicloud_cr_ee_namespace":                config.IdentifierFromProvider,
+	"alicloud_cr_ee_repo":                     config.IdentifierFromProvider,
+	"alicloud_cr_ee_sync_rule":                config.IdentifierFromProvider,
+	"alicloud_cr_endpoint_acl_policy":         config.IdentifierFromProvider,
+	"alicloud_cr_namespace":                   config.IdentifierFromProvider,
+	"alicloud_cr_repo":                        config.IdentifierFromProvider,
+	"alicloud_cr_scan_rule":                   config.IdentifierFromProvider,
+	"alicloud_cr_storage_domain_routing_rule": config.IdentifierFromProvider,
+	"alicloud_cr_vpc_endpoint_linked_vpc":     config.IdentifierFromProvider,
+
 	// ECS
 	"alicloud_auto_provisioning_group":             config.IdentifierFromProvider,
 	"alicloud_ecs_activation":                      config.IdentifierFromProvider,
