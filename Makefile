@@ -256,7 +256,7 @@ UPTEST_EXAMPLE_LIST_QUOTAS=$(QUOTAS)/quotaalarm.yaml,$(QUOTAS)/quotaapplication.
 UPTEST_EXAMPLE_LIST_RAM=$(RAM)/accesskey.yaml,$(RAM)/accountalias.yaml,$(RAM)/accountpasswordpolicy.yaml,$(RAM)/group.yaml,$(RAM)/groupmembership.yaml,$(RAM)/grouppolicyattachment.yaml,$(RAM)/loginprofile.yaml,$(RAM)/passwordpolicy.yaml,$(RAM)/policy.yaml,$(RAM)/role.yaml,$(RAM)/rolepolicyattachment.yaml,$(RAM)/samlprovider.yaml,$(RAM)/user.yaml,$(RAM)/usergroupattachment.yaml,$(RAM)/userpolicyattachment.yaml
 UPTEST_EXAMPLE_LIST_TAIR=$(TAIR)/account.yaml,$(TAIR)/auditlogconfig.yaml,$(TAIR)/connection.yaml,$(TAIR)/instance.yaml,$(TAIR)/tairinstance.yaml
 UPTEST_EXAMPLE_LIST_VPC=$(VPC)/vpc.yaml
-UPTEST_EXAMPLE_LIST=$(CR)/chain.yaml
+UPTEST_EXAMPLE_LIST=$(VPC)/vpc.yaml
 uptest: $(UPTEST) $(KUBECTL) $(CHAINSAW)
 	@$(INFO) running automated tests
 	@KUBECTL=$(KUBECTL) CHAINSAW=$(CHAINSAW) CROSSPLANE_NAMESPACE=$(CROSSPLANE_NAMESPACE) $(UPTEST) e2e "${UPTEST_EXAMPLE_LIST}" --data-source="${UPTEST_DATASOURCE_PATH}" --setup-script=cluster/test/setup.sh --default-conditions="Test" || $(FAIL)
