@@ -6,8 +6,9 @@ repository maintainers in their own `OWNERS.md` file.
 
 ## Maintainers
 
-* jastang <jasont@upbound.io> ([jastang](https://github.com/jastang))
-* Markus <markus.schweig@upbound.io> ([humoflife](https://github.com/humoflife))
+* Jason Tang <jasont@upbound.io> ([jastang](https://github.com/jastang))
+* Markus Schweig <markus.schweig@upbound.io> ([humoflife](https://github.com/humoflife))
+* Steven Borrelli <steven@upbound.io> ([stevendborrelli](https://github.com/stevendborrelli))
 * Xiahuai <xiahuai@alibaba-inc.com> ([xiahuai](https://github.com/xiahuai))
 * Shanye <shanye.xzq@alibaba-inc.com> ([shanye997](https://github.com/shanye997))
 * Guimin He <guimin.hgm@alibaba-inc.com> ([xiaozhu36](https://github.com/xiaozhu36))
