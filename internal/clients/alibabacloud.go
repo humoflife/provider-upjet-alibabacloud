@@ -72,8 +72,8 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		if err != nil {
 			return ps, errors.Wrap(err, errUnmarshalCredentials)
 		}
-		if err := validateProviderConfig(pc, creds); err != nil {
-			return ps, errors.Wrap(err, errInvalidProviderConfig)
+		if validateErr := validateProviderConfig(pc, creds); validateErr != nil {
+			return ps, errors.Wrap(validateErr, errInvalidProviderConfig)
 		}
 
 		region, err := getRegion(mg, creds)
@@ -157,28 +157,36 @@ func validateProviderConfig(pc *v1beta1.ProviderConfig, creds map[string]any) er
 		return nil
 	}
 	if ar := pc.Spec.AssumeRole; ar != nil {
-		if strings.TrimSpace(ar.RoleARN) == "" {
-			return errors.New("spec.assumeRole.roleARN is required")
-		}
-		if err := validateSessionExpiration("spec.assumeRole.sessionExpiration", ar.SessionExpiration, 3600); err != nil {
+		if err := validateAssumeRole(ar); err != nil {
 			return err
 		}
 	}
 	if ar := pc.Spec.AssumeRoleWithOIDC; ar != nil {
-		if strings.TrimSpace(ar.RoleARN) == "" {
-			return errors.New("spec.assumeRoleWithOIDC.roleARN is required")
-		}
-		if strings.TrimSpace(ar.OIDCProviderARN) == "" {
-			return errors.New("spec.assumeRoleWithOIDC.oidcProviderARN is required")
-		}
-		if strings.TrimSpace(ar.OIDCTokenFile) == "" {
-			return errors.New("spec.assumeRoleWithOIDC.oidcTokenFile is required")
-		}
-		if err := validateSessionExpiration("spec.assumeRoleWithOIDC.sessionExpiration", ar.SessionExpiration, 43200); err != nil {
+		if err := validateAssumeRoleWithOIDC(ar); err != nil {
 			return err
 		}
 	}
 	return nil
+}
+
+func validateAssumeRole(ar *v1beta1.AssumeRoleOptions) error {
+	if strings.TrimSpace(ar.RoleARN) == "" {
+		return errors.New("spec.assumeRole.roleARN is required")
+	}
+	return validateSessionExpiration("spec.assumeRole.sessionExpiration", ar.SessionExpiration, 3600)
+}
+
+func validateAssumeRoleWithOIDC(ar *v1beta1.AssumeRoleWithOIDCOptions) error {
+	if strings.TrimSpace(ar.RoleARN) == "" {
+		return errors.New("spec.assumeRoleWithOIDC.roleARN is required")
+	}
+	if strings.TrimSpace(ar.OIDCProviderARN) == "" {
+		return errors.New("spec.assumeRoleWithOIDC.oidcProviderARN is required")
+	}
+	if strings.TrimSpace(ar.OIDCTokenFile) == "" {
+		return errors.New("spec.assumeRoleWithOIDC.oidcTokenFile is required")
+	}
+	return validateSessionExpiration("spec.assumeRoleWithOIDC.sessionExpiration", ar.SessionExpiration, 43200)
 }
 
 func validateSessionExpiration(field string, v *int, max int) error {

@@ -55,10 +55,12 @@ spec:
                 description: AssumeRole defines the options for assuming a RAM role.
                 properties:
                   externalID:
-                    description: ExternalID is the external ID used when assuming the role.
+                    description: ExternalID is the external ID used when assuming
+                      the role.
                     type: string
                   policy:
-                    description: Policy is the RAM policy to apply when assuming the role.
+                    description: Policy is the RAM policy to apply when assuming the
+                      role.
                     type: string
                   roleARN:
                     description: RoleARN is the ARN of the RAM role to assume.
@@ -81,8 +83,7 @@ spec:
                   RAM role with an OIDC token.
                 properties:
                   oidcProviderARN:
-                    description: OIDCProviderARN is the ARN of the OIDC identity
-                      provider.
+                    description: OIDCProviderARN is the ARN of the OIDC identity provider.
                     type: string
                   oidcTokenFile:
                     description: OIDCTokenFile is the path of the OIDC token file.

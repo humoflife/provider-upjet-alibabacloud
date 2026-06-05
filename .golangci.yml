@@ -3,9 +3,6 @@ run:
   concurrency: 1
 
 output:
-  # colored-line-number|line-number|json|tab|checkstyle|code-climate, default is "colored-line-number"
-  formats:
-    - format: colored-line-number
   print-linter-name: true
   show-stats: true
 
