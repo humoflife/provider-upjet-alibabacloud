@@ -22,15 +22,15 @@ type RepoInitParameters struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// Name of container registry namespace where repository is located.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.Namespace
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.RegistryNamespace
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name",false)
 	Namespace *string `json:"namespace,omitempty" tf:"namespace,omitempty"`
 
-	// Reference to a Namespace in cr to populate namespace.
+	// Reference to a RegistryNamespace in cr to populate namespace.
 	// +kubebuilder:validation:Optional
 	NamespaceRef *v1.Reference `json:"namespaceRef,omitempty" tf:"-"`
 
-	// Selector for a Namespace in cr to populate namespace.
+	// Selector for a RegistryNamespace in cr to populate namespace.
 	// +kubebuilder:validation:Optional
 	NamespaceSelector *v1.Selector `json:"namespaceSelector,omitempty" tf:"-"`
 
@@ -77,16 +77,16 @@ type RepoParameters struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// Name of container registry namespace where repository is located.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.Namespace
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.RegistryNamespace
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name",false)
 	// +kubebuilder:validation:Optional
 	Namespace *string `json:"namespace,omitempty" tf:"namespace,omitempty"`
 
-	// Reference to a Namespace in cr to populate namespace.
+	// Reference to a RegistryNamespace in cr to populate namespace.
 	// +kubebuilder:validation:Optional
 	NamespaceRef *v1.Reference `json:"namespaceRef,omitempty" tf:"-"`
 
-	// Selector for a Namespace in cr to populate namespace.
+	// Selector for a RegistryNamespace in cr to populate namespace.
 	// +kubebuilder:validation:Optional
 	NamespaceSelector *v1.Selector `json:"namespaceSelector,omitempty" tf:"-"`
 

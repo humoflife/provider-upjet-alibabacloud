@@ -17,7 +17,7 @@ import (
 	eerepo "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/eerepo"
 	eesyncrule "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/eesyncrule"
 	endpointaclpolicy "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/endpointaclpolicy"
-	namespace "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/namespace"
+	registrynamespace "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/registrynamespace"
 	repo "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/repo"
 	scanrule "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/scanrule"
 	storagedomainroutingrule "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/cr/storagedomainroutingrule"
@@ -36,7 +36,7 @@ func Setup_cr(mgr ctrl.Manager, o controller.Options) error {
 		eerepo.Setup,
 		eesyncrule.Setup,
 		endpointaclpolicy.Setup,
-		namespace.Setup,
+		registrynamespace.Setup,
 		repo.Setup,
 		scanrule.Setup,
 		storagedomainroutingrule.Setup,

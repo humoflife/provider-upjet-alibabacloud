@@ -14,18 +14,18 @@ import (
 	"github.com/crossplane/upjet/pkg/resource/json"
 )
 
-// GetTerraformResourceType returns Terraform resource type for this Namespace
-func (mg *Namespace) GetTerraformResourceType() string {
+// GetTerraformResourceType returns Terraform resource type for this RegistryNamespace
+func (mg *RegistryNamespace) GetTerraformResourceType() string {
 	return "alicloud_cr_namespace"
 }
 
-// GetConnectionDetailsMapping for this Namespace
-func (tr *Namespace) GetConnectionDetailsMapping() map[string]string {
+// GetConnectionDetailsMapping for this RegistryNamespace
+func (tr *RegistryNamespace) GetConnectionDetailsMapping() map[string]string {
 	return nil
 }
 
-// GetObservation of this Namespace
-func (tr *Namespace) GetObservation() (map[string]any, error) {
+// GetObservation of this RegistryNamespace
+func (tr *RegistryNamespace) GetObservation() (map[string]any, error) {
 	o, err := json.TFParser.Marshal(tr.Status.AtProvider)
 	if err != nil {
 		return nil, err
@@ -34,8 +34,8 @@ func (tr *Namespace) GetObservation() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(o, &base)
 }
 
-// SetObservation for this Namespace
-func (tr *Namespace) SetObservation(obs map[string]any) error {
+// SetObservation for this RegistryNamespace
+func (tr *RegistryNamespace) SetObservation(obs map[string]any) error {
 	p, err := json.TFParser.Marshal(obs)
 	if err != nil {
 		return err
@@ -43,16 +43,16 @@ func (tr *Namespace) SetObservation(obs map[string]any) error {
 	return json.TFParser.Unmarshal(p, &tr.Status.AtProvider)
 }
 
-// GetID returns ID of underlying Terraform resource of this Namespace
-func (tr *Namespace) GetID() string {
+// GetID returns ID of underlying Terraform resource of this RegistryNamespace
+func (tr *RegistryNamespace) GetID() string {
 	if tr.Status.AtProvider.ID == nil {
 		return ""
 	}
 	return *tr.Status.AtProvider.ID
 }
 
-// GetParameters of this Namespace
-func (tr *Namespace) GetParameters() (map[string]any, error) {
+// GetParameters of this RegistryNamespace
+func (tr *RegistryNamespace) GetParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.ForProvider)
 	if err != nil {
 		return nil, err
@@ -61,8 +61,8 @@ func (tr *Namespace) GetParameters() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// SetParameters for this Namespace
-func (tr *Namespace) SetParameters(params map[string]any) error {
+// SetParameters for this RegistryNamespace
+func (tr *RegistryNamespace) SetParameters(params map[string]any) error {
 	p, err := json.TFParser.Marshal(params)
 	if err != nil {
 		return err
@@ -70,8 +70,8 @@ func (tr *Namespace) SetParameters(params map[string]any) error {
 	return json.TFParser.Unmarshal(p, &tr.Spec.ForProvider)
 }
 
-// GetInitParameters of this Namespace
-func (tr *Namespace) GetInitParameters() (map[string]any, error) {
+// GetInitParameters of this RegistryNamespace
+func (tr *RegistryNamespace) GetInitParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.InitProvider)
 	if err != nil {
 		return nil, err
@@ -80,8 +80,8 @@ func (tr *Namespace) GetInitParameters() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// GetInitParameters of this Namespace
-func (tr *Namespace) GetMergedParameters(shouldMergeInitProvider bool) (map[string]any, error) {
+// GetInitParameters of this RegistryNamespace
+func (tr *RegistryNamespace) GetMergedParameters(shouldMergeInitProvider bool) (map[string]any, error) {
 	params, err := tr.GetParameters()
 	if err != nil {
 		return nil, errors.Wrapf(err, "cannot get parameters for resource '%q'", tr.GetName())
@@ -110,10 +110,10 @@ func (tr *Namespace) GetMergedParameters(shouldMergeInitProvider bool) (map[stri
 	return params, nil
 }
 
-// LateInitialize this Namespace using its observed tfState.
+// LateInitialize this RegistryNamespace using its observed tfState.
 // returns True if there are any spec changes for the resource.
-func (tr *Namespace) LateInitialize(attrs []byte) (bool, error) {
-	params := &NamespaceParameters{}
+func (tr *RegistryNamespace) LateInitialize(attrs []byte) (bool, error) {
+	params := &RegistryNamespaceParameters{}
 	if err := json.TFParser.Unmarshal(attrs, params); err != nil {
 		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
 	}
@@ -124,6 +124,6 @@ func (tr *Namespace) LateInitialize(attrs []byte) (bool, error) {
 }
 
 // GetTerraformSchemaVersion returns the associated Terraform schema version
-func (tr *Namespace) GetTerraformSchemaVersion() int {
+func (tr *RegistryNamespace) GetTerraformSchemaVersion() int {
 	return 0
 }

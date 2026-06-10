@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.16.5
-  name: namespaces.cr.alibabacloud.crossplane.io
+  name: registrynamespaces.cr.alibabacloud.crossplane.io
 spec:
   group: cr.alibabacloud.crossplane.io
   names:
@@ -12,10 +12,10 @@ spec:
     - crossplane
     - managed
     - alibabacloud
-    kind: Namespace
-    listKind: NamespaceList
-    plural: namespaces
-    singular: namespace
+    kind: RegistryNamespace
+    listKind: RegistryNamespaceList
+    plural: registrynamespaces
+    singular: registrynamespace
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,8 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Namespace is the Schema for the Namespaces API. Provides a Alicloud
-          resource to manage Container Registry namespaces.
+        description: RegistryNamespace is the Schema for the RegistryNamespaces API.
+          Provides a Alicloud resource to manage Container Registry namespaces.
         properties:
           apiVersion:
             description: |-
@@ -55,7 +55,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: NamespaceSpec defines the desired state of Namespace
+            description: RegistryNamespaceSpec defines the desired state of RegistryNamespace
             properties:
               deletionPolicy:
                 default: Delete
@@ -297,7 +297,7 @@ spec:
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
                 || (has(self.initProvider) && has(self.initProvider.name))'
           status:
-            description: NamespaceStatus defines the observed state of Namespace.
+            description: RegistryNamespaceStatus defines the observed state of RegistryNamespace.
             properties:
               atProvider:
                 properties:

@@ -20,7 +20,7 @@ spec:
 ---
 
 apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
-kind: Namespace
+kind: RegistryNamespace
 metadata:
   annotations:
     meta.upbound.io/example-id: cr/v1alpha1/repo

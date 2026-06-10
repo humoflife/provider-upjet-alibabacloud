@@ -13,7 +13,7 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type NamespaceInitParameters struct {
+type RegistryNamespaceInitParameters struct {
 
 	// Boolean, when it set to true, repositories are automatically created when pushing new images. If it set to false, you create repository for images before pushing.
 	AutoCreate *bool `json:"autoCreate,omitempty" tf:"auto_create,omitempty"`
@@ -25,7 +25,7 @@ type NamespaceInitParameters struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 }
 
-type NamespaceObservation struct {
+type RegistryNamespaceObservation struct {
 
 	// Boolean, when it set to true, repositories are automatically created when pushing new images. If it set to false, you create repository for images before pushing.
 	AutoCreate *bool `json:"autoCreate,omitempty" tf:"auto_create,omitempty"`
@@ -40,7 +40,7 @@ type NamespaceObservation struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 }
 
-type NamespaceParameters struct {
+type RegistryNamespaceParameters struct {
 
 	// Boolean, when it set to true, repositories are automatically created when pushing new images. If it set to false, you create repository for images before pushing.
 	// +kubebuilder:validation:Optional
@@ -60,10 +60,10 @@ type NamespaceParameters struct {
 	Region *string `json:"region,omitempty" tf:"-"`
 }
 
-// NamespaceSpec defines the desired state of Namespace
-type NamespaceSpec struct {
+// RegistryNamespaceSpec defines the desired state of RegistryNamespace
+type RegistryNamespaceSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     NamespaceParameters `json:"forProvider"`
+	ForProvider     RegistryNamespaceParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -74,52 +74,52 @@ type NamespaceSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider NamespaceInitParameters `json:"initProvider,omitempty"`
+	InitProvider RegistryNamespaceInitParameters `json:"initProvider,omitempty"`
 }
 
-// NamespaceStatus defines the observed state of Namespace.
-type NamespaceStatus struct {
+// RegistryNamespaceStatus defines the observed state of RegistryNamespace.
+type RegistryNamespaceStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        NamespaceObservation `json:"atProvider,omitempty"`
+	AtProvider        RegistryNamespaceObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// Namespace is the Schema for the Namespaces API. Provides a Alicloud resource to manage Container Registry namespaces.
+// RegistryNamespace is the Schema for the RegistryNamespaces API. Provides a Alicloud resource to manage Container Registry namespaces.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,alibabacloud}
-type Namespace struct {
+type RegistryNamespace struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.autoCreate) || (has(self.initProvider) && has(self.initProvider.autoCreate))",message="spec.forProvider.autoCreate is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.defaultVisibility) || (has(self.initProvider) && has(self.initProvider.defaultVisibility))",message="spec.forProvider.defaultVisibility is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
-	Spec   NamespaceSpec   `json:"spec"`
-	Status NamespaceStatus `json:"status,omitempty"`
+	Spec   RegistryNamespaceSpec   `json:"spec"`
+	Status RegistryNamespaceStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// NamespaceList contains a list of Namespaces
-type NamespaceList struct {
+// RegistryNamespaceList contains a list of RegistryNamespaces
+type RegistryNamespaceList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Namespace `json:"items"`
+	Items           []RegistryNamespace `json:"items"`
 }
 
 // Repository type metadata.
 var (
-	Namespace_Kind             = "Namespace"
-	Namespace_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: Namespace_Kind}.String()
-	Namespace_KindAPIVersion   = Namespace_Kind + "." + CRDGroupVersion.String()
-	Namespace_GroupVersionKind = CRDGroupVersion.WithKind(Namespace_Kind)
+	RegistryNamespace_Kind             = "RegistryNamespace"
+	RegistryNamespace_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: RegistryNamespace_Kind}.String()
+	RegistryNamespace_KindAPIVersion   = RegistryNamespace_Kind + "." + CRDGroupVersion.String()
+	RegistryNamespace_GroupVersionKind = CRDGroupVersion.WithKind(RegistryNamespace_Kind)
 )
 
 func init() {
-	SchemeBuilder.Register(&Namespace{}, &NamespaceList{})
+	SchemeBuilder.Register(&RegistryNamespace{}, &RegistryNamespaceList{})
 }

@@ -1,6 +1,6 @@
 ---
 apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
-kind: Namespace
+kind: RegistryNamespace
 metadata:
   annotations:
     meta.crossplane.io/example-id: cr-v1alpha1-test-namespace-1

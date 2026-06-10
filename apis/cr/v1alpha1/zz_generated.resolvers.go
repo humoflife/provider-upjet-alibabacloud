@@ -568,8 +568,8 @@ func (mg *Repo) ResolveReferences(ctx context.Context, c client.Reader) error {
 		Reference:    mg.Spec.ForProvider.NamespaceRef,
 		Selector:     mg.Spec.ForProvider.NamespaceSelector,
 		To: reference.To{
-			List:    &NamespaceList{},
-			Managed: &Namespace{},
+			List:    &RegistryNamespaceList{},
+			Managed: &RegistryNamespace{},
 		},
 	})
 	if err != nil {
@@ -584,8 +584,8 @@ func (mg *Repo) ResolveReferences(ctx context.Context, c client.Reader) error {
 		Reference:    mg.Spec.InitProvider.NamespaceRef,
 		Selector:     mg.Spec.InitProvider.NamespaceSelector,
 		To: reference.To{
-			List:    &NamespaceList{},
-			Managed: &Namespace{},
+			List:    &RegistryNamespaceList{},
+			Managed: &RegistryNamespace{},
 		},
 	})
 	if err != nil {

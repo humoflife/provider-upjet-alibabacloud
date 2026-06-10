@@ -1,8 +1,8 @@
 apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
-kind: Namespace
+kind: RegistryNamespace
 metadata:
   annotations:
-    meta.upbound.io/example-id: cr/v1alpha1/namespace
+    meta.upbound.io/example-id: cr/v1alpha1/registrynamespace
   labels:
     testing.upbound.io/example-name: example
   name: example

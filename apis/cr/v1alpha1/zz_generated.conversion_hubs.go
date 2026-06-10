@@ -31,7 +31,7 @@ func (tr *EeSyncRule) Hub() {}
 func (tr *EndpointACLPolicy) Hub() {}
 
 // Hub marks this type as a conversion hub.
-func (tr *Namespace) Hub() {}
+func (tr *RegistryNamespace) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *Repo) Hub() {}

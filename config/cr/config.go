@@ -42,6 +42,12 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("alicloud_cr_namespace", func(r *config.Resource) {
 		r.ShortGroup = "cr"
+		// The default kind "Namespace" yields the plural "namespaces", which
+		// collides with the Kubernetes API server's reserved namespace-scoping
+		// path grammar (/apis/<g>/<v>/namespaces/<name>/...), making individual
+		// objects unaddressable by name (GET/PATCH/DELETE 404). Rename the kind
+		// so the plural avoids that reserved segment.
+		r.Kind = "RegistryNamespace"
 	})
 
 	p.AddResourceConfigurator("alicloud_cr_repo", func(r *config.Resource) {

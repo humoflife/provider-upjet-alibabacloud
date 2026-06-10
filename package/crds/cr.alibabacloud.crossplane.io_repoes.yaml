@@ -85,7 +85,8 @@ spec:
                       is located.
                     type: string
                   namespaceRef:
-                    description: Reference to a Namespace in cr to populate namespace.
+                    description: Reference to a RegistryNamespace in cr to populate
+                      namespace.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -119,7 +120,8 @@ spec:
                     - name
                     type: object
                   namespaceSelector:
-                    description: Selector for a Namespace in cr to populate namespace.
+                    description: Selector for a RegistryNamespace in cr to populate
+                      namespace.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -195,7 +197,8 @@ spec:
                       is located.
                     type: string
                   namespaceRef:
-                    description: Reference to a Namespace in cr to populate namespace.
+                    description: Reference to a RegistryNamespace in cr to populate
+                      namespace.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -229,7 +232,8 @@ spec:
                     - name
                     type: object
                   namespaceSelector:
-                    description: Selector for a Namespace in cr to populate namespace.
+                    description: Selector for a RegistryNamespace in cr to populate
+                      namespace.
                     properties:
                       matchControllerRef:
                         description: |-
