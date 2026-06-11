@@ -25,7 +25,17 @@ type EndpointACLPolicyInitParameters struct {
 	Entry *string `json:"entry,omitempty" tf:"entry,omitempty"`
 
 	// The ID of the CR Instance.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeInstance
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.IdExtractor()
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
+
+	// Reference to a EeInstance in cr to populate instanceId.
+	// +kubebuilder:validation:Optional
+	InstanceIDRef *v1.Reference `json:"instanceIdRef,omitempty" tf:"-"`
+
+	// Selector for a EeInstance in cr to populate instanceId.
+	// +kubebuilder:validation:Optional
+	InstanceIDSelector *v1.Selector `json:"instanceIdSelector,omitempty" tf:"-"`
 
 	// The module that needs to set the access policy. Valid values: Registry.
 	ModuleName *string `json:"moduleName,omitempty" tf:"module_name,omitempty"`
@@ -67,8 +77,18 @@ type EndpointACLPolicyParameters struct {
 	Entry *string `json:"entry,omitempty" tf:"entry,omitempty"`
 
 	// The ID of the CR Instance.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeInstance
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.IdExtractor()
 	// +kubebuilder:validation:Optional
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
+
+	// Reference to a EeInstance in cr to populate instanceId.
+	// +kubebuilder:validation:Optional
+	InstanceIDRef *v1.Reference `json:"instanceIdRef,omitempty" tf:"-"`
+
+	// Selector for a EeInstance in cr to populate instanceId.
+	// +kubebuilder:validation:Optional
+	InstanceIDSelector *v1.Selector `json:"instanceIdSelector,omitempty" tf:"-"`
 
 	// The module that needs to set the access policy. Valid values: Registry.
 	// +kubebuilder:validation:Optional

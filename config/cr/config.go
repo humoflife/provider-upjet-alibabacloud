@@ -4,12 +4,22 @@
 
 package cr
 
-import "github.com/crossplane/upjet/pkg/config"
+import (
+	"github.com/crossplane/upjet/pkg/config"
+
+	"github.com/crossplane-contrib/provider-alibabacloud/config/common"
+)
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("alicloud_cr_chain", func(r *config.Resource) {
 		r.ShortGroup = "cr"
+		// Auto-detection mis-resolves instance_id to an EeNamespace; it is the
+		// Enterprise Edition instance ID.
+		r.References["instance_id"] = config.Reference{
+			TerraformName: "alicloud_cr_ee_instance",
+			Extractor:     common.PathIdExtractor,
+		}
 	})
 
 	p.AddResourceConfigurator("alicloud_cr_chart_namespace", func(r *config.Resource) {
@@ -18,6 +28,12 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("alicloud_cr_chart_repository", func(r *config.Resource) {
 		r.ShortGroup = "cr"
+		// Auto-detection mis-resolves instance_id to a ChartNamespace; it is the
+		// Enterprise Edition instance ID.
+		r.References["instance_id"] = config.Reference{
+			TerraformName: "alicloud_cr_ee_instance",
+			Extractor:     common.PathIdExtractor,
+		}
 	})
 
 	p.AddResourceConfigurator("alicloud_cr_ee_instance", func(r *config.Resource) {
@@ -38,15 +54,15 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("alicloud_cr_endpoint_acl_policy", func(r *config.Resource) {
 		r.ShortGroup = "cr"
-		// instance_id is populated via a cross-resource reference
-		// (instanceIdSelector). It is Required in the Terraform schema, which
-		// makes upjet emit a required-parameter CEL rule that is not
-		// reference-aware, so a selector cannot satisfy it at admission. Mark it
-		// Optional so the reference path works, consistent with the other cr
-		// resources whose instance_id is reference-populated.
-		if s, ok := r.TerraformResource.Schema["instance_id"]; ok {
-			s.Required = false
-			s.Optional = true
+		// Auto-detection generated no instance_id reference for this resource,
+		// so instanceIdSelector could not resolve and the (non reference-aware)
+		// required-parameter CEL rejected the manifest at admission. Configure
+		// the reference explicitly; this both enables the selector and excludes
+		// instance_id from the required-parameter CEL, matching the other cr
+		// resources.
+		r.References["instance_id"] = config.Reference{
+			TerraformName: "alicloud_cr_ee_instance",
+			Extractor:     common.PathIdExtractor,
 		}
 	})
 

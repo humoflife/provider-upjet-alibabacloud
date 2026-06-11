@@ -9,6 +9,7 @@ package v1alpha1
 import (
 	"context"
 	v1alpha1 "github.com/crossplane-contrib/provider-alibabacloud/apis/vpc/v1alpha1"
+	common "github.com/crossplane-contrib/provider-alibabacloud/config/common"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
 	resource "github.com/crossplane/upjet/pkg/resource"
 	errors "github.com/pkg/errors"
@@ -24,12 +25,12 @@ func (mg *Chain) ResolveReferences(ctx context.Context, c client.Reader) error {
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.InstanceID),
-		Extract:      resource.ExtractParamPath("instance_id", false),
+		Extract:      common.IdExtractor(),
 		Reference:    mg.Spec.ForProvider.InstanceIDRef,
 		Selector:     mg.Spec.ForProvider.InstanceIDSelector,
 		To: reference.To{
-			List:    &EeNamespaceList{},
-			Managed: &EeNamespace{},
+			List:    &EeInstanceList{},
+			Managed: &EeInstance{},
 		},
 	})
 	if err != nil {
@@ -72,12 +73,12 @@ func (mg *Chain) ResolveReferences(ctx context.Context, c client.Reader) error {
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.InstanceID),
-		Extract:      resource.ExtractParamPath("instance_id", false),
+		Extract:      common.IdExtractor(),
 		Reference:    mg.Spec.InitProvider.InstanceIDRef,
 		Selector:     mg.Spec.InitProvider.InstanceIDSelector,
 		To: reference.To{
-			List:    &EeNamespaceList{},
-			Managed: &EeNamespace{},
+			List:    &EeInstanceList{},
+			Managed: &EeInstance{},
 		},
 	})
 	if err != nil {
@@ -172,12 +173,12 @@ func (mg *ChartRepository) ResolveReferences(ctx context.Context, c client.Reade
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.InstanceID),
-		Extract:      resource.ExtractParamPath("instance_id", false),
+		Extract:      common.IdExtractor(),
 		Reference:    mg.Spec.ForProvider.InstanceIDRef,
 		Selector:     mg.Spec.ForProvider.InstanceIDSelector,
 		To: reference.To{
-			List:    &ChartNamespaceList{},
-			Managed: &ChartNamespace{},
+			List:    &EeInstanceList{},
+			Managed: &EeInstance{},
 		},
 	})
 	if err != nil {
@@ -204,12 +205,12 @@ func (mg *ChartRepository) ResolveReferences(ctx context.Context, c client.Reade
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.InstanceID),
-		Extract:      resource.ExtractParamPath("instance_id", false),
+		Extract:      common.IdExtractor(),
 		Reference:    mg.Spec.InitProvider.InstanceIDRef,
 		Selector:     mg.Spec.InitProvider.InstanceIDSelector,
 		To: reference.To{
-			List:    &ChartNamespaceList{},
-			Managed: &ChartNamespace{},
+			List:    &EeInstanceList{},
+			Managed: &EeInstance{},
 		},
 	})
 	if err != nil {
@@ -551,6 +552,48 @@ func (mg *EeSyncRule) ResolveReferences(ctx context.Context, c client.Reader) er
 	}
 	mg.Spec.InitProvider.TargetRepoName = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.TargetRepoNameRef = rsp.ResolvedReference
+
+	return nil
+}
+
+// ResolveReferences of this EndpointACLPolicy.
+func (mg *EndpointACLPolicy) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.InstanceID),
+		Extract:      common.IdExtractor(),
+		Reference:    mg.Spec.ForProvider.InstanceIDRef,
+		Selector:     mg.Spec.ForProvider.InstanceIDSelector,
+		To: reference.To{
+			List:    &EeInstanceList{},
+			Managed: &EeInstance{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.InstanceID")
+	}
+	mg.Spec.ForProvider.InstanceID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.InstanceIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.InstanceID),
+		Extract:      common.IdExtractor(),
+		Reference:    mg.Spec.InitProvider.InstanceIDRef,
+		Selector:     mg.Spec.InitProvider.InstanceIDSelector,
+		To: reference.To{
+			List:    &EeInstanceList{},
+			Managed: &EeInstance{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.InstanceID")
+	}
+	mg.Spec.InitProvider.InstanceID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.InstanceIDRef = rsp.ResolvedReference
 
 	return nil
 }

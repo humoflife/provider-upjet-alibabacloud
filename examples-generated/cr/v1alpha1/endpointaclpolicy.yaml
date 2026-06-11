@@ -11,7 +11,9 @@ spec:
     description: ${var.name}
     endpointType: internet
     entry: 192.168.1.0/24
-    instanceId: ${data.alicloud_cr_endpoint_acl_service.default.instance_id}
+    instanceIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: alicloud_cr_endpoint_acl_service
     moduleName: Registry
     region: cn-beijing
 

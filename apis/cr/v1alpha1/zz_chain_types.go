@@ -54,15 +54,15 @@ type ChainInitParameters struct {
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
 	// The ID of CR Enterprise Edition instance.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeNamespace
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("instance_id",false)
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeInstance
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.IdExtractor()
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
 
-	// Reference to a EeNamespace in cr to populate instanceId.
+	// Reference to a EeInstance in cr to populate instanceId.
 	// +kubebuilder:validation:Optional
 	InstanceIDRef *v1.Reference `json:"instanceIdRef,omitempty" tf:"-"`
 
-	// Selector for a EeNamespace in cr to populate instanceId.
+	// Selector for a EeInstance in cr to populate instanceId.
 	// +kubebuilder:validation:Optional
 	InstanceIDSelector *v1.Selector `json:"instanceIdSelector,omitempty" tf:"-"`
 
@@ -135,16 +135,16 @@ type ChainParameters struct {
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
 	// The ID of CR Enterprise Edition instance.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeNamespace
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("instance_id",false)
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeInstance
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.IdExtractor()
 	// +kubebuilder:validation:Optional
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
 
-	// Reference to a EeNamespace in cr to populate instanceId.
+	// Reference to a EeInstance in cr to populate instanceId.
 	// +kubebuilder:validation:Optional
 	InstanceIDRef *v1.Reference `json:"instanceIdRef,omitempty" tf:"-"`
 
-	// Selector for a EeNamespace in cr to populate instanceId.
+	// Selector for a EeInstance in cr to populate instanceId.
 	// +kubebuilder:validation:Optional
 	InstanceIDSelector *v1.Selector `json:"instanceIdSelector,omitempty" tf:"-"`
 

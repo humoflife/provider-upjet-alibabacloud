@@ -16,15 +16,15 @@ import (
 type ChartRepositoryInitParameters struct {
 
 	// The ID of the Container Registry instance.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.ChartNamespace
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("instance_id",false)
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeInstance
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.IdExtractor()
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
 
-	// Reference to a ChartNamespace in cr to populate instanceId.
+	// Reference to a EeInstance in cr to populate instanceId.
 	// +kubebuilder:validation:Optional
 	InstanceIDRef *v1.Reference `json:"instanceIdRef,omitempty" tf:"-"`
 
-	// Selector for a ChartNamespace in cr to populate instanceId.
+	// Selector for a EeInstance in cr to populate instanceId.
 	// +kubebuilder:validation:Optional
 	InstanceIDSelector *v1.Selector `json:"instanceIdSelector,omitempty" tf:"-"`
 
@@ -75,16 +75,16 @@ type ChartRepositoryObservation struct {
 type ChartRepositoryParameters struct {
 
 	// The ID of the Container Registry instance.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.ChartNamespace
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("instance_id",false)
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeInstance
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.IdExtractor()
 	// +kubebuilder:validation:Optional
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
 
-	// Reference to a ChartNamespace in cr to populate instanceId.
+	// Reference to a EeInstance in cr to populate instanceId.
 	// +kubebuilder:validation:Optional
 	InstanceIDRef *v1.Reference `json:"instanceIdRef,omitempty" tf:"-"`
 
-	// Selector for a ChartNamespace in cr to populate instanceId.
+	// Selector for a EeInstance in cr to populate instanceId.
 	// +kubebuilder:validation:Optional
 	InstanceIDSelector *v1.Selector `json:"instanceIdSelector,omitempty" tf:"-"`
 

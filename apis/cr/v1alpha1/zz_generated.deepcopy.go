@@ -2519,6 +2519,16 @@ func (in *EndpointACLPolicyInitParameters) DeepCopyInto(out *EndpointACLPolicyIn
 		*out = new(string)
 		**out = **in
 	}
+	if in.InstanceIDRef != nil {
+		in, out := &in.InstanceIDRef, &out.InstanceIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.InstanceIDSelector != nil {
+		in, out := &in.InstanceIDSelector, &out.InstanceIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.ModuleName != nil {
 		in, out := &in.ModuleName, &out.ModuleName
 		*out = new(string)
@@ -2635,6 +2645,16 @@ func (in *EndpointACLPolicyParameters) DeepCopyInto(out *EndpointACLPolicyParame
 		in, out := &in.InstanceID, &out.InstanceID
 		*out = new(string)
 		**out = **in
+	}
+	if in.InstanceIDRef != nil {
+		in, out := &in.InstanceIDRef, &out.InstanceIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.InstanceIDSelector != nil {
+		in, out := &in.InstanceIDSelector, &out.InstanceIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.ModuleName != nil {
 		in, out := &in.ModuleName, &out.ModuleName
