@@ -300,10 +300,6 @@ spec:
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.entry)
                 || (has(self.initProvider) && has(self.initProvider.entry))'
-            - message: spec.forProvider.instanceId is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.instanceId)
-                || (has(self.initProvider) && has(self.initProvider.instanceId))'
           status:
             description: EndpointACLPolicyStatus defines the observed state of EndpointACLPolicy.
             properties:

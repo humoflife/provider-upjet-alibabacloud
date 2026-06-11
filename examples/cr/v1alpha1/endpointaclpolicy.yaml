@@ -9,6 +9,7 @@ metadata:
   name: test-endpoint-acl-1
 spec:
   forProvider:
+    endpointType: internet
     entry: 192.168.1.0/24
     instanceIdSelector:
       matchLabels:
