@@ -63,7 +63,7 @@ metadata:
   name: test-ee-instance-for-vpc-endpoint-1
 spec:
   forProvider:
-    instanceName: cr-ee-test-vpc-ep-1
+    instanceName: cr-ee-test-vpc-ep-2
     instanceType: Advanced
     paymentType: Subscription
     period: 1

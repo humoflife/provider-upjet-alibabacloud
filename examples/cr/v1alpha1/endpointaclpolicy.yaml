@@ -26,7 +26,7 @@ metadata:
   name: test-ee-instance-for-acl-1
 spec:
   forProvider:
-    instanceName: cr-ee-test-acl-1
+    instanceName: cr-ee-test-acl-2
     instanceType: Advanced
     paymentType: Subscription
     period: 1

@@ -80,7 +80,7 @@ metadata:
   name: test-ee-instance-for-sync-1
 spec:
   forProvider:
-    instanceName: cr-ee-test-sync-1
+    instanceName: cr-ee-test-sync-2
     instanceType: Advanced
     paymentType: Subscription
     period: 1
@@ -136,7 +136,7 @@ metadata:
   name: test-ee-instance-target-sync-1
 spec:
   forProvider:
-    instanceName: cr-ee-test-synctgt-1
+    instanceName: cr-ee-test-synctgt-2
     instanceType: Advanced
     paymentType: Subscription
     period: 1
