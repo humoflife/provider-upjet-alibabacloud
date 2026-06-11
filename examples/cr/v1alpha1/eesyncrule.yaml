@@ -10,7 +10,11 @@ metadata:
 spec:
   forProvider:
     region: us-west-1
-    name: test-sync-rule-1
+    # Field "name" is deprecated since alicloud provider v1.240.0 and is now
+    # mutually exclusive with sync_rule_name; setting "name" makes Terraform
+    # send both and the create fails with
+    # "only one of `name,sync_rule_name` can be specified". Use syncRuleName.
+    syncRuleName: test-sync-rule-1
     tagFilter: .*
     targetRegionId: us-west-1
     instanceIdSelector:
