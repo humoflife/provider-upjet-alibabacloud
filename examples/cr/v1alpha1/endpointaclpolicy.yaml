@@ -9,6 +9,7 @@ metadata:
   name: test-endpoint-acl-1
 spec:
   forProvider:
+    region: us-west-1
     endpointType: internet
     entry: 192.168.1.0/24
     instanceIdSelector:
@@ -26,6 +27,7 @@ metadata:
   name: test-ee-instance-for-acl-1
 spec:
   forProvider:
+    region: us-west-1
     instanceName: cr-ee-test-acl-2
     instanceType: Advanced
     paymentType: Subscription

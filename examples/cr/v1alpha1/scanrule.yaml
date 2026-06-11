@@ -9,6 +9,7 @@ metadata:
   name: test-scan-rule-1
 spec:
   forProvider:
+    region: us-west-1
     instanceIdSelector:
       matchLabels:
         testing.crossplane.io/example-name: test-ee-instance-for-scan-1
@@ -30,6 +31,7 @@ metadata:
   name: test-ee-namespace-for-scan-1
 spec:
   forProvider:
+    region: us-west-1
     autoCreate: false
     defaultVisibility: PUBLIC
     instanceIdSelector:
@@ -47,6 +49,7 @@ metadata:
   name: test-ee-instance-for-scan-1
 spec:
   forProvider:
+    region: us-west-1
     instanceName: cr-ee-test-scan-1
     instanceType: Advanced
     paymentType: Subscription

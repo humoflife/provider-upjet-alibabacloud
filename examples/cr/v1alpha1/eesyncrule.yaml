@@ -9,9 +9,10 @@ metadata:
   name: test-sync-rule-1
 spec:
   forProvider:
+    region: us-west-1
     name: test-sync-rule-1
     tagFilter: .*
-    targetRegionId: cn-beijing
+    targetRegionId: us-west-1
     instanceIdSelector:
       matchLabels:
         testing.crossplane.io/example-name: test-ee-instance-for-sync-1
@@ -42,6 +43,7 @@ metadata:
   name: test-ee-repo-for-sync-1
 spec:
   forProvider:
+    region: us-west-1
     detail: Test EE source repository for sync rule
     instanceIdSelector:
       matchLabels:
@@ -63,6 +65,7 @@ metadata:
   name: test-ee-namespace-for-sync-1
 spec:
   forProvider:
+    region: us-west-1
     autoCreate: false
     defaultVisibility: PUBLIC
     instanceIdSelector:
@@ -80,6 +83,7 @@ metadata:
   name: test-ee-instance-for-sync-1
 spec:
   forProvider:
+    region: us-west-1
     instanceName: cr-ee-test-sync-2
     instanceType: Advanced
     paymentType: Subscription
@@ -98,6 +102,7 @@ metadata:
   name: test-ee-repo-target-sync-1
 spec:
   forProvider:
+    region: us-west-1
     detail: Test EE target repository for sync rule
     instanceIdSelector:
       matchLabels:
@@ -119,6 +124,7 @@ metadata:
   name: test-ee-namespace-target-sync-1
 spec:
   forProvider:
+    region: us-west-1
     autoCreate: false
     defaultVisibility: PUBLIC
     instanceIdSelector:
@@ -136,6 +142,7 @@ metadata:
   name: test-ee-instance-target-sync-1
 spec:
   forProvider:
+    region: us-west-1
     instanceName: cr-ee-test-synctgt-2
     instanceType: Advanced
     paymentType: Subscription

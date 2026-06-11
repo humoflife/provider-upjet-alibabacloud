@@ -9,6 +9,7 @@ metadata:
   name: test-ee-repo-1
 spec:
   forProvider:
+    region: us-west-1
     detail: This is a test EE repository created by provider-upjet-alibabacloud.
     instanceIdSelector:
       matchLabels:
@@ -30,6 +31,7 @@ metadata:
   name: test-ee-namespace-for-repo-1
 spec:
   forProvider:
+    region: us-west-1
     autoCreate: false
     defaultVisibility: PUBLIC
     instanceIdSelector:
@@ -47,6 +49,7 @@ metadata:
   name: test-ee-instance-for-repo-1
 spec:
   forProvider:
+    region: us-west-1
     instanceName: cr-ee-test-repo-1
     instanceType: Advanced
     paymentType: Subscription
