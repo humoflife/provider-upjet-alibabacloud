@@ -46,7 +46,7 @@ metadata:
   name: test-ee-instance-for-chart-repo-1
 spec:
   forProvider:
-    instanceName: test-ee-instance-for-chart-repo-1
+    instanceName: cr-ee-test-chart-repo-1
     instanceType: Advanced
     paymentType: Subscription
     period: 1

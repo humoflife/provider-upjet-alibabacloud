@@ -68,7 +68,7 @@ metadata:
   name: test-ee-instance-for-storage-1
 spec:
   forProvider:
-    instanceName: test-ee-instance-for-storage-1
+    instanceName: cr-ee-test-storage-1
     instanceType: Advanced
     paymentType: Subscription
     period: 1

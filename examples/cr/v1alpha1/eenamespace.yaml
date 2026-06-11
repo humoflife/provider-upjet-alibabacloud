@@ -26,7 +26,7 @@ metadata:
   name: test-ee-instance-for-namespace-1
 spec:
   forProvider:
-    instanceName: crossplane-upjet-ee
+    instanceName: cr-ee-test-ns-1
     instanceType: Advanced
     paymentType: Subscription
     period: 1

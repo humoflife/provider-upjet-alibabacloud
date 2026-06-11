@@ -47,7 +47,7 @@ metadata:
   name: test-ee-instance-for-repo-1
 spec:
   forProvider:
-    instanceName: test-ee-instance-for-repo-1
+    instanceName: cr-ee-test-repo-1
     instanceType: Advanced
     paymentType: Subscription
     period: 1

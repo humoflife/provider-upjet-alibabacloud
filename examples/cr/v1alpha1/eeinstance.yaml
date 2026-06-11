@@ -9,7 +9,7 @@ metadata:
   name: test-ee-instance-1
 spec:
   forProvider:
-    instanceName: test-ee-instance-1
+    instanceName: cr-ee-test-inst-1
     instanceType: Advanced
     paymentType: Subscription
     period: 1

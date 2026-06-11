@@ -98,7 +98,7 @@ metadata:
   name: test-ee-instance-for-chain-1
 spec:
   forProvider:
-    instanceName: test-ee-instance-for-chain-1
+    instanceName: cr-ee-test-chain-1
     instanceType: Advanced
     paymentType: Subscription
     period: 1
