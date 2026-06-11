@@ -1,6 +1,6 @@
 ---
 apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
-kind: VpcEndpointLinkedVpc
+kind: VPCEndpointLinkedVPC
 metadata:
   annotations:
     meta.crossplane.io/example-id: cr-v1alpha1-test-vpc-endpoint-1
