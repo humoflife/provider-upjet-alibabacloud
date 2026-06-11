@@ -9,22 +9,29 @@ metadata:
   name: test-sync-rule-1
 spec:
   forProvider:
+    name: test-sync-rule-1
+    tagFilter: .*
+    targetRegionId: cn-beijing
     instanceIdSelector:
       matchLabels:
         testing.crossplane.io/example-name: test-ee-instance-for-sync-1
-    name: test-sync-rule-1
     namespaceNameSelector:
       matchLabels:
         testing.crossplane.io/example-name: test-ee-namespace-for-sync-1
     repoNameSelector:
       matchLabels:
         testing.crossplane.io/example-name: test-ee-repo-for-sync-1
-    tagFilter: .*
-    targetInstanceId: target-instance-id
-    targetNamespaceName: target-namespace
-    targetRegionId: cn-hangzhou
-    targetRepoName: target-repo
+    targetInstanceIdSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-instance-target-sync-1
+    targetNamespaceNameSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-namespace-target-sync-1
+    targetRepoNameSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-repo-target-sync-1
 ---
+# --- Source side ---
 apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
 kind: EeRepo
 metadata:
@@ -35,7 +42,7 @@ metadata:
   name: test-ee-repo-for-sync-1
 spec:
   forProvider:
-    detail: Test EE repository for sync rule
+    detail: Test EE source repository for sync rule
     instanceIdSelector:
       matchLabels:
         testing.crossplane.io/example-name: test-ee-instance-for-sync-1
@@ -44,7 +51,7 @@ spec:
       matchLabels:
         testing.crossplane.io/example-name: test-ee-namespace-for-sync-1
     repoType: PUBLIC
-    summary: Test EE repository for sync rule
+    summary: Test EE source repository for sync rule
 ---
 apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
 kind: EeNamespace
@@ -74,6 +81,62 @@ metadata:
 spec:
   forProvider:
     instanceName: cr-ee-test-sync-1
+    instanceType: Advanced
+    paymentType: Subscription
+    period: 1
+    renewPeriod: 1
+    renewalStatus: AutoRenewal
+---
+# --- Target side ---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: EeRepo
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-ee-repo-target-sync-1
+  labels:
+    testing.crossplane.io/example-name: test-ee-repo-target-sync-1
+  name: test-ee-repo-target-sync-1
+spec:
+  forProvider:
+    detail: Test EE target repository for sync rule
+    instanceIdSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-instance-target-sync-1
+    name: test-ee-repo-target-sync-1
+    namespaceSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-namespace-target-sync-1
+    repoType: PUBLIC
+    summary: Test EE target repository for sync rule
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: EeNamespace
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-ee-namespace-target-sync-1
+  labels:
+    testing.crossplane.io/example-name: test-ee-namespace-target-sync-1
+  name: test-ee-namespace-target-sync-1
+spec:
+  forProvider:
+    autoCreate: false
+    defaultVisibility: PUBLIC
+    instanceIdSelector:
+      matchLabels:
+        testing.crossplane.io/example-name: test-ee-instance-target-sync-1
+    name: test-ee-namespace-target-sync-1
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: EeInstance
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-ee-instance-target-sync-1
+  labels:
+    testing.crossplane.io/example-name: test-ee-instance-target-sync-1
+  name: test-ee-instance-target-sync-1
+spec:
+  forProvider:
+    instanceName: cr-ee-test-synctgt-1
     instanceType: Advanced
     paymentType: Subscription
     period: 1
