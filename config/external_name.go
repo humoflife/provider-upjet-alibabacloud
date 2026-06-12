@@ -143,6 +143,18 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"alicloud_message_service_subscription": config.IdentifierFromProvider,
 	"alicloud_message_service_topic":        config.IdentifierFromProvider,
 
+	// OOS
+	"alicloud_oos_template":               config.IdentifierFromProvider,
+	"alicloud_oos_parameter":              config.IdentifierFromProvider,
+	"alicloud_oos_application":            config.IdentifierFromProvider,
+	"alicloud_oos_application_group":      config.IdentifierFromProvider,
+	"alicloud_oos_default_patch_baseline": config.IdentifierFromProvider,
+	"alicloud_oos_execution":              config.IdentifierFromProvider,
+	"alicloud_oos_patch_baseline":         config.IdentifierFromProvider,
+	"alicloud_oos_secret_parameter":       config.IdentifierFromProvider,
+	"alicloud_oos_service_setting":        config.IdentifierFromProvider,
+	"alicloud_oos_state_configuration":    config.IdentifierFromProvider,
+
 	// OSS
 	"alicloud_oss_access_point":                      config.IdentifierFromProvider,
 	"alicloud_oss_account_public_access_block":       config.IdentifierFromProvider,
