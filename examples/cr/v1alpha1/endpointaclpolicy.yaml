@@ -1,47 +1,78 @@
----
-apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
-kind: EndpointACLPolicy
-metadata:
-  annotations:
-    meta.crossplane.io/example-id: cr-v1alpha1-test-endpoint-acl-1
-  labels:
-    testing.crossplane.io/example-name: test-endpoint-acl-1
-  name: test-endpoint-acl-1
-spec:
-  # NOTE: the target endpoint's ACL service must be enabled before an ACL
-  # policy entry can persist (the "internet" endpoint is disabled by default).
-  # Upstream exposes that only as the side-effecting Terraform data source
-  # alicloud_cr_endpoint_acl_service (enable=true), which has no managed
-  # resource equivalent. In a Composition this is done by running that data
-  # source via provider-terraform (Workspace) and managing this
-  # EndpointACLPolicy with this provider, ordered enable -> policy. Because
-  # single-provider uptest cannot perform the enable step, this example is
-  # excluded from the automated e2e list, but the resource itself is valid and
-  # works when the endpoint is enabled out-of-band.
-  forProvider:
-    region: us-west-1
-    endpointType: internet
-    entry: 192.168.1.0/24
-    description: test-endpoint-acl-1
-    instanceIdSelector:
-      matchLabels:
-        testing.crossplane.io/example-name: test-ee-instance-for-acl-1
-    moduleName: Registry
----
-apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
-kind: EeInstance
-metadata:
-  annotations:
-    meta.crossplane.io/example-id: cr-v1alpha1-test-ee-instance-for-acl-1
-  labels:
-    testing.crossplane.io/example-name: test-ee-instance-for-acl-1
-  name: test-ee-instance-for-acl-1
-spec:
-  forProvider:
-    region: us-west-1
-    instanceName: cr-ee-test-acl-2
-    instanceType: Advanced
-    paymentType: Subscription
-    period: 1
-    renewPeriod: 1
-    renewalStatus: AutoRenewal
+# ===========================================================================
+# EndpointACLPolicy (alicloud_cr_endpoint_acl_policy) - documentation only
+# ===========================================================================
+#
+# This file intentionally contains NO runnable manifest. EndpointACLPolicy is
+# a valid, shipped resource of this provider, but it cannot be exercised by a
+# single-provider end-to-end test, so a live example here would always fail to
+# become Ready. The "what", the "why no example", and the supported usage are
+# documented below.
+#
+# ---------------------------------------------------------------------------
+# What the resource does
+# ---------------------------------------------------------------------------
+# EndpointACLPolicy adds one IP-whitelist entry (a CIDR) to the access-control
+# list of a Container Registry Enterprise Edition (EE) instance endpoint -
+# typically the public "internet" endpoint. Its spec.forProvider fields are:
+#
+#   instanceId    - the EE instance to attach to. Reference an EeInstance via
+#                   instanceIdSelector or instanceIdRef (do not hardcode the
+#                   generated cri-xxxxx id).
+#   endpointType  - the endpoint to guard, e.g. "internet".
+#   entry         - the allowed source CIDR, e.g. "192.168.1.0/24".
+#   moduleName    - the module the ACL applies to, e.g. "Registry".
+#   description   - optional free-text description.
+#   region        - the instance's region, e.g. "us-west-1".
+#
+# ---------------------------------------------------------------------------
+# Why there is no runnable example (a provider-only test is not feasible)
+# ---------------------------------------------------------------------------
+# An ACL entry can only persist once the target endpoint's ACL service is
+# ENABLED on the instance. By default the "internet" endpoint is DISABLED:
+# the instance reports status.atProvider.instanceEndpoints[].enable = false
+# for endpointType "internet".
+#
+# Enabling it is NOT configurable on the EeInstance resource. The
+# instance_endpoints field (which carries the per-endpoint "enable" flag) is
+# computed / read-only: in the generated CRD it appears only under
+# status.atProvider, never under spec.forProvider, so there is no field to set
+# enable = true on the instance.
+#
+# Upstream (aliyun/terraform-provider-alicloud) exposes endpoint enablement
+# ONLY through the side-effecting data source
+# "alicloud_cr_endpoint_acl_service" (enable = true), which invokes the
+# UpdateInstanceEndpointStatus API. Crossplane / upjet model managed resources
+# only and have no representation for a Terraform data source, so there is no
+# managed resource - in this provider or upstream - that enables the endpoint
+# declaratively.
+#
+# As a result, if the policy is applied against an instance whose endpoint ACL
+# service has not been enabled out-of-band, the create does not persist and the
+# Terraform layer surfaces:
+#
+#   "Provider produced inconsistent result after apply:
+#    Root resource was present, but now absent"
+#
+# and the resource never reaches Ready. A single-provider uptest run creates
+# its own fresh EE instance and has no way to enable the endpoint, so a live
+# example would always fail. This resource is therefore excluded from the
+# automated example list (see UPTEST_EXAMPLE_LIST_CR in the Makefile) and
+# shipped as documentation only - it is a test-harness limitation, not a
+# defect in the resource.
+#
+# ---------------------------------------------------------------------------
+# Supported usage (declarative)
+# ---------------------------------------------------------------------------
+# The resource works correctly once the endpoint is enabled. The recommended
+# declarative pattern composes two providers:
+#
+#   1. provider-terraform (a Workspace) runs the
+#      alicloud_cr_endpoint_acl_service data source with enable = true to turn
+#      on the endpoint's ACL service on the EE instance, then
+#   2. this provider manages the EndpointACLPolicy entry,
+#
+# ordered enable -> policy via the composition's dependencies. Alternatively,
+# enable the endpoint out-of-band (Alibaba Cloud console, aliyun CLI, or a
+# standalone Terraform run) and then manage EndpointACLPolicy with this
+# provider as usual.
+# ===========================================================================
