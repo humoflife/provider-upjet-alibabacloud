@@ -150,10 +150,6 @@ spec:
                             type: string
                         type: object
                     type: object
-                  name:
-                    description: Field name has been deprecated from provider version
-                      1.240.0. New field sync_rule_name instead.
-                    type: string
                   namespaceName:
                     description: The namespace name of the source instance.
                     type: string
@@ -654,10 +650,6 @@ spec:
                             type: string
                         type: object
                     type: object
-                  name:
-                    description: Field name has been deprecated from provider version
-                      1.240.0. New field sync_rule_name instead.
-                    type: string
                   namespaceName:
                     description: The namespace name of the source instance.
                     type: string
@@ -1254,10 +1246,6 @@ spec:
                     type: string
                   instanceId:
                     description: The ID of the Container Registry source instance.
-                    type: string
-                  name:
-                    description: Field name has been deprecated from provider version
-                      1.240.0. New field sync_rule_name instead.
                     type: string
                   namespaceName:
                     description: The namespace name of the source instance.

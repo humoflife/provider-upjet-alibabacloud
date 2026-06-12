@@ -28,9 +28,6 @@ type EeSyncRuleInitParameters struct {
 	// +kubebuilder:validation:Optional
 	InstanceIDSelector *v1.Selector `json:"instanceIdSelector,omitempty" tf:"-"`
 
-	// Field name has been deprecated from provider version 1.240.0. New field sync_rule_name instead.
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
-
 	// The namespace name of the source instance.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeNamespace
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("name",false)
@@ -126,9 +123,6 @@ type EeSyncRuleObservation struct {
 	// The ID of the Container Registry source instance.
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
 
-	// Field name has been deprecated from provider version 1.240.0. New field sync_rule_name instead.
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
-
 	// The namespace name of the source instance.
 	NamespaceName *string `json:"namespaceName,omitempty" tf:"namespace_name,omitempty"`
 
@@ -190,10 +184,6 @@ type EeSyncRuleParameters struct {
 	// Selector for a EeInstance in cr to populate instanceId.
 	// +kubebuilder:validation:Optional
 	InstanceIDSelector *v1.Selector `json:"instanceIdSelector,omitempty" tf:"-"`
-
-	// Field name has been deprecated from provider version 1.240.0. New field sync_rule_name instead.
-	// +kubebuilder:validation:Optional
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// The namespace name of the source instance.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeNamespace

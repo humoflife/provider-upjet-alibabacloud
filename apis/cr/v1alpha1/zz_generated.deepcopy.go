@@ -2025,11 +2025,6 @@ func (in *EeSyncRuleInitParameters) DeepCopyInto(out *EeSyncRuleInitParameters) 
 		*out = new(v1.Selector)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.Name != nil {
-		in, out := &in.Name, &out.Name
-		*out = new(string)
-		**out = **in
-	}
 	if in.NamespaceName != nil {
 		in, out := &in.NamespaceName, &out.NamespaceName
 		*out = new(string)
@@ -2197,11 +2192,6 @@ func (in *EeSyncRuleObservation) DeepCopyInto(out *EeSyncRuleObservation) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.Name != nil {
-		in, out := &in.Name, &out.Name
-		*out = new(string)
-		**out = **in
-	}
 	if in.NamespaceName != nil {
 		in, out := &in.NamespaceName, &out.NamespaceName
 		*out = new(string)
@@ -2306,11 +2296,6 @@ func (in *EeSyncRuleParameters) DeepCopyInto(out *EeSyncRuleParameters) {
 		in, out := &in.InstanceIDSelector, &out.InstanceIDSelector
 		*out = new(v1.Selector)
 		(*in).DeepCopyInto(*out)
-	}
-	if in.Name != nil {
-		in, out := &in.Name, &out.Name
-		*out = new(string)
-		**out = **in
 	}
 	if in.NamespaceName != nil {
 		in, out := &in.NamespaceName, &out.NamespaceName

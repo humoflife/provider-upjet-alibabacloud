@@ -51,15 +51,15 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("alicloud_cr_ee_sync_rule", func(r *config.Resource) {
 		r.ShortGroup = "cr"
 		// The provider deprecated "name" in favor of "sync_rule_name" (v1.240.0)
-		// and made the two mutually exclusive, but "name" is Computed and is
-		// populated on read. Without ignoring it, upjet late-initializes
-		// spec.forProvider.name from the observed value, so every subsequent
-		// reconcile sends BOTH name and sync_rule_name and the refresh fails
-		// with "only one of `name,sync_rule_name` can be specified" — the
-		// resource creates but never reaches Ready. Skip late-init of "name".
-		r.LateInitializer = config.LateInitializer{
-			IgnoredFields: []string{"name"},
-		}
+		// and made the two mutually exclusive (ConflictsWith). Both are also
+		// Computed, so the provider populates "name" on every read; upjet then
+		// reads it back into the spec and the next apply sends BOTH fields,
+		// failing the refresh with "only one of `name,sync_rule_name` can be
+		// specified" — the rule creates but never reaches Ready. Skipping
+		// late-init alone is insufficient (the value is still read back), so
+		// drop the dead "name" field from the schema entirely; "sync_rule_name"
+		// fully replaces it.
+		delete(r.TerraformResource.Schema, "name")
 	})
 
 	p.AddResourceConfigurator("alicloud_cr_endpoint_acl_policy", func(r *config.Resource) {
