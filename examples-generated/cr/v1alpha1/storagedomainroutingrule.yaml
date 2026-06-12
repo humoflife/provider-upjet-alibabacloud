@@ -14,8 +14,12 @@ spec:
     region: cn-beijing
     routes:
     - endpointType: Internet
-      instanceDomain: ${alicloud_cr_ee_instance.default.instance_name}-registry-vpc.cn-hangzhou.cr.aliyuncs.com
-      storageDomain: https://${alicloud_cr_ee_instance.default.id}-registry.oss-cn-hangzhou-internal.aliyuncs.com
+      instanceDomainSelector:
+        matchLabels:
+          testing.upbound.io/example-name: default
+      storageDomainSelector:
+        matchLabels:
+          testing.upbound.io/example-name: default
 
 ---
 
