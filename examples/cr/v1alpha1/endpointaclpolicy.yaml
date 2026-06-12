@@ -11,13 +11,13 @@ spec:
   # NOTE: the target endpoint's ACL service must be enabled before an ACL
   # policy entry can persist (the "internet" endpoint is disabled by default).
   # Upstream exposes that only as the side-effecting Terraform data source
-  # alicloud_cr_endpoint_acl_service (enable=true), which has no managed-resource
-  # equivalent. In a Composition this is done by running that data source via
-  # provider-terraform (Workspace) and managing this EndpointACLPolicy with this
-  # provider, ordered enable -> policy. Because single-provider uptest cannot
-  # perform the enable step, this example is excluded from the automated e2e
-  # list, but the resource itself is valid and works when the endpoint is
-  # enabled out-of-band.
+  # alicloud_cr_endpoint_acl_service (enable=true), which has no managed
+  # resource equivalent. In a Composition this is done by running that data
+  # source via provider-terraform (Workspace) and managing this
+  # EndpointACLPolicy with this provider, ordered enable -> policy. Because
+  # single-provider uptest cannot perform the enable step, this example is
+  # excluded from the automated e2e list, but the resource itself is valid and
+  # works when the endpoint is enabled out-of-band.
   forProvider:
     region: us-west-1
     endpointType: internet
