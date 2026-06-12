@@ -22,7 +22,7 @@ export TERRAFORM_PROVIDER_REPO ?= https://github.com/aliyun/terraform-provider-a
 export TERRAFORM_PROVIDER_VERSION ?= 1.261.0
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-alicloud
 export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= https://releases.hashicorp.com/$(TERRAFORM_PROVIDER_DOWNLOAD_NAME)/$(TERRAFORM_PROVIDER_VERSION)
-export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-alicloud_v1.279.0
+export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-alicloud_v1.261.0
 export TERRAFORM_DOCS_PATH ?= website/docs/r
 
 
@@ -233,6 +233,7 @@ CDN=./examples/cdn/v1alpha1
 ECS=./examples/ecs/v1alpha1
 KMS=./examples/kms/v1alpha1
 MESSAGESERVICE=./examples/messageservice/v1alpha1
+OOS=./examples/oos/v1alpha1
 OSS=./examples/oss/v1alpha1
 POLARDB=./examples/polardb/v1alpha1
 PRIVATELINK=./examples/privatelink/v1alpha1
@@ -248,6 +249,7 @@ UPTEST_EXAMPLE_LIST_CDN=$(CDN)/domain.yaml,$(CDN)/domainconfig.yaml,$(CDN)/fctri
 UPTEST_EXAMPLE_LIST_ECS=$(ECS)/command.yaml,$(ECS)/disk.yaml,$(ECS)/diskattachment.yaml,$(ECS)/instance.yaml,$(ECS)/keypair.yaml,$(ECS)/keypairattachment.yaml,$(ECS)/launchtemplate.yaml,$(ECS)/networkinterface.yaml,$(ECS)/networkinterfaceattachment.yaml,$(ECS)/networkinterfacepermissionspermission.yaml,$(ECS)/securitygroup.yaml,$(ECS)/securitygrouprule.yaml
 UPTEST_EXAMPLE_LIST_KMS=$(KMS)/alias.yaml,$(KMS)/key.yaml,$(KMS)/instance.yaml,$(KMS)/secret.yaml
 UPTEST_EXAMPLE_LIST_MESSAGESERVICE=$(MESSAGESERVICE)/endpoint.yaml,$(MESSAGESERVICE)/endpointacl.yaml,$(MESSAGESERVICE)/queue.yaml,$(MESSAGESERVICE)/subscription.yaml,$(MESSAGESERVICE)/topic.yaml
+UPTEST_EXAMPLE_LIST_OOS=$(OOS)/application.yaml,$(OOS)/applicationgroup.yaml,$(OOS)/defaultpatchbaseline.yaml,$(OOS)/execution.yaml,$(OOS)/parameter.yaml,$(OOS)/patchbaseline.yaml,$(OOS)/secretparameter.yaml,$(OOS)/servicesetting.yaml,$(OOS)/stateconfiguration.yaml,$(OOS)/template.yaml
 UPTEST_EXAMPLE_LIST_OSS=$(OSS)/accesscontrol.yaml,$(OSS)/accountpublicaccessblock.yaml,$(OSS)/bucket.yaml,$(OSS)/bucketaccessmonitor.yaml,$(OSS)/bucketacl.yaml,$(OSS)/bucketcname.yaml,$(OSS)/bucketcnametoken.yaml,$(OSS)/bucketcors.yaml,$(OSS)/bucketdataredundancytransition.yaml,$(OSS)/buckethttpsconfig.yaml,$(OSS)/bucketlogging.yaml,$(OSS)/bucketmetaquery.yaml,$(OSS)/bucketobject.yaml,$(OSS)/bucketpolicy.yaml,$(OSS)/bucketpublicaccessblock.yaml,$(OSS)/bucketreferer.yaml,$(OSS)/bucketreplication.yaml,$(OSS)/bucketrequestpayment.yaml,$(OSS)/bucketserversideencryption.yaml,$(OSS)/bucketstytle.yaml,$(OSS)/buckettransferacceleration.yaml,$(OSS)/bucketuserdefinedlogfields.yaml,$(OSS)/bucketversioning.yaml,$(OSS)/bucketwebsite.yaml,$(OSS)/bucketworm.yaml
 UPTEST_EXAMPLE_LIST_POLARDB=$(POLARDB)/account.yaml,$(POLARDB)/accountprivilege.yaml,$(POLARDB)/backuppolicy.yaml,$(POLARDB)/cluster.yaml,$(POLARDB)/clusterendpoint.yaml,$(POLARDB)/database.yaml,$(POLARDB)/endpoint.yaml,$(POLARDB)/endpointaddress.yaml,$(POLARDB)/globaldatabasenetwork.yaml,$(POLARDB)/parametergroup.yaml,$(POLARDB)/primaryendpoint.yaml
 UPTEST_EXAMPLE_LIST_PRIVATELINK=$(PRIVATELINK)/vpcendpoint.yaml,$(PRIVATELINK)/vpcendpointconnection.yaml,$(PRIVATELINK)/vpcendpointservice.yaml,$(PRIVATELINK)/vpcendpointserviceresource.yaml,$(PRIVATELINK)/vpcendpointserviceuser.yaml,$(PRIVATELINK)/vpcendpointservicezone.yaml

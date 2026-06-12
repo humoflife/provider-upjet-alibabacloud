@@ -10,7 +10,14 @@ import (
 	"github.com/crossplane/upjet/pkg/controller"
 
 	application "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/application"
+	applicationgroup "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/applicationgroup"
+	defaultpatchbaseline "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/defaultpatchbaseline"
+	execution "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/execution"
 	parameter "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/parameter"
+	patchbaseline "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/patchbaseline"
+	secretparameter "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/secretparameter"
+	servicesetting "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/servicesetting"
+	stateconfiguration "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/stateconfiguration"
 	template "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/template"
 )
 
@@ -19,7 +26,14 @@ import (
 func Setup_oos(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		application.Setup,
+		applicationgroup.Setup,
+		defaultpatchbaseline.Setup,
+		execution.Setup,
 		parameter.Setup,
+		patchbaseline.Setup,
+		secretparameter.Setup,
+		servicesetting.Setup,
+		stateconfiguration.Setup,
 		template.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {

@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.16.5
-  name: templateservices.quotas.alibabacloud.crossplane.io
+  name: executions.oos.alibabacloud.crossplane.io
 spec:
-  group: quotas.alibabacloud.crossplane.io
+  group: oos.alibabacloud.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - alibabacloud
-    kind: TemplateService
-    listKind: TemplateServiceList
-    plural: templateservices
-    singular: templateservice
+    kind: Execution
+    listKind: ExecutionList
+    plural: executions
+    singular: execution
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,8 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: TemplateService is the Schema for the TemplateServices API. Provides
-          a Alicloud Quotas Template Service resource.
+        description: Execution is the Schema for the Executions API. Provides a OOS
+          Execution resource.
         properties:
           apiVersion:
             description: |-
@@ -55,7 +55,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: TemplateServiceSpec defines the desired state of TemplateService
+            description: ExecutionSpec defines the desired state of Execution
             properties:
               deletionPolicy:
                 default: Delete
@@ -73,13 +73,115 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  description:
+                    description: The description of OOS Execution.
+                    type: string
+                  loopMode:
+                    description: The loop mode of OOS Execution.
+                    type: string
+                  mode:
+                    description: 'The mode of OOS Execution. Valid: Automatic, Debug.
+                      Default to Automatic.'
+                    type: string
+                  parameters:
+                    description: The parameters required by the template. Default
+                      to {}.
+                    type: string
+                  parentExecutionId:
+                    description: The id of parent execution.
+                    type: string
                   region:
                     description: Region is the region you'd like your resource to
                       be created in.
                     type: string
-                  serviceStatus:
-                    description: 'Status of the quota template. Valid values:'
-                    type: number
+                  safetyCheck:
+                    description: The mode of safety check.
+                    type: string
+                  templateContent:
+                    description: The content of template. When the user selects an
+                      existing template to create and execute a task, it is not necessary
+                      to pass in this field.
+                    type: string
+                  templateName:
+                    description: The name of execution template.
+                    type: string
+                  templateNameRef:
+                    description: Reference to a Template in oos to populate templateName.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  templateNameSelector:
+                    description: Selector for a Template in oos to populate templateName.
+                    properties:
+                      matchControllerRef:
+                        description: |-
+                          MatchControllerRef ensures an object with the same controller reference
+                          as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    type: object
+                  templateVersion:
+                    description: The version of execution template.
+                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -94,9 +196,111 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  serviceStatus:
-                    description: 'Status of the quota template. Valid values:'
-                    type: number
+                  description:
+                    description: The description of OOS Execution.
+                    type: string
+                  loopMode:
+                    description: The loop mode of OOS Execution.
+                    type: string
+                  mode:
+                    description: 'The mode of OOS Execution. Valid: Automatic, Debug.
+                      Default to Automatic.'
+                    type: string
+                  parameters:
+                    description: The parameters required by the template. Default
+                      to {}.
+                    type: string
+                  parentExecutionId:
+                    description: The id of parent execution.
+                    type: string
+                  safetyCheck:
+                    description: The mode of safety check.
+                    type: string
+                  templateContent:
+                    description: The content of template. When the user selects an
+                      existing template to create and execute a task, it is not necessary
+                      to pass in this field.
+                    type: string
+                  templateName:
+                    description: The name of execution template.
+                    type: string
+                  templateNameRef:
+                    description: Reference to a Template in oos to populate templateName.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  templateNameSelector:
+                    description: Selector for a Template in oos to populate templateName.
+                    properties:
+                      matchControllerRef:
+                        description: |-
+                          MatchControllerRef ensures an object with the same controller reference
+                          as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    type: object
+                  templateVersion:
+                    description: The version of execution template.
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -265,23 +469,81 @@ spec:
             required:
             - forProvider
             type: object
-            x-kubernetes-validations:
-            - message: spec.forProvider.serviceStatus is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.serviceStatus)
-                || (has(self.initProvider) && has(self.initProvider.serviceStatus))'
           status:
-            description: TemplateServiceStatus defines the observed state of TemplateService.
+            description: ExecutionStatus defines the observed state of Execution.
             properties:
               atProvider:
                 properties:
-                  id:
-                    description: The ID of the resource supplied above.The value is
-                      formulated as “.
+                  counters:
+                    description: The counters of OOS Execution.
                     type: string
-                  serviceStatus:
-                    description: 'Status of the quota template. Valid values:'
-                    type: number
+                  createDate:
+                    description: The time when the execution was created.
+                    type: string
+                  description:
+                    description: The description of OOS Execution.
+                    type: string
+                  endDate:
+                    description: The time when the execution was ended.
+                    type: string
+                  executedBy:
+                    description: The user who execute the template.
+                    type: string
+                  id:
+                    description: The id of OOS Execution.
+                    type: string
+                  isParent:
+                    description: Whether to include subtasks.
+                    type: boolean
+                  loopMode:
+                    description: The loop mode of OOS Execution.
+                    type: string
+                  mode:
+                    description: 'The mode of OOS Execution. Valid: Automatic, Debug.
+                      Default to Automatic.'
+                    type: string
+                  outputs:
+                    description: The outputs of OOS Execution.
+                    type: string
+                  parameters:
+                    description: The parameters required by the template. Default
+                      to {}.
+                    type: string
+                  parentExecutionId:
+                    description: The id of parent execution.
+                    type: string
+                  ramRole:
+                    description: The role that executes the current template.
+                    type: string
+                  safetyCheck:
+                    description: The mode of safety check.
+                    type: string
+                  startDate:
+                    description: The time when the execution was started.
+                    type: string
+                  status:
+                    description: The status of OOS Execution.
+                    type: string
+                  statusMessage:
+                    description: The message of status.
+                    type: string
+                  templateContent:
+                    description: The content of template. When the user selects an
+                      existing template to create and execute a task, it is not necessary
+                      to pass in this field.
+                    type: string
+                  templateId:
+                    description: The id of template.
+                    type: string
+                  templateName:
+                    description: The name of execution template.
+                    type: string
+                  templateVersion:
+                    description: The version of execution template.
+                    type: string
+                  updateDate:
+                    description: The time when the execution was updated.
+                    type: string
                 type: object
               conditions:
                 description: Conditions of the resource.

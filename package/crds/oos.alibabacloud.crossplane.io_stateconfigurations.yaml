@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.16.5
-  name: templateservices.quotas.alibabacloud.crossplane.io
+  name: stateconfigurations.oos.alibabacloud.crossplane.io
 spec:
-  group: quotas.alibabacloud.crossplane.io
+  group: oos.alibabacloud.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - alibabacloud
-    kind: TemplateService
-    listKind: TemplateServiceList
-    plural: templateservices
-    singular: templateservice
+    kind: StateConfiguration
+    listKind: StateConfigurationList
+    plural: stateconfigurations
+    singular: stateconfiguration
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,8 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: TemplateService is the Schema for the TemplateServices API. Provides
-          a Alicloud Quotas Template Service resource.
+        description: StateConfiguration is the Schema for the StateConfigurations
+          API. Provides a Alicloud OOS State Configuration resource.
         properties:
           apiVersion:
             description: |-
@@ -55,7 +55,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: TemplateServiceSpec defines the desired state of TemplateService
+            description: StateConfigurationSpec defines the desired state of StateConfiguration
             properties:
               deletionPolicy:
                 default: Delete
@@ -73,13 +73,50 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  configureMode:
+                    description: 'Configuration mode. Valid values: ApplyAndAutoCorrect,
+                      ApplyAndMonitor, ApplyOnly.'
+                    type: string
+                  description:
+                    description: The description of the resource.
+                    type: string
+                  parameters:
+                    description: The parameter of the Template. This field is in the
+                      format of JSON strings. For detailed definition instructions,
+                      please refer to Metadata types that are supported by a configuration
+                      list.
+                    type: string
                   region:
                     description: Region is the region you'd like your resource to
                       be created in.
                     type: string
-                  serviceStatus:
-                    description: 'Status of the quota template. Valid values:'
-                    type: number
+                  resourceGroupId:
+                    description: The ID of the resource group.
+                    type: string
+                  scheduleExpression:
+                    description: Timing expression.
+                    type: string
+                  scheduleType:
+                    description: 'Timing type. Valid values: rate.'
+                    type: string
+                  tags:
+                    additionalProperties:
+                      type: string
+                    description: Key-value map of resource tags.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  targets:
+                    description: The Target resources.  This field is in the format
+                      of JSON strings. For detailed definition instructions, please
+                      refer to Parameter.
+                    type: string
+                  templateName:
+                    description: The name of the template.
+                    type: string
+                  templateVersion:
+                    description: The version number. If you do not specify this parameter,
+                      the system uses the latest version.
+                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -94,9 +131,46 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  serviceStatus:
-                    description: 'Status of the quota template. Valid values:'
-                    type: number
+                  configureMode:
+                    description: 'Configuration mode. Valid values: ApplyAndAutoCorrect,
+                      ApplyAndMonitor, ApplyOnly.'
+                    type: string
+                  description:
+                    description: The description of the resource.
+                    type: string
+                  parameters:
+                    description: The parameter of the Template. This field is in the
+                      format of JSON strings. For detailed definition instructions,
+                      please refer to Metadata types that are supported by a configuration
+                      list.
+                    type: string
+                  resourceGroupId:
+                    description: The ID of the resource group.
+                    type: string
+                  scheduleExpression:
+                    description: Timing expression.
+                    type: string
+                  scheduleType:
+                    description: 'Timing type. Valid values: rate.'
+                    type: string
+                  tags:
+                    additionalProperties:
+                      type: string
+                    description: Key-value map of resource tags.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  targets:
+                    description: The Target resources.  This field is in the format
+                      of JSON strings. For detailed definition instructions, please
+                      refer to Parameter.
+                    type: string
+                  templateName:
+                    description: The name of the template.
+                    type: string
+                  templateVersion:
+                    description: The version number. If you do not specify this parameter,
+                      the system uses the latest version.
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -266,22 +340,70 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
-            - message: spec.forProvider.serviceStatus is a required parameter
+            - message: spec.forProvider.scheduleExpression is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.serviceStatus)
-                || (has(self.initProvider) && has(self.initProvider.serviceStatus))'
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.scheduleExpression)
+                || (has(self.initProvider) && has(self.initProvider.scheduleExpression))'
+            - message: spec.forProvider.scheduleType is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.scheduleType)
+                || (has(self.initProvider) && has(self.initProvider.scheduleType))'
+            - message: spec.forProvider.targets is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.targets)
+                || (has(self.initProvider) && has(self.initProvider.targets))'
+            - message: spec.forProvider.templateName is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.templateName)
+                || (has(self.initProvider) && has(self.initProvider.templateName))'
           status:
-            description: TemplateServiceStatus defines the observed state of TemplateService.
+            description: StateConfigurationStatus defines the observed state of StateConfiguration.
             properties:
               atProvider:
                 properties:
-                  id:
-                    description: The ID of the resource supplied above.The value is
-                      formulated as “.
+                  configureMode:
+                    description: 'Configuration mode. Valid values: ApplyAndAutoCorrect,
+                      ApplyAndMonitor, ApplyOnly.'
                     type: string
-                  serviceStatus:
-                    description: 'Status of the quota template. Valid values:'
-                    type: number
+                  description:
+                    description: The description of the resource.
+                    type: string
+                  id:
+                    description: The value is formate as <state_configuration_id>.
+                    type: string
+                  parameters:
+                    description: The parameter of the Template. This field is in the
+                      format of JSON strings. For detailed definition instructions,
+                      please refer to Metadata types that are supported by a configuration
+                      list.
+                    type: string
+                  resourceGroupId:
+                    description: The ID of the resource group.
+                    type: string
+                  scheduleExpression:
+                    description: Timing expression.
+                    type: string
+                  scheduleType:
+                    description: 'Timing type. Valid values: rate.'
+                    type: string
+                  tags:
+                    additionalProperties:
+                      type: string
+                    description: Key-value map of resource tags.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  targets:
+                    description: The Target resources.  This field is in the format
+                      of JSON strings. For detailed definition instructions, please
+                      refer to Parameter.
+                    type: string
+                  templateName:
+                    description: The name of the template.
+                    type: string
+                  templateVersion:
+                    description: The version number. If you do not specify this parameter,
+                      the system uses the latest version.
+                    type: string
                 type: object
               conditions:
                 description: Conditions of the resource.

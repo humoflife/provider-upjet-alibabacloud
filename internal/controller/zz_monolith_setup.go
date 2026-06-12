@@ -102,7 +102,14 @@ import (
 	subscription "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/messageservice/subscription"
 	topic "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/messageservice/topic"
 	application "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/application"
+	applicationgroup "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/applicationgroup"
+	defaultpatchbaseline "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/defaultpatchbaseline"
+	execution "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/execution"
 	parameter "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/parameter"
+	patchbaseline "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/patchbaseline"
+	secretparameter "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/secretparameter"
+	servicesetting "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/servicesetting"
+	stateconfiguration "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/stateconfiguration"
 	template "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/template"
 	accesspoint "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oss/accesspoint"
 	accountpublicaccessblock "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oss/accountpublicaccessblock"
@@ -278,7 +285,14 @@ func Setup_monolith(mgr ctrl.Manager, o controller.Options) error {
 		subscription.Setup,
 		topic.Setup,
 		application.Setup,
+		applicationgroup.Setup,
+		defaultpatchbaseline.Setup,
+		execution.Setup,
 		parameter.Setup,
+		patchbaseline.Setup,
+		secretparameter.Setup,
+		servicesetting.Setup,
+		stateconfiguration.Setup,
 		template.Setup,
 		accesspoint.Setup,
 		accountpublicaccessblock.Setup,

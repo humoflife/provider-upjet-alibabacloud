@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.16.5
-  name: templateservices.quotas.alibabacloud.crossplane.io
+  name: defaultpatchbaselines.oos.alibabacloud.crossplane.io
 spec:
-  group: quotas.alibabacloud.crossplane.io
+  group: oos.alibabacloud.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - alibabacloud
-    kind: TemplateService
-    listKind: TemplateServiceList
-    plural: templateservices
-    singular: templateservice
+    kind: DefaultPatchBaseline
+    listKind: DefaultPatchBaselineList
+    plural: defaultpatchbaselines
+    singular: defaultpatchbaseline
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,8 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: TemplateService is the Schema for the TemplateServices API. Provides
-          a Alicloud Quotas Template Service resource.
+        description: DefaultPatchBaseline is the Schema for the DefaultPatchBaselines
+          API. Provides a Alicloud Oos Default Patch Baseline resource.
         properties:
           apiVersion:
             description: |-
@@ -55,7 +55,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: TemplateServiceSpec defines the desired state of TemplateService
+            description: DefaultPatchBaselineSpec defines the desired state of DefaultPatchBaseline
             properties:
               deletionPolicy:
                 default: Delete
@@ -73,13 +73,87 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  patchBaselineName:
+                    description: The name of the patch baseline.
+                    type: string
+                  patchBaselineNameRef:
+                    description: Reference to a PatchBaseline in oos to populate patchBaselineName.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  patchBaselineNameSelector:
+                    description: Selector for a PatchBaseline in oos to populate patchBaselineName.
+                    properties:
+                      matchControllerRef:
+                        description: |-
+                          MatchControllerRef ensures an object with the same controller reference
+                          as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    type: object
                   region:
                     description: Region is the region you'd like your resource to
                       be created in.
                     type: string
-                  serviceStatus:
-                    description: 'Status of the quota template. Valid values:'
-                    type: number
                 type: object
               initProvider:
                 description: |-
@@ -94,9 +168,83 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  serviceStatus:
-                    description: 'Status of the quota template. Valid values:'
-                    type: number
+                  patchBaselineName:
+                    description: The name of the patch baseline.
+                    type: string
+                  patchBaselineNameRef:
+                    description: Reference to a PatchBaseline in oos to populate patchBaselineName.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  patchBaselineNameSelector:
+                    description: Selector for a PatchBaseline in oos to populate patchBaselineName.
+                    properties:
+                      matchControllerRef:
+                        description: |-
+                          MatchControllerRef ensures an object with the same controller reference
+                          as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    type: object
                 type: object
               managementPolicies:
                 default:
@@ -265,23 +413,21 @@ spec:
             required:
             - forProvider
             type: object
-            x-kubernetes-validations:
-            - message: spec.forProvider.serviceStatus is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.serviceStatus)
-                || (has(self.initProvider) && has(self.initProvider.serviceStatus))'
           status:
-            description: TemplateServiceStatus defines the observed state of TemplateService.
+            description: DefaultPatchBaselineStatus defines the observed state of
+              DefaultPatchBaseline.
             properties:
               atProvider:
                 properties:
                   id:
-                    description: The ID of the resource supplied above.The value is
-                      formulated as “.
+                    description: The key of the resource supplied above.
                     type: string
-                  serviceStatus:
-                    description: 'Status of the quota template. Valid values:'
-                    type: number
+                  patchBaselineId:
+                    description: The ID of the patch baseline.
+                    type: string
+                  patchBaselineName:
+                    description: The name of the patch baseline.
+                    type: string
                 type: object
               conditions:
                 description: Conditions of the resource.

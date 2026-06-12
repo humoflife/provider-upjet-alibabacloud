@@ -10,7 +10,28 @@ package v1alpha1
 func (tr *Application) Hub() {}
 
 // Hub marks this type as a conversion hub.
+func (tr *ApplicationGroup) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *DefaultPatchBaseline) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *Execution) Hub() {}
+
+// Hub marks this type as a conversion hub.
 func (tr *Parameter) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *PatchBaseline) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *SecretParameter) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *ServiceSetting) Hub() {}
+
+// Hub marks this type as a conversion hub.
+func (tr *StateConfiguration) Hub() {}
 
 // Hub marks this type as a conversion hub.
 func (tr *Template) Hub() {}
