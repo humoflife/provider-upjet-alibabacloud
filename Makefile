@@ -245,12 +245,14 @@ UPTEST_EXAMPLE_LIST_ACKONE=$(ACKONE)/cluster.yaml,$(ACKONE)/membershipattachment
 UPTEST_EXAMPLE_LIST_ALB=$(ALB)/acl.yaml,$(ALB)/aclentryattachment.yaml,$(ALB)/ascript.yaml,$(ALB)/healthchecktemplate.yaml,$(ALB)/listener.yaml,$(ALB)/listeneraclattachment.yaml,$(ALB)/loadbalancer.yaml,$(ALB)/loadbalancersecuritygroupattachment.yaml,$(ALB)/loadbalancerzoneshiftedattachment.yaml,$(ALB)/rule.yaml,$(ALB)/securitupolicy.yaml,$(ALB)/servergroup.yaml
 UPTEST_EXAMPLE_LIST_ALIDNS=$(ALIDNS)/addreddpool.yaml,$(ALIDNS)/customline.yaml,$(ALIDNS)/domain.yaml,$(ALIDNS)/domainattachment.yaml,$(ALIDNS)/domaingroup.yaml,$(ALIDNS)/gtminstance.yaml,$(ALIDNS)/instance.yaml,$(ALIDNS)/monitorconfig.yaml,$(ALIDNS)/record.yaml
 UPTEST_EXAMPLE_LIST_CDN=$(CDN)/domain.yaml,$(CDN)/domainconfig.yaml,$(CDN)/fctrigger.yaml
-# Enterprise Edition examples validated end-to-end. Excluded: endpointaclpolicy
-# (its prerequisite - enabling the endpoint ACL service - is only exposed
-# upstream as a side-effecting Terraform data source, which Crossplane/upjet
-# cannot model; the policy entry never persists, so create returns an
-# inconsistent result), and personal-edition registrynamespace/repo (require a
-# registered CR user on the test account).
+# Enterprise Edition examples validated end-to-end. endpointaclpolicy is omitted
+# from the automated list (not a defect): the endpoint ACL service must be
+# enabled first, which upstream exposes only as a side-effecting Terraform data
+# source (alicloud_cr_endpoint_acl_service) with no managed-resource equivalent,
+# so single-provider uptest cannot perform the enable step. The resource works
+# when composed (e.g. provider-terraform runs the data source to enable, this
+# provider manages the policy). personal-edition registrynamespace/repo are also
+# omitted (require a registered CR user on the test account).
 UPTEST_EXAMPLE_LIST_CR=$(CR)/chain.yaml,$(CR)/chartnamespace.yaml,$(CR)/chartrepository.yaml,$(CR)/eeinstance.yaml,$(CR)/eenamespace.yaml,$(CR)/eerepo.yaml,$(CR)/eesyncrule.yaml,$(CR)/scanrule.yaml,$(CR)/storagedomainroutingrule.yaml,$(CR)/vpcendpointlinkedvpc.yaml
 UPTEST_EXAMPLE_LIST_ECS=$(ECS)/command.yaml,$(ECS)/disk.yaml,$(ECS)/diskattachment.yaml,$(ECS)/instance.yaml,$(ECS)/keypair.yaml,$(ECS)/keypairattachment.yaml,$(ECS)/launchtemplate.yaml,$(ECS)/networkinterface.yaml,$(ECS)/networkinterfaceattachment.yaml,$(ECS)/networkinterfacepermissionspermission.yaml,$(ECS)/securitygroup.yaml,$(ECS)/securitygrouprule.yaml
 UPTEST_EXAMPLE_LIST_KMS=$(KMS)/alias.yaml,$(KMS)/key.yaml,$(KMS)/instance.yaml,$(KMS)/secret.yaml
