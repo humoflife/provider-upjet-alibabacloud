@@ -1,3 +1,6 @@
+# This resource is deprecated and will be removed in a future release.
+# You need to set your registry password in Container Registry console before
+# use this resource.
 ---
 apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
 kind: RegistryNamespace
