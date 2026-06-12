@@ -61,18 +61,67 @@
 # defect in the resource.
 #
 # ---------------------------------------------------------------------------
-# Supported usage (declarative)
+# Supported usage (declarative) - concrete outline
 # ---------------------------------------------------------------------------
-# The resource works correctly once the endpoint is enabled. The recommended
-# declarative pattern composes two providers:
+# The resource works correctly once the endpoint is enabled. Because enabling
+# is only available as a Terraform data source, the declarative pattern pairs
+# provider-terraform (to enable) with this provider (to manage the policy).
+# The two reconcile independently; the policy create simply retries until the
+# endpoint is enabled, so strict ordering is not required (you may still gate
+# it - see the note at the end).
 #
-#   1. provider-terraform (a Workspace) runs the
-#      alicloud_cr_endpoint_acl_service data source with enable = true to turn
-#      on the endpoint's ACL service on the EE instance, then
-#   2. this provider manages the EndpointACLPolicy entry,
+# Step 1 - enable the endpoint with provider-terraform. A Workspace runs an
+# inline module whose data source performs the enable side effect. (Confirm
+# the apiVersion of your installed provider-terraform; e.g. tf.upbound.io.)
 #
-# ordered enable -> policy via the composition's dependencies. Alternatively,
-# enable the endpoint out-of-band (Alibaba Cloud console, aliyun CLI, or a
-# standalone Terraform run) and then manage EndpointACLPolicy with this
-# provider as usual.
+#   apiVersion: tf.upbound.io/v1beta1
+#   kind: Workspace
+#   metadata:
+#     name: enable-cr-internet-endpoint
+#   spec:
+#     providerConfigRef:
+#       name: default
+#     forProvider:
+#       source: Inline
+#       module: |
+#         variable "instance_id" { type = string }
+#         data "alicloud_cr_endpoint_acl_service" "enable" {
+#           instance_id   = var.instance_id
+#           endpoint_type = "internet"
+#           module_name   = "Registry"
+#           enable        = true
+#         }
+#       vars:
+#         - key: instance_id
+#           value: cri-xxxxxxxxxxxxxxxx   # the EE instance id
+#
+# Step 2 - manage the ACL entry with this provider:
+#
+#   apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+#   kind: EndpointACLPolicy
+#   metadata:
+#     name: allow-office-cidr
+#   spec:
+#     forProvider:
+#       region: us-west-1
+#       instanceIdSelector:
+#         matchLabels:
+#           example: cr-ee
+#       endpointType: internet
+#       moduleName: Registry
+#       entry: 192.168.1.0/24
+#       description: office network
+#
+# In a Composition, template both resources from the XR in pipeline mode
+# (e.g. the function-patch-and-transform function): patch the EE instance id
+# into the Workspace var and into the policy's instanceId, and emit them
+# together. To enforce enable-before-policy explicitly (rather than relying on
+# the policy's retries), gate the policy on the Workspace - e.g. a crossplane
+# Usage (of: EndpointACLPolicy, by: Workspace), or derive the policy's
+# instanceId from a Workspace output so it is created only after the enable
+# step is observed.
+#
+# Out-of-band alternative: enable the endpoint via the Alibaba Cloud console,
+# the aliyun CLI (UpdateInstanceEndpointStatus), or a standalone Terraform run,
+# then manage EndpointACLPolicy with this provider as usual.
 # ===========================================================================
