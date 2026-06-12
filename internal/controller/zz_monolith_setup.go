@@ -101,6 +101,9 @@ import (
 	queue "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/messageservice/queue"
 	subscription "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/messageservice/subscription"
 	topic "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/messageservice/topic"
+	application "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/application"
+	parameter "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/parameter"
+	template "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/template"
 	accesspoint "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oss/accesspoint"
 	accountpublicaccessblock "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oss/accountpublicaccessblock"
 	bucket "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oss/bucket"
@@ -274,6 +277,9 @@ func Setup_monolith(mgr ctrl.Manager, o controller.Options) error {
 		queue.Setup,
 		subscription.Setup,
 		topic.Setup,
+		application.Setup,
+		parameter.Setup,
+		template.Setup,
 		accesspoint.Setup,
 		accountpublicaccessblock.Setup,
 		bucket.Setup,

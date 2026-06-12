@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.16.5
-  name: accountpublicaccessblocks.oss.alibabacloud.crossplane.io
+  name: templates.oos.alibabacloud.crossplane.io
 spec:
-  group: oss.alibabacloud.crossplane.io
+  group: oos.alibabacloud.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - alibabacloud
-    kind: AccountPublicAccessBlock
-    listKind: AccountPublicAccessBlockList
-    plural: accountpublicaccessblocks
-    singular: accountpublicaccessblock
+    kind: Template
+    listKind: TemplateList
+    plural: templates
+    singular: template
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,8 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: AccountPublicAccessBlock is the Schema for the AccountPublicAccessBlocks
-          API. Provides a Alicloud OSS Account Public Access Block resource.
+        description: Template is the Schema for the Templates API. Provides a OOS
+          Template resource.
         properties:
           apiVersion:
             description: |-
@@ -55,8 +55,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: AccountPublicAccessBlockSpec defines the desired state of
-              AccountPublicAccessBlock
+            description: TemplateSpec defines the desired state of Template
             properties:
               deletionPolicy:
                 default: Delete
@@ -74,13 +73,35 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  blockPublicAccess:
-                    description: Whether or not AlibabaCloud OSS should block public
-                      bucket policies for buckets in this account is enabled.
+                  autoDeleteExecutions:
+                    description: When deleting a template, whether to delete its related
+                      executions. Default to false.
                     type: boolean
+                  content:
+                    description: 'The content of the template. The template must be
+                      in the JSON or YAML format. Maximum size: 64 KB.'
+                    type: string
                   region:
                     description: Region is the region you'd like your resource to
                       be created in.
+                    type: string
+                  resourceGroupId:
+                    description: The ID of resource group which the template belongs.
+                    type: string
+                  tags:
+                    additionalProperties:
+                      type: string
+                    description: Key-value map of resource tags.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  templateName:
+                    description: The name of the template. The template name can be
+                      up to 200 characters in length. The name can contain letters,
+                      digits, hyphens (-), and underscores (_). It cannot start with
+                      ALIYUN, ACS, ALIBABA, or ALICLOUD.
+                    type: string
+                  versionName:
+                    description: The name of template version.
                     type: string
                 type: object
               initProvider:
@@ -96,10 +117,32 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  blockPublicAccess:
-                    description: Whether or not AlibabaCloud OSS should block public
-                      bucket policies for buckets in this account is enabled.
+                  autoDeleteExecutions:
+                    description: When deleting a template, whether to delete its related
+                      executions. Default to false.
                     type: boolean
+                  content:
+                    description: 'The content of the template. The template must be
+                      in the JSON or YAML format. Maximum size: 64 KB.'
+                    type: string
+                  resourceGroupId:
+                    description: The ID of resource group which the template belongs.
+                    type: string
+                  tags:
+                    additionalProperties:
+                      type: string
+                    description: Key-value map of resource tags.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  templateName:
+                    description: The name of the template. The template name can be
+                      up to 200 characters in length. The name can contain letters,
+                      digits, hyphens (-), and underscores (_). It cannot start with
+                      ALIYUN, ACS, ALIBABA, or ALICLOUD.
+                    type: string
+                  versionName:
+                    description: The name of template version.
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -269,23 +312,85 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
-            - message: spec.forProvider.blockPublicAccess is a required parameter
+            - message: spec.forProvider.content is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.blockPublicAccess)
-                || (has(self.initProvider) && has(self.initProvider.blockPublicAccess))'
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.content)
+                || (has(self.initProvider) && has(self.initProvider.content))'
+            - message: spec.forProvider.templateName is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.templateName)
+                || (has(self.initProvider) && has(self.initProvider.templateName))'
           status:
-            description: AccountPublicAccessBlockStatus defines the observed state
-              of AccountPublicAccessBlock.
+            description: TemplateStatus defines the observed state of Template.
             properties:
               atProvider:
                 properties:
-                  blockPublicAccess:
-                    description: Whether or not AlibabaCloud OSS should block public
-                      bucket policies for buckets in this account is enabled.
+                  autoDeleteExecutions:
+                    description: When deleting a template, whether to delete its related
+                      executions. Default to false.
+                    type: boolean
+                  content:
+                    description: 'The content of the template. The template must be
+                      in the JSON or YAML format. Maximum size: 64 KB.'
+                    type: string
+                  createdBy:
+                    description: The creator of the template.
+                    type: string
+                  createdDate:
+                    description: The time when the template is created.
+                    type: string
+                  description:
+                    description: The description of the template.
+                    type: string
+                  hasTrigger:
+                    description: Is it triggered successfully.
                     type: boolean
                   id:
-                    description: The ID of the resource supplied above.The value is
-                      formulated as ``.
+                    description: The id of the resource. It same with template_name.
+                    type: string
+                  resourceGroupId:
+                    description: The ID of resource group which the template belongs.
+                    type: string
+                  shareType:
+                    description: The sharing type of the template. The sharing type
+                      of templates created by users are set to Private. The sharing
+                      type of common templates provided by OOS are set to Public.
+                    type: string
+                  tags:
+                    additionalProperties:
+                      type: string
+                    description: Key-value map of resource tags.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  templateFormat:
+                    description: The format of the template. The format can be JSON
+                      or YAML. The system automatically identifies the format.
+                    type: string
+                  templateId:
+                    description: The id of OOS Template.
+                    type: string
+                  templateName:
+                    description: The name of the template. The template name can be
+                      up to 200 characters in length. The name can contain letters,
+                      digits, hyphens (-), and underscores (_). It cannot start with
+                      ALIYUN, ACS, ALIBABA, or ALICLOUD.
+                    type: string
+                  templateType:
+                    description: The type of OOS Template. Automation means the implementation
+                      of Alibaba Cloud API template, Package means represents a template
+                      for installing software.
+                    type: string
+                  templateVersion:
+                    description: The version of OOS Template.
+                    type: string
+                  updatedBy:
+                    description: The user who updated the template.
+                    type: string
+                  updatedDate:
+                    description: The time when the template was updated.
+                    type: string
+                  versionName:
+                    description: The name of template version.
                     type: string
                 type: object
               conditions:

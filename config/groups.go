@@ -137,6 +137,11 @@ var GroupMap = map[string]GroupKindCalculator{
 	"alicloud_message_service_subscription": ReplaceGroupWords("messageservice", 2),
 	"alicloud_message_service_topic":        ReplaceGroupWords("messageservice", 2),
 
+	// OOS
+	"alicloud_oos_application": ReplaceGroupWords("oos", 1),
+	"alicloud_oos_parameter":   ReplaceGroupWords("oos", 1),
+	"alicloud_oos_template":    ReplaceGroupWords("oos", 1),
+
 	// OSS - Object Storage Service resources
 	"alicloud_oss_bucket":                            ReplaceGroupWords("oss", 1),
 	"alicloud_oss_bucket_object":                     ReplaceGroupWords("oss", 1),

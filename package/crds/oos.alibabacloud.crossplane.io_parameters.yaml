@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.16.5
-  name: accountpublicaccessblocks.oss.alibabacloud.crossplane.io
+  name: parameters.oos.alibabacloud.crossplane.io
 spec:
-  group: oss.alibabacloud.crossplane.io
+  group: oos.alibabacloud.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - alibabacloud
-    kind: AccountPublicAccessBlock
-    listKind: AccountPublicAccessBlockList
-    plural: accountpublicaccessblocks
-    singular: accountpublicaccessblock
+    kind: Parameter
+    listKind: ParameterList
+    plural: parameters
+    singular: parameter
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,8 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: AccountPublicAccessBlock is the Schema for the AccountPublicAccessBlocks
-          API. Provides a Alicloud OSS Account Public Access Block resource.
+        description: Parameter is the Schema for the Parameters API. Provides a Alicloud
+          OOS Parameter resource.
         properties:
           apiVersion:
             description: |-
@@ -55,8 +55,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: AccountPublicAccessBlockSpec defines the desired state of
-              AccountPublicAccessBlock
+            description: ParameterSpec defines the desired state of Parameter
             properties:
               deletionPolicy:
                 default: Delete
@@ -74,13 +73,41 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  blockPublicAccess:
-                    description: Whether or not AlibabaCloud OSS should block public
-                      bucket policies for buckets in this account is enabled.
-                    type: boolean
+                  constraints:
+                    description: 'The constraints of the common parameter. This value
+                      follows the json format. By default, this parameter is null.
+                      Valid values:'
+                    type: string
+                  description:
+                    description: The description of the common parameter. The description
+                      must be 1 to 200 characters in length.
+                    type: string
+                  parameterName:
+                    description: The name of the common parameter. The name must be
+                      2 to 180 characters in length, and can contain letters, digits,
+                      hyphens (-), forward slashes (/) and underscores (_). It cannot
+                      start with ALIYUN, ACS, ALIBABA, ALICLOUD, or OOS.
+                    type: string
                   region:
                     description: Region is the region you'd like your resource to
                       be created in.
+                    type: string
+                  resourceGroupId:
+                    description: The ID of the Resource Group.
+                    type: string
+                  tags:
+                    additionalProperties:
+                      type: string
+                    description: Key-value map of resource tags.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  type:
+                    description: 'The data type of the common parameter. Valid values:
+                      String and StringList.'
+                    type: string
+                  value:
+                    description: The value of the common parameter. The value must
+                      be 1 to 4096 characters in length.
                     type: string
                 type: object
               initProvider:
@@ -96,10 +123,38 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  blockPublicAccess:
-                    description: Whether or not AlibabaCloud OSS should block public
-                      bucket policies for buckets in this account is enabled.
-                    type: boolean
+                  constraints:
+                    description: 'The constraints of the common parameter. This value
+                      follows the json format. By default, this parameter is null.
+                      Valid values:'
+                    type: string
+                  description:
+                    description: The description of the common parameter. The description
+                      must be 1 to 200 characters in length.
+                    type: string
+                  parameterName:
+                    description: The name of the common parameter. The name must be
+                      2 to 180 characters in length, and can contain letters, digits,
+                      hyphens (-), forward slashes (/) and underscores (_). It cannot
+                      start with ALIYUN, ACS, ALIBABA, ALICLOUD, or OOS.
+                    type: string
+                  resourceGroupId:
+                    description: The ID of the Resource Group.
+                    type: string
+                  tags:
+                    additionalProperties:
+                      type: string
+                    description: Key-value map of resource tags.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  type:
+                    description: 'The data type of the common parameter. Valid values:
+                      String and StringList.'
+                    type: string
+                  value:
+                    description: The value of the common parameter. The value must
+                      be 1 to 4096 characters in length.
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -269,23 +324,57 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
-            - message: spec.forProvider.blockPublicAccess is a required parameter
+            - message: spec.forProvider.parameterName is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.blockPublicAccess)
-                || (has(self.initProvider) && has(self.initProvider.blockPublicAccess))'
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.parameterName)
+                || (has(self.initProvider) && has(self.initProvider.parameterName))'
+            - message: spec.forProvider.type is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.type)
+                || (has(self.initProvider) && has(self.initProvider.type))'
+            - message: spec.forProvider.value is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.value)
+                || (has(self.initProvider) && has(self.initProvider.value))'
           status:
-            description: AccountPublicAccessBlockStatus defines the observed state
-              of AccountPublicAccessBlock.
+            description: ParameterStatus defines the observed state of Parameter.
             properties:
               atProvider:
                 properties:
-                  blockPublicAccess:
-                    description: Whether or not AlibabaCloud OSS should block public
-                      bucket policies for buckets in this account is enabled.
-                    type: boolean
+                  constraints:
+                    description: 'The constraints of the common parameter. This value
+                      follows the json format. By default, this parameter is null.
+                      Valid values:'
+                    type: string
+                  description:
+                    description: The description of the common parameter. The description
+                      must be 1 to 200 characters in length.
+                    type: string
                   id:
-                    description: The ID of the resource supplied above.The value is
-                      formulated as ``.
+                    description: Its value is same as parameter_name.
+                    type: string
+                  parameterName:
+                    description: The name of the common parameter. The name must be
+                      2 to 180 characters in length, and can contain letters, digits,
+                      hyphens (-), forward slashes (/) and underscores (_). It cannot
+                      start with ALIYUN, ACS, ALIBABA, ALICLOUD, or OOS.
+                    type: string
+                  resourceGroupId:
+                    description: The ID of the Resource Group.
+                    type: string
+                  tags:
+                    additionalProperties:
+                      type: string
+                    description: Key-value map of resource tags.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  type:
+                    description: 'The data type of the common parameter. Valid values:
+                      String and StringList.'
+                    type: string
+                  value:
+                    description: The value of the common parameter. The value must
+                      be 1 to 4096 characters in length.
                     type: string
                 type: object
               conditions:
