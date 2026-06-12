@@ -12,6 +12,7 @@ spec:
     region: us-west-1
     endpointType: internet
     entry: 192.168.1.0/24
+    description: test-endpoint-acl-1
     instanceIdSelector:
       matchLabels:
         testing.crossplane.io/example-name: test-ee-instance-for-acl-1
