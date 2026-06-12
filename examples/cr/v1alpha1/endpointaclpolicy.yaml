@@ -124,4 +124,48 @@
 # Out-of-band alternative: enable the endpoint via the Alibaba Cloud console,
 # the aliyun CLI (UpdateInstanceEndpointStatus), or a standalone Terraform run,
 # then manage EndpointACLPolicy with this provider as usual.
+#
+# This file ships a live EeInstance (the policy's prerequisite) so the package
+# has a valid manifest to parse, and shows the EndpointACLPolicy commented out
+# because it cannot reach Ready until the endpoint is enabled (see above). The
+# file is excluded from the automated e2e list (UPTEST_EXAMPLE_LIST_CR); to use
+# the policy, enable the endpoint (see the composition outline) and uncomment
+# the block below.
 # ===========================================================================
+---
+apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+kind: EeInstance
+metadata:
+  annotations:
+    meta.crossplane.io/example-id: cr-v1alpha1-test-ee-instance-for-acl-1
+  labels:
+    testing.crossplane.io/example-name: test-ee-instance-for-acl-1
+  name: test-ee-instance-for-acl-1
+spec:
+  forProvider:
+    region: us-west-1
+    instanceName: cr-ee-test-acl-2
+    instanceType: Advanced
+    paymentType: Subscription
+    period: 1
+    renewPeriod: 1
+    renewalStatus: AutoRenewal
+# ---
+# apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
+# kind: EndpointACLPolicy
+# metadata:
+#   annotations:
+#     meta.crossplane.io/example-id: cr-v1alpha1-test-endpoint-acl-1
+#   labels:
+#     testing.crossplane.io/example-name: test-endpoint-acl-1
+#   name: test-endpoint-acl-1
+# spec:
+#   forProvider:
+#     region: us-west-1
+#     endpointType: internet
+#     entry: 192.168.1.0/24
+#     description: test-endpoint-acl-1
+#     instanceIdSelector:
+#       matchLabels:
+#         testing.crossplane.io/example-name: test-ee-instance-for-acl-1
+#     moduleName: Registry
