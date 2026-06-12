@@ -50,6 +50,16 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("alicloud_cr_ee_sync_rule", func(r *config.Resource) {
 		r.ShortGroup = "cr"
+		// The provider deprecated "name" in favor of "sync_rule_name" (v1.240.0)
+		// and made the two mutually exclusive, but "name" is Computed and is
+		// populated on read. Without ignoring it, upjet late-initializes
+		// spec.forProvider.name from the observed value, so every subsequent
+		// reconcile sends BOTH name and sync_rule_name and the refresh fails
+		// with "only one of `name,sync_rule_name` can be specified" — the
+		// resource creates but never reaches Ready. Skip late-init of "name".
+		r.LateInitializer = config.LateInitializer{
+			IgnoredFields: []string{"name"},
+		}
 	})
 
 	p.AddResourceConfigurator("alicloud_cr_endpoint_acl_policy", func(r *config.Resource) {
