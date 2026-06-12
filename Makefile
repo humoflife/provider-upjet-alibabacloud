@@ -245,7 +245,11 @@ UPTEST_EXAMPLE_LIST_ACKONE=$(ACKONE)/cluster.yaml,$(ACKONE)/membershipattachment
 UPTEST_EXAMPLE_LIST_ALB=$(ALB)/acl.yaml,$(ALB)/aclentryattachment.yaml,$(ALB)/ascript.yaml,$(ALB)/healthchecktemplate.yaml,$(ALB)/listener.yaml,$(ALB)/listeneraclattachment.yaml,$(ALB)/loadbalancer.yaml,$(ALB)/loadbalancersecuritygroupattachment.yaml,$(ALB)/loadbalancerzoneshiftedattachment.yaml,$(ALB)/rule.yaml,$(ALB)/securitupolicy.yaml,$(ALB)/servergroup.yaml
 UPTEST_EXAMPLE_LIST_ALIDNS=$(ALIDNS)/addreddpool.yaml,$(ALIDNS)/customline.yaml,$(ALIDNS)/domain.yaml,$(ALIDNS)/domainattachment.yaml,$(ALIDNS)/domaingroup.yaml,$(ALIDNS)/gtminstance.yaml,$(ALIDNS)/instance.yaml,$(ALIDNS)/monitorconfig.yaml,$(ALIDNS)/record.yaml
 UPTEST_EXAMPLE_LIST_CDN=$(CDN)/domain.yaml,$(CDN)/domainconfig.yaml,$(CDN)/fctrigger.yaml
-UPTEST_EXAMPLE_LIST_CR=$(CR)/chain.yaml,$(CR)/chartnamespace.yaml,$(CR)/chartrepository.yaml,$(CR)/eeinstance.yaml,$(CR)/eenamespace.yaml,$(CR)/eerepo.yaml,$(CR)/eesyncrule.yaml,$(CR)/endpointaclpolicy.yaml,$(CR)/registrynamespace.yaml,$(CR)/repo.yaml,$(CR)/scanrule.yaml,$(CR)/storagedomainroutingrule.yaml,$(CR)/vpcendpointlinkedvpc.yaml
+# Enterprise Edition examples validated end-to-end. Excluded: endpointaclpolicy
+# (upstream provider bug), storagedomainroutingrule (needs a runtime instance id,
+# not statically testable), and personal-edition registrynamespace/repo
+# (require a registered CR user on the test account).
+UPTEST_EXAMPLE_LIST_CR=$(CR)/chain.yaml,$(CR)/chartnamespace.yaml,$(CR)/chartrepository.yaml,$(CR)/eeinstance.yaml,$(CR)/eenamespace.yaml,$(CR)/eerepo.yaml,$(CR)/eesyncrule.yaml,$(CR)/scanrule.yaml,$(CR)/vpcendpointlinkedvpc.yaml
 UPTEST_EXAMPLE_LIST_ECS=$(ECS)/command.yaml,$(ECS)/disk.yaml,$(ECS)/diskattachment.yaml,$(ECS)/instance.yaml,$(ECS)/keypair.yaml,$(ECS)/keypairattachment.yaml,$(ECS)/launchtemplate.yaml,$(ECS)/networkinterface.yaml,$(ECS)/networkinterfaceattachment.yaml,$(ECS)/networkinterfacepermissionspermission.yaml,$(ECS)/securitygroup.yaml,$(ECS)/securitygrouprule.yaml
 UPTEST_EXAMPLE_LIST_KMS=$(KMS)/alias.yaml,$(KMS)/key.yaml,$(KMS)/instance.yaml,$(KMS)/secret.yaml
 UPTEST_EXAMPLE_LIST_MESSAGESERVICE=$(MESSAGESERVICE)/endpoint.yaml,$(MESSAGESERVICE)/endpointacl.yaml,$(MESSAGESERVICE)/queue.yaml,$(MESSAGESERVICE)/subscription.yaml,$(MESSAGESERVICE)/topic.yaml
