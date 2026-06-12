@@ -25,7 +25,7 @@ type ClusterInitParameters struct {
 	BackupRetentionPolicyOnClusterDeletion *string `json:"backupRetentionPolicyOnClusterDeletion,omitempty" tf:"backup_retention_policy_on_cluster_deletion,omitempty"`
 
 	// The time point of data to be cloned. Valid values are LATEST,BackupID,Timestamp.Value options can refer to the latest docs CreateDBCluster CloneDataPoint.
-	// -> NOTE: If CreationOption is set to CloneFromRDS, the value of this parameter must be LATEST.
+	// -> NOTE: If CreationOption is set to CloneFromRDS, the value of this parameter must be LATEST. When clone to a historical backup set, you must specify a specific backup set ID. When clone to a specific point in time, specify a YYYY-MM-DDThh:mm:ssZ format UTC timestamp.
 	CloneDataPoint *string `json:"cloneDataPoint,omitempty" tf:"clone_data_point,omitempty"`
 
 	// Specifies whether to enable or disable SQL data collector. Valid values are Enable, Disabled.
@@ -75,7 +75,7 @@ type ClusterInitParameters struct {
 	DefaultTimeZone *string `json:"defaultTimeZone,omitempty" tf:"default_time_zone,omitempty"`
 
 	// turn on table deletion_lock. Valid values are 0, 1. 1 means to open the cluster protection lock, 0 means to close the cluster protection lock
-	// -> NOTE:  Cannot modify after created when pay_type is Prepaid .deletion_lock the cluster protection lock can be turned on or off when pay_type is Postpaid.
+	// -> NOTE:  Cannot modify after created when pay_type is PrePaid .deletion_lock the cluster protection lock can be turned on or off when pay_type is PostPaid.
 	DeletionLock *float64 `json:"deletionLock,omitempty" tf:"deletion_lock,omitempty"`
 
 	// The description of cluster.
@@ -248,7 +248,7 @@ type ClusterInitParameters struct {
 	// -> NOTE: standby_az is required when hot_standby_cluster is EQUAL.
 	StandbyAz *string `json:"standbyAz,omitempty" tf:"standby_az,omitempty"`
 
-	// The billing method of the storage. Valid values Postpaid, Prepaid.
+	// The billing method of the storage. Valid values PostPaid, PrePaid.
 	StoragePayType *string `json:"storagePayType,omitempty" tf:"storage_pay_type,omitempty"`
 
 	// Storage space charged by space (monthly package). Unit: GB.
@@ -321,7 +321,7 @@ type ClusterObservation struct {
 	BackupRetentionPolicyOnClusterDeletion *string `json:"backupRetentionPolicyOnClusterDeletion,omitempty" tf:"backup_retention_policy_on_cluster_deletion,omitempty"`
 
 	// The time point of data to be cloned. Valid values are LATEST,BackupID,Timestamp.Value options can refer to the latest docs CreateDBCluster CloneDataPoint.
-	// -> NOTE: If CreationOption is set to CloneFromRDS, the value of this parameter must be LATEST.
+	// -> NOTE: If CreationOption is set to CloneFromRDS, the value of this parameter must be LATEST. When clone to a historical backup set, you must specify a specific backup set ID. When clone to a specific point in time, specify a YYYY-MM-DDThh:mm:ssZ format UTC timestamp.
 	CloneDataPoint *string `json:"cloneDataPoint,omitempty" tf:"clone_data_point,omitempty"`
 
 	// Specifies whether to enable or disable SQL data collector. Valid values are Enable, Disabled.
@@ -380,7 +380,7 @@ type ClusterObservation struct {
 	DefaultTimeZone *string `json:"defaultTimeZone,omitempty" tf:"default_time_zone,omitempty"`
 
 	// turn on table deletion_lock. Valid values are 0, 1. 1 means to open the cluster protection lock, 0 means to close the cluster protection lock
-	// -> NOTE:  Cannot modify after created when pay_type is Prepaid .deletion_lock the cluster protection lock can be turned on or off when pay_type is Postpaid.
+	// -> NOTE:  Cannot modify after created when pay_type is PrePaid .deletion_lock the cluster protection lock can be turned on or off when pay_type is PostPaid.
 	DeletionLock *float64 `json:"deletionLock,omitempty" tf:"deletion_lock,omitempty"`
 
 	// The description of cluster.
@@ -541,7 +541,7 @@ type ClusterObservation struct {
 	// (Available since 1.204.1) PolarDB cluster status.
 	Status *string `json:"status,omitempty" tf:"status,omitempty"`
 
-	// The billing method of the storage. Valid values Postpaid, Prepaid.
+	// The billing method of the storage. Valid values PostPaid, PrePaid.
 	StoragePayType *string `json:"storagePayType,omitempty" tf:"storage_pay_type,omitempty"`
 
 	// Storage space charged by space (monthly package). Unit: GB.
@@ -603,7 +603,7 @@ type ClusterParameters struct {
 	BackupRetentionPolicyOnClusterDeletion *string `json:"backupRetentionPolicyOnClusterDeletion,omitempty" tf:"backup_retention_policy_on_cluster_deletion,omitempty"`
 
 	// The time point of data to be cloned. Valid values are LATEST,BackupID,Timestamp.Value options can refer to the latest docs CreateDBCluster CloneDataPoint.
-	// -> NOTE: If CreationOption is set to CloneFromRDS, the value of this parameter must be LATEST.
+	// -> NOTE: If CreationOption is set to CloneFromRDS, the value of this parameter must be LATEST. When clone to a historical backup set, you must specify a specific backup set ID. When clone to a specific point in time, specify a YYYY-MM-DDThh:mm:ssZ format UTC timestamp.
 	// +kubebuilder:validation:Optional
 	CloneDataPoint *string `json:"cloneDataPoint,omitempty" tf:"clone_data_point,omitempty"`
 
@@ -667,7 +667,7 @@ type ClusterParameters struct {
 	DefaultTimeZone *string `json:"defaultTimeZone,omitempty" tf:"default_time_zone,omitempty"`
 
 	// turn on table deletion_lock. Valid values are 0, 1. 1 means to open the cluster protection lock, 0 means to close the cluster protection lock
-	// -> NOTE:  Cannot modify after created when pay_type is Prepaid .deletion_lock the cluster protection lock can be turned on or off when pay_type is Postpaid.
+	// -> NOTE:  Cannot modify after created when pay_type is PrePaid .deletion_lock the cluster protection lock can be turned on or off when pay_type is PostPaid.
 	// +kubebuilder:validation:Optional
 	DeletionLock *float64 `json:"deletionLock,omitempty" tf:"deletion_lock,omitempty"`
 
@@ -888,7 +888,7 @@ type ClusterParameters struct {
 	// +kubebuilder:validation:Optional
 	StandbyAz *string `json:"standbyAz,omitempty" tf:"standby_az,omitempty"`
 
-	// The billing method of the storage. Valid values Postpaid, Prepaid.
+	// The billing method of the storage. Valid values PostPaid, PrePaid.
 	// +kubebuilder:validation:Optional
 	StoragePayType *string `json:"storagePayType,omitempty" tf:"storage_pay_type,omitempty"`
 

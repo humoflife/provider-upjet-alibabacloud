@@ -13,6 +13,45 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
+type CPUOptionsInitParameters struct {
+
+	// The maximum number of partitions in the storage set.
+	CoreCount *float64 `json:"coreCount,omitempty" tf:"core_count,omitempty"`
+
+	// The number of threads per CPU core.
+	ThreadsPerCore *float64 `json:"threadsPerCore,omitempty" tf:"threads_per_core,omitempty"`
+
+	// The CPU topology type of the instance. Valid values: ContinuousCoreToHTMapping, DiscreteCoreToHTMapping.
+	TopologyType *string `json:"topologyType,omitempty" tf:"topology_type,omitempty"`
+}
+
+type CPUOptionsObservation struct {
+
+	// The maximum number of partitions in the storage set.
+	CoreCount *float64 `json:"coreCount,omitempty" tf:"core_count,omitempty"`
+
+	// The number of threads per CPU core.
+	ThreadsPerCore *float64 `json:"threadsPerCore,omitempty" tf:"threads_per_core,omitempty"`
+
+	// The CPU topology type of the instance. Valid values: ContinuousCoreToHTMapping, DiscreteCoreToHTMapping.
+	TopologyType *string `json:"topologyType,omitempty" tf:"topology_type,omitempty"`
+}
+
+type CPUOptionsParameters struct {
+
+	// The maximum number of partitions in the storage set.
+	// +kubebuilder:validation:Optional
+	CoreCount *float64 `json:"coreCount,omitempty" tf:"core_count,omitempty"`
+
+	// The number of threads per CPU core.
+	// +kubebuilder:validation:Optional
+	ThreadsPerCore *float64 `json:"threadsPerCore,omitempty" tf:"threads_per_core,omitempty"`
+
+	// The CPU topology type of the instance. Valid values: ContinuousCoreToHTMapping, DiscreteCoreToHTMapping.
+	// +kubebuilder:validation:Optional
+	TopologyType *string `json:"topologyType,omitempty" tf:"topology_type,omitempty"`
+}
+
 type InstanceDataDisksInitParameters struct {
 
 	// The ID of the automatic snapshot policy applied to the system disk.
@@ -203,6 +242,9 @@ type InstanceInitParameters struct {
 
 	// The Zone to start the instance in. It is ignored and will be computed when set vswitch_id.
 	AvailabilityZone *string `json:"availabilityZone,omitempty" tf:"availability_zone,omitempty"`
+
+	// The options of cpu. See cpu_options below.
+	CPUOptions []CPUOptionsInitParameters `json:"cpuOptions,omitempty" tf:"cpu_options,omitempty"`
 
 	// Performance mode of the t5 burstable instance. Valid values: 'Standard', 'Unlimited'.
 	CreditSpecification *string `json:"creditSpecification,omitempty" tf:"credit_specification,omitempty"`
@@ -585,6 +627,9 @@ type InstanceObservation struct {
 	// The number of vCPUs.
 	CPU *float64 `json:"cpu,omitempty" tf:"cpu,omitempty"`
 
+	// The options of cpu. See cpu_options below.
+	CPUOptions []CPUOptionsObservation `json:"cpuOptions,omitempty" tf:"cpu_options,omitempty"`
+
 	// (Available since v1.232.0) The time when the instance was created.
 	CreateTime *string `json:"createTime,omitempty" tf:"create_time,omitempty"`
 
@@ -873,6 +918,10 @@ type InstanceParameters struct {
 	// The Zone to start the instance in. It is ignored and will be computed when set vswitch_id.
 	// +kubebuilder:validation:Optional
 	AvailabilityZone *string `json:"availabilityZone,omitempty" tf:"availability_zone,omitempty"`
+
+	// The options of cpu. See cpu_options below.
+	// +kubebuilder:validation:Optional
+	CPUOptions []CPUOptionsParameters `json:"cpuOptions,omitempty" tf:"cpu_options,omitempty"`
 
 	// Performance mode of the t5 burstable instance. Valid values: 'Standard', 'Unlimited'.
 	// +kubebuilder:validation:Optional

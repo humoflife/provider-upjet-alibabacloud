@@ -42,25 +42,6 @@ type AuditLogConfigParameters struct {
 	SlsProjectName *string `json:"slsProjectName,omitempty" tf:"sls_project_name,omitempty"`
 }
 
-type AutoModeInitParameters struct {
-
-	// Whether to enable auto mode. Valid values: true, false. Only ACK managed Pro clusters support Auto Mode.
-	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
-}
-
-type AutoModeObservation struct {
-
-	// Whether to enable auto mode. Valid values: true, false. Only ACK managed Pro clusters support Auto Mode.
-	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
-}
-
-type AutoModeParameters struct {
-
-	// Whether to enable auto mode. Valid values: true, false. Only ACK managed Pro clusters support Auto Mode.
-	// +kubebuilder:validation:Optional
-	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
-}
-
 type ClusterAutoUpgradeInitParameters struct {
 
 	// The automatic cluster upgrade channel. Valid values: patch, stable, rapid.
@@ -188,6 +169,25 @@ type ManagedKubernetesAddonsParameters struct {
 	Version *string `json:"version,omitempty" tf:"version,omitempty"`
 }
 
+type ManagedKubernetesAutoModeInitParameters struct {
+
+	// Whether to enable auto mode. Valid values: true, false. Only ACK managed Pro clusters support Auto Mode.
+	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+}
+
+type ManagedKubernetesAutoModeObservation struct {
+
+	// Whether to enable auto mode. Valid values: true, false. Only ACK managed Pro clusters support Auto Mode.
+	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+}
+
+type ManagedKubernetesAutoModeParameters struct {
+
+	// Whether to enable auto mode. Valid values: true, false. Only ACK managed Pro clusters support Auto Mode.
+	// +kubebuilder:validation:Optional
+	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+}
+
 type ManagedKubernetesDeleteOptionsInitParameters struct {
 
 	// The deletion mode of the cluster. Different resources may have different default behavior, see resource_type for details. Valid values:
@@ -229,7 +229,7 @@ type ManagedKubernetesInitParameters struct {
 	AuditLogConfig []AuditLogConfigInitParameters `json:"auditLogConfig,omitempty" tf:"audit_log_config,omitempty"`
 
 	// Auto mode cluster configuration. See auto_mode below.
-	AutoMode []AutoModeInitParameters `json:"autoMode,omitempty" tf:"auto_mode,omitempty"`
+	AutoMode []ManagedKubernetesAutoModeInitParameters `json:"autoMode,omitempty" tf:"auto_mode,omitempty"`
 
 	// (Removed since v1.212.0) The Zone where new kubernetes cluster will be located. If it is not be specified, the vswitch_ids should be set, its value will be vswitch's zone.
 	AvailabilityZone *string `json:"availabilityZone,omitempty" tf:"availability_zone,omitempty"`
@@ -532,7 +532,7 @@ type ManagedKubernetesObservation struct {
 	AuditLogConfig []AuditLogConfigObservation `json:"auditLogConfig,omitempty" tf:"audit_log_config,omitempty"`
 
 	// Auto mode cluster configuration. See auto_mode below.
-	AutoMode []AutoModeObservation `json:"autoMode,omitempty" tf:"auto_mode,omitempty"`
+	AutoMode []ManagedKubernetesAutoModeObservation `json:"autoMode,omitempty" tf:"auto_mode,omitempty"`
 
 	// (Removed since v1.212.0) The Zone where new kubernetes cluster will be located. If it is not be specified, the vswitch_ids should be set, its value will be vswitch's zone.
 	AvailabilityZone *string `json:"availabilityZone,omitempty" tf:"availability_zone,omitempty"`
@@ -821,7 +821,7 @@ type ManagedKubernetesParameters struct {
 
 	// Auto mode cluster configuration. See auto_mode below.
 	// +kubebuilder:validation:Optional
-	AutoMode []AutoModeParameters `json:"autoMode,omitempty" tf:"auto_mode,omitempty"`
+	AutoMode []ManagedKubernetesAutoModeParameters `json:"autoMode,omitempty" tf:"auto_mode,omitempty"`
 
 	// (Removed since v1.212.0) The Zone where new kubernetes cluster will be located. If it is not be specified, the vswitch_ids should be set, its value will be vswitch's zone.
 	// +kubebuilder:validation:Optional

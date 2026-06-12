@@ -74,6 +74,19 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  autoMode:
+                    description: 'Whether to enable auto mode. When enabled, the system
+                      will automatically manage the node pool with optimized default
+                      configurations. Note: When auto_mode is enabled, many parameters
+                      will be automatically set to default values and cannot be modified.
+                      See auto_mode.enable below for details. See auto_mode below.'
+                    items:
+                      properties:
+                        enabled:
+                          description: 'Whether to enable auto mode. Valid values:'
+                          type: boolean
+                      type: object
+                    type: array
                   autoRenew:
                     description: 'Whether to enable automatic renewal for nodes in
                       the node pool takes effect only when instance_charge_type is
@@ -317,6 +330,80 @@ spec:
                       default is PostPaid. If value is PrePaid, the arguments period,
                       period_unit, auto_renew and auto_renew_period are required.'
                     type: string
+                  instanceMetadataOptions:
+                    description: ECS instance metadata access configuration. See instance_metadata_options
+                      below.
+                    items:
+                      properties:
+                        httpTokens:
+                          description: 'ECS instance metadata access mode configuration.
+                            Value range:'
+                          type: string
+                      type: object
+                    type: array
+                  instancePatterns:
+                    description: Instance property configuration. See instance_patterns
+                      below.
+                    items:
+                      properties:
+                        cores:
+                          description: 'The number of vCPU cores of the instance type.
+                            Example value: 8.'
+                          type: number
+                        cpuArchitectures:
+                          description: 'The CPU architecture of the instance. Value
+                            range:'
+                          items:
+                            type: string
+                          type: array
+                        excludedInstanceTypes:
+                          description: 'Instance specifications to be excluded. You
+                            can exclude individual specifications or entire specification
+                            families by using the wildcard character (*). For example:'
+                          items:
+                            type: string
+                          type: array
+                        instanceCategories:
+                          description: 'Instance classification. Value range:'
+                          items:
+                            type: string
+                          type: array
+                        instanceFamilyLevel:
+                          description: 'Instance specification family level, value
+                            range:'
+                          type: string
+                        instanceTypeFamilies:
+                          description: Specifies the instance type family. Example
+                            values:["ecs.g8i","ecs.c8i"]
+                          items:
+                            type: string
+                          type: array
+                        maxCpuCores:
+                          description: 'The maximum number of vCPU cores of the instance
+                            type. Example value: 8. MaxCpuCores cannot exceed 4 times
+                            of MinCpuCores.'
+                          type: number
+                        maxMemorySize:
+                          description: 'The maximum memory of the instance type. Unit:
+                            GiB, example value: 8,MaxMemoryCores does not support
+                            more than 4 times MinMemoryCores.'
+                          type: number
+                        memory:
+                          description: 'The memory size of the instance type, in GiB.
+                            Example value: 8.'
+                          type: number
+                        minCpuCores:
+                          description: 'The minimum number of vCPU cores of the instance
+                            type. Example value: 4. MaxCpuCores cannot exceed 4 times
+                            of MinCpuCores.'
+                          type: number
+                        minMemorySize:
+                          description: 'The minimum memory of the instance type. Unit:
+                            GiB, example value: 4,MaxMemoryCores does not support
+                            more than 4 times MinMemoryCores.'
+                          type: number
+                      type: object
+                    type: array
                   instanceTypes:
                     description: In the node instance specification list, you can
                       select multiple instance specifications as alternatives. When
@@ -615,6 +702,10 @@ spec:
                             run docker daemon with version < 1.9 or an Aufs storage
                             backend. Valid value is true or false.
                           type: string
+                        serverTlsBootstrap:
+                          description: Used to enable the kubelet server certificate
+                            signing and rotation via CSR.
+                          type: boolean
                         systemReserved:
                           additionalProperties:
                             type: string
@@ -1268,6 +1359,19 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
+                  autoMode:
+                    description: 'Whether to enable auto mode. When enabled, the system
+                      will automatically manage the node pool with optimized default
+                      configurations. Note: When auto_mode is enabled, many parameters
+                      will be automatically set to default values and cannot be modified.
+                      See auto_mode.enable below for details. See auto_mode below.'
+                    items:
+                      properties:
+                        enabled:
+                          description: 'Whether to enable auto mode. Valid values:'
+                          type: boolean
+                      type: object
+                    type: array
                   autoRenew:
                     description: 'Whether to enable automatic renewal for nodes in
                       the node pool takes effect only when instance_charge_type is
@@ -1511,6 +1615,80 @@ spec:
                       default is PostPaid. If value is PrePaid, the arguments period,
                       period_unit, auto_renew and auto_renew_period are required.'
                     type: string
+                  instanceMetadataOptions:
+                    description: ECS instance metadata access configuration. See instance_metadata_options
+                      below.
+                    items:
+                      properties:
+                        httpTokens:
+                          description: 'ECS instance metadata access mode configuration.
+                            Value range:'
+                          type: string
+                      type: object
+                    type: array
+                  instancePatterns:
+                    description: Instance property configuration. See instance_patterns
+                      below.
+                    items:
+                      properties:
+                        cores:
+                          description: 'The number of vCPU cores of the instance type.
+                            Example value: 8.'
+                          type: number
+                        cpuArchitectures:
+                          description: 'The CPU architecture of the instance. Value
+                            range:'
+                          items:
+                            type: string
+                          type: array
+                        excludedInstanceTypes:
+                          description: 'Instance specifications to be excluded. You
+                            can exclude individual specifications or entire specification
+                            families by using the wildcard character (*). For example:'
+                          items:
+                            type: string
+                          type: array
+                        instanceCategories:
+                          description: 'Instance classification. Value range:'
+                          items:
+                            type: string
+                          type: array
+                        instanceFamilyLevel:
+                          description: 'Instance specification family level, value
+                            range:'
+                          type: string
+                        instanceTypeFamilies:
+                          description: Specifies the instance type family. Example
+                            values:["ecs.g8i","ecs.c8i"]
+                          items:
+                            type: string
+                          type: array
+                        maxCpuCores:
+                          description: 'The maximum number of vCPU cores of the instance
+                            type. Example value: 8. MaxCpuCores cannot exceed 4 times
+                            of MinCpuCores.'
+                          type: number
+                        maxMemorySize:
+                          description: 'The maximum memory of the instance type. Unit:
+                            GiB, example value: 8,MaxMemoryCores does not support
+                            more than 4 times MinMemoryCores.'
+                          type: number
+                        memory:
+                          description: 'The memory size of the instance type, in GiB.
+                            Example value: 8.'
+                          type: number
+                        minCpuCores:
+                          description: 'The minimum number of vCPU cores of the instance
+                            type. Example value: 4. MaxCpuCores cannot exceed 4 times
+                            of MinCpuCores.'
+                          type: number
+                        minMemorySize:
+                          description: 'The minimum memory of the instance type. Unit:
+                            GiB, example value: 4,MaxMemoryCores does not support
+                            more than 4 times MinMemoryCores.'
+                          type: number
+                      type: object
+                    type: array
                   instanceTypes:
                     description: In the node instance specification list, you can
                       select multiple instance specifications as alternatives. When
@@ -1809,6 +1987,10 @@ spec:
                             run docker daemon with version < 1.9 or an Aufs storage
                             backend. Valid value is true or false.
                           type: string
+                        serverTlsBootstrap:
+                          description: Used to enable the kubelet server certificate
+                            signing and rotation via CSR.
+                          type: boolean
                         systemReserved:
                           additionalProperties:
                             type: string
@@ -2617,6 +2799,19 @@ spec:
             properties:
               atProvider:
                 properties:
+                  autoMode:
+                    description: 'Whether to enable auto mode. When enabled, the system
+                      will automatically manage the node pool with optimized default
+                      configurations. Note: When auto_mode is enabled, many parameters
+                      will be automatically set to default values and cannot be modified.
+                      See auto_mode.enable below for details. See auto_mode below.'
+                    items:
+                      properties:
+                        enabled:
+                          description: 'Whether to enable auto mode. Valid values:'
+                          type: boolean
+                      type: object
+                    type: array
                   autoRenew:
                     description: 'Whether to enable automatic renewal for nodes in
                       the node pool takes effect only when instance_charge_type is
@@ -2788,6 +2983,80 @@ spec:
                       default is PostPaid. If value is PrePaid, the arguments period,
                       period_unit, auto_renew and auto_renew_period are required.'
                     type: string
+                  instanceMetadataOptions:
+                    description: ECS instance metadata access configuration. See instance_metadata_options
+                      below.
+                    items:
+                      properties:
+                        httpTokens:
+                          description: 'ECS instance metadata access mode configuration.
+                            Value range:'
+                          type: string
+                      type: object
+                    type: array
+                  instancePatterns:
+                    description: Instance property configuration. See instance_patterns
+                      below.
+                    items:
+                      properties:
+                        cores:
+                          description: 'The number of vCPU cores of the instance type.
+                            Example value: 8.'
+                          type: number
+                        cpuArchitectures:
+                          description: 'The CPU architecture of the instance. Value
+                            range:'
+                          items:
+                            type: string
+                          type: array
+                        excludedInstanceTypes:
+                          description: 'Instance specifications to be excluded. You
+                            can exclude individual specifications or entire specification
+                            families by using the wildcard character (*). For example:'
+                          items:
+                            type: string
+                          type: array
+                        instanceCategories:
+                          description: 'Instance classification. Value range:'
+                          items:
+                            type: string
+                          type: array
+                        instanceFamilyLevel:
+                          description: 'Instance specification family level, value
+                            range:'
+                          type: string
+                        instanceTypeFamilies:
+                          description: Specifies the instance type family. Example
+                            values:["ecs.g8i","ecs.c8i"]
+                          items:
+                            type: string
+                          type: array
+                        maxCpuCores:
+                          description: 'The maximum number of vCPU cores of the instance
+                            type. Example value: 8. MaxCpuCores cannot exceed 4 times
+                            of MinCpuCores.'
+                          type: number
+                        maxMemorySize:
+                          description: 'The maximum memory of the instance type. Unit:
+                            GiB, example value: 8,MaxMemoryCores does not support
+                            more than 4 times MinMemoryCores.'
+                          type: number
+                        memory:
+                          description: 'The memory size of the instance type, in GiB.
+                            Example value: 8.'
+                          type: number
+                        minCpuCores:
+                          description: 'The minimum number of vCPU cores of the instance
+                            type. Example value: 4. MaxCpuCores cannot exceed 4 times
+                            of MinCpuCores.'
+                          type: number
+                        minMemorySize:
+                          description: 'The minimum memory of the instance type. Unit:
+                            GiB, example value: 4,MaxMemoryCores does not support
+                            more than 4 times MinMemoryCores.'
+                          type: number
+                      type: object
+                    type: array
                   instanceTypes:
                     description: In the node instance specification list, you can
                       select multiple instance specifications as alternatives. When
@@ -2993,6 +3262,10 @@ spec:
                             run docker daemon with version < 1.9 or an Aufs storage
                             backend. Valid value is true or false.
                           type: string
+                        serverTlsBootstrap:
+                          description: Used to enable the kubelet server certificate
+                            signing and rotation via CSR.
+                          type: boolean
                         systemReserved:
                           additionalProperties:
                             type: string

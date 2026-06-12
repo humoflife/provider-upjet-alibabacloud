@@ -5,6 +5,8 @@
 package common
 
 import (
+	"fmt"
+
 	"github.com/crossplane/crossplane-runtime/pkg/fieldpath"
 	"github.com/crossplane/crossplane-runtime/pkg/reference"
 	xpresource "github.com/crossplane/crossplane-runtime/pkg/resource"
@@ -30,6 +32,8 @@ const (
 	PathFcv3FunctionVersionFunctionNameExtractor = SelfPackagePath + ".Fcv3FunctionVersionFunctionNameExtractor()"
 	PathFcv3LayerVersionArnExtractor             = SelfPackagePath + ".Fcv3LayerVersionArnExtractor()"
 	PathVSwitchZoneIdExtractor                   = SelfPackagePath + ".VSwitchZoneIdExtractor()"
+	PathCrEeInstanceVPCDomainExtractor           = SelfPackagePath + ".CrEeInstanceVPCDomainExtractor()"
+	PathCrEeInstanceOssStorageDomainExtractor    = SelfPackagePath + ".CrEeInstanceOssStorageDomainExtractor()"
 )
 
 // IdExtractor extracts id of the
@@ -253,5 +257,53 @@ func VSwitchZoneIdExtractor() reference.ExtractValueFn {
 			return ""
 		}
 		return r
+	}
+}
+
+// CrEeInstanceVPCDomainExtractor builds the VPC registry domain of a Container
+// Registry Enterprise Edition instance, i.e.
+// "<instanceName>-registry-vpc.<region>.cr.aliyuncs.com", from the referenced
+// alicloud_cr_ee_instance. StorageDomainRoutingRule's routes[].instance_domain
+// is a templated string that interpolates the instance name and region, which a
+// plain selector cannot produce.
+func CrEeInstanceVPCDomainExtractor() reference.ExtractValueFn {
+	return func(mg xpresource.Managed) string {
+		paved, err := fieldpath.PaveObject(mg)
+		if err != nil {
+			return ""
+		}
+		instanceName, err := paved.GetString("spec.forProvider.instanceName")
+		if err != nil || instanceName == "" {
+			return ""
+		}
+		region, err := paved.GetString("spec.forProvider.region")
+		if err != nil || region == "" {
+			return ""
+		}
+		return fmt.Sprintf("%s-registry-vpc.%s.cr.aliyuncs.com", instanceName, region)
+	}
+}
+
+// CrEeInstanceOssStorageDomainExtractor builds the internal OSS storage domain
+// of a Container Registry Enterprise Edition instance, i.e.
+// "https://<instanceId>-registry.oss-<region>-internal.aliyuncs.com", from the
+// referenced alicloud_cr_ee_instance. StorageDomainRoutingRule's
+// routes[].storage_domain is a templated string that interpolates the instance
+// id (only known after creation) and region.
+func CrEeInstanceOssStorageDomainExtractor() reference.ExtractValueFn {
+	return func(mg xpresource.Managed) string {
+		paved, err := fieldpath.PaveObject(mg)
+		if err != nil {
+			return ""
+		}
+		instanceID, err := paved.GetString("status.atProvider.id")
+		if err != nil || instanceID == "" {
+			return ""
+		}
+		region, err := paved.GetString("spec.forProvider.region")
+		if err != nil || region == "" {
+			return ""
+		}
+		return fmt.Sprintf("https://%s-registry.oss-%s-internal.aliyuncs.com", instanceID, region)
 	}
 }

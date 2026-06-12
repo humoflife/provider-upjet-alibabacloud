@@ -2424,6 +2424,11 @@ func (in *FunctionInitParameters) DeepCopyInto(out *FunctionInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.IdleTimeout != nil {
+		in, out := &in.IdleTimeout, &out.IdleTimeout
+		*out = new(float64)
+		**out = **in
+	}
 	if in.InstanceConcurrency != nil {
 		in, out := &in.InstanceConcurrency, &out.InstanceConcurrency
 		*out = new(float64)
@@ -2713,6 +2718,11 @@ func (in *FunctionObservation) DeepCopyInto(out *FunctionObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.IdleTimeout != nil {
+		in, out := &in.IdleTimeout, &out.IdleTimeout
+		*out = new(float64)
+		**out = **in
+	}
 	if in.InstanceConcurrency != nil {
 		in, out := &in.InstanceConcurrency, &out.InstanceConcurrency
 		*out = new(float64)
@@ -2963,6 +2973,11 @@ func (in *FunctionParameters) DeepCopyInto(out *FunctionParameters) {
 	if in.Handler != nil {
 		in, out := &in.Handler, &out.Handler
 		*out = new(string)
+		**out = **in
+	}
+	if in.IdleTimeout != nil {
+		in, out := &in.IdleTimeout, &out.IdleTimeout
+		*out = new(float64)
 		**out = **in
 	}
 	if in.InstanceConcurrency != nil {

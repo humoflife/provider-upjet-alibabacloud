@@ -13,6 +13,25 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
+type AutoModeInitParameters struct {
+
+	// Whether to enable auto mode. Valid values:
+	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+}
+
+type AutoModeObservation struct {
+
+	// Whether to enable auto mode. Valid values:
+	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+}
+
+type AutoModeParameters struct {
+
+	// Whether to enable auto mode. Valid values:
+	// +kubebuilder:validation:Optional
+	Enabled *bool `json:"enabled,omitempty" tf:"enabled,omitempty"`
+}
+
 type AutoRepairPolicyInitParameters struct {
 
 	// Whether to allow node restart.
@@ -258,6 +277,144 @@ type EfloNodeGroupParameters struct {
 	GroupID *string `json:"groupId,omitempty" tf:"group_id,omitempty"`
 }
 
+type InstanceMetadataOptionsInitParameters struct {
+
+	// ECS instance metadata access mode configuration. Value range:
+	HTTPTokens *string `json:"httpTokens,omitempty" tf:"http_tokens,omitempty"`
+}
+
+type InstanceMetadataOptionsObservation struct {
+
+	// ECS instance metadata access mode configuration. Value range:
+	HTTPTokens *string `json:"httpTokens,omitempty" tf:"http_tokens,omitempty"`
+}
+
+type InstanceMetadataOptionsParameters struct {
+
+	// ECS instance metadata access mode configuration. Value range:
+	// +kubebuilder:validation:Optional
+	HTTPTokens *string `json:"httpTokens,omitempty" tf:"http_tokens,omitempty"`
+}
+
+type InstancePatternsInitParameters struct {
+
+	// The CPU architecture of the instance. Value range:
+	CPUArchitectures []*string `json:"cpuArchitectures,omitempty" tf:"cpu_architectures,omitempty"`
+
+	// The number of vCPU cores of the instance type. Example value: 8.
+	Cores *float64 `json:"cores,omitempty" tf:"cores,omitempty"`
+
+	// Instance specifications to be excluded. You can exclude individual specifications or entire specification families by using the wildcard character (*). For example:
+	ExcludedInstanceTypes []*string `json:"excludedInstanceTypes,omitempty" tf:"excluded_instance_types,omitempty"`
+
+	// Instance classification. Value range:
+	InstanceCategories []*string `json:"instanceCategories,omitempty" tf:"instance_categories,omitempty"`
+
+	// Instance specification family level, value range:
+	InstanceFamilyLevel *string `json:"instanceFamilyLevel,omitempty" tf:"instance_family_level,omitempty"`
+
+	// Specifies the instance type family. Example values:["ecs.g8i","ecs.c8i"]
+	InstanceTypeFamilies []*string `json:"instanceTypeFamilies,omitempty" tf:"instance_type_families,omitempty"`
+
+	// The maximum number of vCPU cores of the instance type. Example value: 8. MaxCpuCores cannot exceed 4 times of MinCpuCores.
+	MaxCPUCores *float64 `json:"maxCpuCores,omitempty" tf:"max_cpu_cores,omitempty"`
+
+	// The maximum memory of the instance type. Unit: GiB, example value: 8,MaxMemoryCores does not support more than 4 times MinMemoryCores.
+	MaxMemorySize *float64 `json:"maxMemorySize,omitempty" tf:"max_memory_size,omitempty"`
+
+	// The memory size of the instance type, in GiB. Example value: 8.
+	Memory *float64 `json:"memory,omitempty" tf:"memory,omitempty"`
+
+	// The minimum number of vCPU cores of the instance type. Example value: 4. MaxCpuCores cannot exceed 4 times of MinCpuCores.
+	MinCPUCores *float64 `json:"minCpuCores,omitempty" tf:"min_cpu_cores,omitempty"`
+
+	// The minimum memory of the instance type. Unit: GiB, example value: 4,MaxMemoryCores does not support more than 4 times MinMemoryCores.
+	MinMemorySize *float64 `json:"minMemorySize,omitempty" tf:"min_memory_size,omitempty"`
+}
+
+type InstancePatternsObservation struct {
+
+	// The CPU architecture of the instance. Value range:
+	CPUArchitectures []*string `json:"cpuArchitectures,omitempty" tf:"cpu_architectures,omitempty"`
+
+	// The number of vCPU cores of the instance type. Example value: 8.
+	Cores *float64 `json:"cores,omitempty" tf:"cores,omitempty"`
+
+	// Instance specifications to be excluded. You can exclude individual specifications or entire specification families by using the wildcard character (*). For example:
+	ExcludedInstanceTypes []*string `json:"excludedInstanceTypes,omitempty" tf:"excluded_instance_types,omitempty"`
+
+	// Instance classification. Value range:
+	InstanceCategories []*string `json:"instanceCategories,omitempty" tf:"instance_categories,omitempty"`
+
+	// Instance specification family level, value range:
+	InstanceFamilyLevel *string `json:"instanceFamilyLevel,omitempty" tf:"instance_family_level,omitempty"`
+
+	// Specifies the instance type family. Example values:["ecs.g8i","ecs.c8i"]
+	InstanceTypeFamilies []*string `json:"instanceTypeFamilies,omitempty" tf:"instance_type_families,omitempty"`
+
+	// The maximum number of vCPU cores of the instance type. Example value: 8. MaxCpuCores cannot exceed 4 times of MinCpuCores.
+	MaxCPUCores *float64 `json:"maxCpuCores,omitempty" tf:"max_cpu_cores,omitempty"`
+
+	// The maximum memory of the instance type. Unit: GiB, example value: 8,MaxMemoryCores does not support more than 4 times MinMemoryCores.
+	MaxMemorySize *float64 `json:"maxMemorySize,omitempty" tf:"max_memory_size,omitempty"`
+
+	// The memory size of the instance type, in GiB. Example value: 8.
+	Memory *float64 `json:"memory,omitempty" tf:"memory,omitempty"`
+
+	// The minimum number of vCPU cores of the instance type. Example value: 4. MaxCpuCores cannot exceed 4 times of MinCpuCores.
+	MinCPUCores *float64 `json:"minCpuCores,omitempty" tf:"min_cpu_cores,omitempty"`
+
+	// The minimum memory of the instance type. Unit: GiB, example value: 4,MaxMemoryCores does not support more than 4 times MinMemoryCores.
+	MinMemorySize *float64 `json:"minMemorySize,omitempty" tf:"min_memory_size,omitempty"`
+}
+
+type InstancePatternsParameters struct {
+
+	// The CPU architecture of the instance. Value range:
+	// +kubebuilder:validation:Optional
+	CPUArchitectures []*string `json:"cpuArchitectures,omitempty" tf:"cpu_architectures,omitempty"`
+
+	// The number of vCPU cores of the instance type. Example value: 8.
+	// +kubebuilder:validation:Optional
+	Cores *float64 `json:"cores,omitempty" tf:"cores,omitempty"`
+
+	// Instance specifications to be excluded. You can exclude individual specifications or entire specification families by using the wildcard character (*). For example:
+	// +kubebuilder:validation:Optional
+	ExcludedInstanceTypes []*string `json:"excludedInstanceTypes,omitempty" tf:"excluded_instance_types,omitempty"`
+
+	// Instance classification. Value range:
+	// +kubebuilder:validation:Optional
+	InstanceCategories []*string `json:"instanceCategories,omitempty" tf:"instance_categories,omitempty"`
+
+	// Instance specification family level, value range:
+	// +kubebuilder:validation:Optional
+	InstanceFamilyLevel *string `json:"instanceFamilyLevel" tf:"instance_family_level,omitempty"`
+
+	// Specifies the instance type family. Example values:["ecs.g8i","ecs.c8i"]
+	// +kubebuilder:validation:Optional
+	InstanceTypeFamilies []*string `json:"instanceTypeFamilies,omitempty" tf:"instance_type_families,omitempty"`
+
+	// The maximum number of vCPU cores of the instance type. Example value: 8. MaxCpuCores cannot exceed 4 times of MinCpuCores.
+	// +kubebuilder:validation:Optional
+	MaxCPUCores *float64 `json:"maxCpuCores,omitempty" tf:"max_cpu_cores,omitempty"`
+
+	// The maximum memory of the instance type. Unit: GiB, example value: 8,MaxMemoryCores does not support more than 4 times MinMemoryCores.
+	// +kubebuilder:validation:Optional
+	MaxMemorySize *float64 `json:"maxMemorySize,omitempty" tf:"max_memory_size,omitempty"`
+
+	// The memory size of the instance type, in GiB. Example value: 8.
+	// +kubebuilder:validation:Optional
+	Memory *float64 `json:"memory,omitempty" tf:"memory,omitempty"`
+
+	// The minimum number of vCPU cores of the instance type. Example value: 4. MaxCpuCores cannot exceed 4 times of MinCpuCores.
+	// +kubebuilder:validation:Optional
+	MinCPUCores *float64 `json:"minCpuCores,omitempty" tf:"min_cpu_cores,omitempty"`
+
+	// The minimum memory of the instance type. Unit: GiB, example value: 4,MaxMemoryCores does not support more than 4 times MinMemoryCores.
+	// +kubebuilder:validation:Optional
+	MinMemorySize *float64 `json:"minMemorySize,omitempty" tf:"min_memory_size,omitempty"`
+}
+
 type KubeletConfigurationInitParameters struct {
 
 	// Allowed sysctl mode whitelist.
@@ -348,6 +505,9 @@ type KubeletConfigurationInitParameters struct {
 
 	// Same as serializeImagePulls. When enabled, it tells the Kubelet to pull images one at a time. We recommend not changing the default value on nodes that run docker daemon with version < 1.9 or an Aufs storage backend. Valid value is true or false.
 	SerializeImagePulls *string `json:"serializeImagePulls,omitempty" tf:"serialize_image_pulls,omitempty"`
+
+	// Used to enable the kubelet server certificate signing and rotation via CSR.
+	ServerTLSBootstrap *bool `json:"serverTlsBootstrap,omitempty" tf:"server_tls_bootstrap,omitempty"`
 
 	// Same as systemReserved. The set of ResourceName=ResourceQuantity (e.g. cpu=200m,memory=150G) pairs that describe resources reserved for non-kubernetes components. Currently, only cpu and memory are supported. See compute resources for more details.
 	// +mapType=granular
@@ -450,6 +610,9 @@ type KubeletConfigurationObservation struct {
 
 	// Same as serializeImagePulls. When enabled, it tells the Kubelet to pull images one at a time. We recommend not changing the default value on nodes that run docker daemon with version < 1.9 or an Aufs storage backend. Valid value is true or false.
 	SerializeImagePulls *string `json:"serializeImagePulls,omitempty" tf:"serialize_image_pulls,omitempty"`
+
+	// Used to enable the kubelet server certificate signing and rotation via CSR.
+	ServerTLSBootstrap *bool `json:"serverTlsBootstrap,omitempty" tf:"server_tls_bootstrap,omitempty"`
 
 	// Same as systemReserved. The set of ResourceName=ResourceQuantity (e.g. cpu=200m,memory=150G) pairs that describe resources reserved for non-kubernetes components. Currently, only cpu and memory are supported. See compute resources for more details.
 	// +mapType=granular
@@ -581,6 +744,10 @@ type KubeletConfigurationParameters struct {
 	// +kubebuilder:validation:Optional
 	SerializeImagePulls *string `json:"serializeImagePulls,omitempty" tf:"serialize_image_pulls,omitempty"`
 
+	// Used to enable the kubelet server certificate signing and rotation via CSR.
+	// +kubebuilder:validation:Optional
+	ServerTLSBootstrap *bool `json:"serverTlsBootstrap,omitempty" tf:"server_tls_bootstrap,omitempty"`
+
 	// Same as systemReserved. The set of ResourceName=ResourceQuantity (e.g. cpu=200m,memory=150G) pairs that describe resources reserved for non-kubernetes components. Currently, only cpu and memory are supported. See compute resources for more details.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
@@ -596,6 +763,9 @@ type KubeletConfigurationParameters struct {
 }
 
 type KubernetesNodePoolInitParameters struct {
+
+	// Whether to enable auto mode. When enabled, the system will automatically manage the node pool with optimized default configurations. Note: When auto_mode is enabled, many parameters will be automatically set to default values and cannot be modified. See auto_mode.enable below for details. See auto_mode below.
+	AutoMode []AutoModeInitParameters `json:"autoMode,omitempty" tf:"auto_mode,omitempty"`
 
 	// Whether to enable automatic renewal for nodes in the node pool takes effect only when instance_charge_type is set to PrePaid. Default value: false. Valid values:
 	AutoRenew *bool `json:"autoRenew,omitempty" tf:"auto_renew,omitempty"`
@@ -655,6 +825,12 @@ type KubernetesNodePoolInitParameters struct {
 
 	// Node payment type. Valid values: PostPaid, PrePaid, default is PostPaid. If value is PrePaid, the arguments period, period_unit, auto_renew and auto_renew_period are required.
 	InstanceChargeType *string `json:"instanceChargeType,omitempty" tf:"instance_charge_type,omitempty"`
+
+	// ECS instance metadata access configuration. See instance_metadata_options below.
+	InstanceMetadataOptions []InstanceMetadataOptionsInitParameters `json:"instanceMetadataOptions,omitempty" tf:"instance_metadata_options,omitempty"`
+
+	// Instance property configuration. See instance_patterns below.
+	InstancePatterns []InstancePatternsInitParameters `json:"instancePatterns,omitempty" tf:"instance_patterns,omitempty"`
 
 	// In the node instance specification list, you can select multiple instance specifications as alternatives. When each node is created, it will try to purchase from the first specification until it is created successfully. The final purchased instance specifications may vary with inventory changes.
 	InstanceTypes []*string `json:"instanceTypes,omitempty" tf:"instance_types,omitempty"`
@@ -872,6 +1048,9 @@ type KubernetesNodePoolInitParameters struct {
 
 type KubernetesNodePoolObservation struct {
 
+	// Whether to enable auto mode. When enabled, the system will automatically manage the node pool with optimized default configurations. Note: When auto_mode is enabled, many parameters will be automatically set to default values and cannot be modified. See auto_mode.enable below for details. See auto_mode below.
+	AutoMode []AutoModeObservation `json:"autoMode,omitempty" tf:"auto_mode,omitempty"`
+
 	// Whether to enable automatic renewal for nodes in the node pool takes effect only when instance_charge_type is set to PrePaid. Default value: false. Valid values:
 	AutoRenew *bool `json:"autoRenew,omitempty" tf:"auto_renew,omitempty"`
 
@@ -922,6 +1101,12 @@ type KubernetesNodePoolObservation struct {
 
 	// Node payment type. Valid values: PostPaid, PrePaid, default is PostPaid. If value is PrePaid, the arguments period, period_unit, auto_renew and auto_renew_period are required.
 	InstanceChargeType *string `json:"instanceChargeType,omitempty" tf:"instance_charge_type,omitempty"`
+
+	// ECS instance metadata access configuration. See instance_metadata_options below.
+	InstanceMetadataOptions []InstanceMetadataOptionsObservation `json:"instanceMetadataOptions,omitempty" tf:"instance_metadata_options,omitempty"`
+
+	// Instance property configuration. See instance_patterns below.
+	InstancePatterns []InstancePatternsObservation `json:"instancePatterns,omitempty" tf:"instance_patterns,omitempty"`
 
 	// In the node instance specification list, you can select multiple instance specifications as alternatives. When each node is created, it will try to purchase from the first specification until it is created successfully. The final purchased instance specifications may vary with inventory changes.
 	InstanceTypes []*string `json:"instanceTypes,omitempty" tf:"instance_types,omitempty"`
@@ -1113,6 +1298,10 @@ type KubernetesNodePoolObservation struct {
 
 type KubernetesNodePoolParameters struct {
 
+	// Whether to enable auto mode. When enabled, the system will automatically manage the node pool with optimized default configurations. Note: When auto_mode is enabled, many parameters will be automatically set to default values and cannot be modified. See auto_mode.enable below for details. See auto_mode below.
+	// +kubebuilder:validation:Optional
+	AutoMode []AutoModeParameters `json:"autoMode,omitempty" tf:"auto_mode,omitempty"`
+
 	// Whether to enable automatic renewal for nodes in the node pool takes effect only when instance_charge_type is set to PrePaid. Default value: false. Valid values:
 	// +kubebuilder:validation:Optional
 	AutoRenew *bool `json:"autoRenew,omitempty" tf:"auto_renew,omitempty"`
@@ -1187,6 +1376,14 @@ type KubernetesNodePoolParameters struct {
 	// Node payment type. Valid values: PostPaid, PrePaid, default is PostPaid. If value is PrePaid, the arguments period, period_unit, auto_renew and auto_renew_period are required.
 	// +kubebuilder:validation:Optional
 	InstanceChargeType *string `json:"instanceChargeType,omitempty" tf:"instance_charge_type,omitempty"`
+
+	// ECS instance metadata access configuration. See instance_metadata_options below.
+	// +kubebuilder:validation:Optional
+	InstanceMetadataOptions []InstanceMetadataOptionsParameters `json:"instanceMetadataOptions,omitempty" tf:"instance_metadata_options,omitempty"`
+
+	// Instance property configuration. See instance_patterns below.
+	// +kubebuilder:validation:Optional
+	InstancePatterns []InstancePatternsParameters `json:"instancePatterns,omitempty" tf:"instance_patterns,omitempty"`
 
 	// In the node instance specification list, you can select multiple instance specifications as alternatives. When each node is created, it will try to purchase from the first specification until it is created successfully. The final purchased instance specifications may vary with inventory changes.
 	// +kubebuilder:validation:Optional

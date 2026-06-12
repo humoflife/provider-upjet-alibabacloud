@@ -17,6 +17,7 @@ import (
 	"github.com/crossplane-contrib/provider-alibabacloud/config/alidns"
 	"github.com/crossplane-contrib/provider-alibabacloud/config/cdn"
 	"github.com/crossplane-contrib/provider-alibabacloud/config/cloudmonitorservice"
+	"github.com/crossplane-contrib/provider-alibabacloud/config/cr"
 	"github.com/crossplane-contrib/provider-alibabacloud/config/ecs"
 	"github.com/crossplane-contrib/provider-alibabacloud/config/kms"
 	"github.com/crossplane-contrib/provider-alibabacloud/config/messageservice"
@@ -74,6 +75,7 @@ func GetProvider() *ujconfig.Provider {
 		alidns.Configure,
 		cdn.Configure,
 		cloudmonitorservice.Configure,
+		cr.Configure,
 		ecs.Configure,
 		fcv3.Configure,
 		kms.Configure,
