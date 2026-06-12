@@ -9,54 +9,22 @@ metadata:
   name: test-storage-routing-1
 spec:
   forProvider:
+    region: us-west-1
     instanceIdSelector:
       matchLabels:
         testing.crossplane.io/example-name: test-ee-instance-for-storage-1
-    namespaceNameSelector:
-      matchLabels:
-        testing.crossplane.io/example-name: test-ee-namespace-for-storage-1
-    repoNameSelector:
-      matchLabels:
-        testing.crossplane.io/example-name: test-ee-repo-for-storage-1
-    storageDomain: oss
----
-apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
-kind: EeRepo
-metadata:
-  annotations:
-    meta.crossplane.io/example-id: cr-v1alpha1-test-ee-repo-for-storage-1
-  labels:
-    testing.crossplane.io/example-name: test-ee-repo-for-storage-1
-  name: test-ee-repo-for-storage-1
-spec:
-  forProvider:
-    detail: Test EE repository for storage routing
-    instanceIdSelector:
-      matchLabels:
-        testing.crossplane.io/example-name: test-ee-instance-for-storage-1
-    name: test-ee-repo-for-storage-1
-    namespaceSelector:
-      matchLabels:
-        testing.crossplane.io/example-name: test-ee-namespace-for-storage-1
-    repoType: PUBLIC
-    summary: Test EE repository for storage routing
----
-apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
-kind: EeNamespace
-metadata:
-  annotations:
-    meta.crossplane.io/example-id: cr-v1alpha1-test-ee-namespace-for-storage-1
-  labels:
-    testing.crossplane.io/example-name: test-ee-namespace-for-storage-1
-  name: test-ee-namespace-for-storage-1
-spec:
-  forProvider:
-    autoCreate: false
-    defaultVisibility: PUBLIC
-    instanceIdSelector:
-      matchLabels:
-        testing.crossplane.io/example-name: test-ee-instance-for-storage-1
-    name: test-ee-namespace-for-storage-1
+    # routes[].instanceDomain and routes[].storageDomain are templated URLs that
+    # embed the EE instance name/id and region. They are resolved from the
+    # referenced EeInstance via custom extractors (see config/cr/config.go), so
+    # the example only needs selectors here, not the literal domains.
+    routes:
+      - endpointType: Internet
+        instanceDomainSelector:
+          matchLabels:
+            testing.crossplane.io/example-name: test-ee-instance-for-storage-1
+        storageDomainSelector:
+          matchLabels:
+            testing.crossplane.io/example-name: test-ee-instance-for-storage-1
 ---
 apiVersion: cr.alibabacloud.crossplane.io/v1alpha1
 kind: EeInstance
@@ -68,7 +36,8 @@ metadata:
   name: test-ee-instance-for-storage-1
 spec:
   forProvider:
-    instanceName: cr-ee-test-storage-1
+    region: us-west-1
+    instanceName: cr-ee-test-storage-2
     instanceType: Advanced
     paymentType: Subscription
     period: 1

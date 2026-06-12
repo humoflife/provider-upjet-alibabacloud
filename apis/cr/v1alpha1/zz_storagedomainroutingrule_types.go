@@ -19,10 +19,30 @@ type RoutesInitParameters struct {
 	EndpointType *string `json:"endpointType,omitempty" tf:"endpoint_type,omitempty"`
 
 	// Instance domain name.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeInstance
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.CrEeInstanceVPCDomainExtractor()
 	InstanceDomain *string `json:"instanceDomain,omitempty" tf:"instance_domain,omitempty"`
 
+	// Reference to a EeInstance in cr to populate instanceDomain.
+	// +kubebuilder:validation:Optional
+	InstanceDomainRef *v1.Reference `json:"instanceDomainRef,omitempty" tf:"-"`
+
+	// Selector for a EeInstance in cr to populate instanceDomain.
+	// +kubebuilder:validation:Optional
+	InstanceDomainSelector *v1.Selector `json:"instanceDomainSelector,omitempty" tf:"-"`
+
 	// Storage domain name.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeInstance
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.CrEeInstanceOssStorageDomainExtractor()
 	StorageDomain *string `json:"storageDomain,omitempty" tf:"storage_domain,omitempty"`
+
+	// Reference to a EeInstance in cr to populate storageDomain.
+	// +kubebuilder:validation:Optional
+	StorageDomainRef *v1.Reference `json:"storageDomainRef,omitempty" tf:"-"`
+
+	// Selector for a EeInstance in cr to populate storageDomain.
+	// +kubebuilder:validation:Optional
+	StorageDomainSelector *v1.Selector `json:"storageDomainSelector,omitempty" tf:"-"`
 }
 
 type RoutesObservation struct {
@@ -44,19 +64,39 @@ type RoutesParameters struct {
 	EndpointType *string `json:"endpointType" tf:"endpoint_type,omitempty"`
 
 	// Instance domain name.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeInstance
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.CrEeInstanceVPCDomainExtractor()
 	// +kubebuilder:validation:Optional
-	InstanceDomain *string `json:"instanceDomain" tf:"instance_domain,omitempty"`
+	InstanceDomain *string `json:"instanceDomain,omitempty" tf:"instance_domain,omitempty"`
+
+	// Reference to a EeInstance in cr to populate instanceDomain.
+	// +kubebuilder:validation:Optional
+	InstanceDomainRef *v1.Reference `json:"instanceDomainRef,omitempty" tf:"-"`
+
+	// Selector for a EeInstance in cr to populate instanceDomain.
+	// +kubebuilder:validation:Optional
+	InstanceDomainSelector *v1.Selector `json:"instanceDomainSelector,omitempty" tf:"-"`
 
 	// Storage domain name.
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeInstance
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.CrEeInstanceOssStorageDomainExtractor()
 	// +kubebuilder:validation:Optional
-	StorageDomain *string `json:"storageDomain" tf:"storage_domain,omitempty"`
+	StorageDomain *string `json:"storageDomain,omitempty" tf:"storage_domain,omitempty"`
+
+	// Reference to a EeInstance in cr to populate storageDomain.
+	// +kubebuilder:validation:Optional
+	StorageDomainRef *v1.Reference `json:"storageDomainRef,omitempty" tf:"-"`
+
+	// Selector for a EeInstance in cr to populate storageDomain.
+	// +kubebuilder:validation:Optional
+	StorageDomainSelector *v1.Selector `json:"storageDomainSelector,omitempty" tf:"-"`
 }
 
 type StorageDomainRoutingRuleInitParameters struct {
 
 	// The ID of the Container Registry Instance.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeInstance
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractResourceID()
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.IdExtractor()
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
 
 	// Reference to a EeInstance in cr to populate instanceId.
@@ -93,7 +133,7 @@ type StorageDomainRoutingRuleParameters struct {
 
 	// The ID of the Container Registry Instance.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/cr/v1alpha1.EeInstance
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractResourceID()
+	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.IdExtractor()
 	// +kubebuilder:validation:Optional
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
 

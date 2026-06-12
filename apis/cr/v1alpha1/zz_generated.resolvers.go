@@ -691,7 +691,7 @@ func (mg *StorageDomainRoutingRule) ResolveReferences(ctx context.Context, c cli
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.InstanceID),
-		Extract:      resource.ExtractResourceID(),
+		Extract:      common.IdExtractor(),
 		Reference:    mg.Spec.ForProvider.InstanceIDRef,
 		Selector:     mg.Spec.ForProvider.InstanceIDSelector,
 		To: reference.To{
@@ -705,9 +705,45 @@ func (mg *StorageDomainRoutingRule) ResolveReferences(ctx context.Context, c cli
 	mg.Spec.ForProvider.InstanceID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.InstanceIDRef = rsp.ResolvedReference
 
+	for i3 := 0; i3 < len(mg.Spec.ForProvider.Routes); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Routes[i3].InstanceDomain),
+			Extract:      common.CrEeInstanceVPCDomainExtractor(),
+			Reference:    mg.Spec.ForProvider.Routes[i3].InstanceDomainRef,
+			Selector:     mg.Spec.ForProvider.Routes[i3].InstanceDomainSelector,
+			To: reference.To{
+				List:    &EeInstanceList{},
+				Managed: &EeInstance{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.ForProvider.Routes[i3].InstanceDomain")
+		}
+		mg.Spec.ForProvider.Routes[i3].InstanceDomain = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.ForProvider.Routes[i3].InstanceDomainRef = rsp.ResolvedReference
+
+	}
+	for i3 := 0; i3 < len(mg.Spec.ForProvider.Routes); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Routes[i3].StorageDomain),
+			Extract:      common.CrEeInstanceOssStorageDomainExtractor(),
+			Reference:    mg.Spec.ForProvider.Routes[i3].StorageDomainRef,
+			Selector:     mg.Spec.ForProvider.Routes[i3].StorageDomainSelector,
+			To: reference.To{
+				List:    &EeInstanceList{},
+				Managed: &EeInstance{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.ForProvider.Routes[i3].StorageDomain")
+		}
+		mg.Spec.ForProvider.Routes[i3].StorageDomain = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.ForProvider.Routes[i3].StorageDomainRef = rsp.ResolvedReference
+
+	}
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.InstanceID),
-		Extract:      resource.ExtractResourceID(),
+		Extract:      common.IdExtractor(),
 		Reference:    mg.Spec.InitProvider.InstanceIDRef,
 		Selector:     mg.Spec.InitProvider.InstanceIDSelector,
 		To: reference.To{
@@ -720,6 +756,43 @@ func (mg *StorageDomainRoutingRule) ResolveReferences(ctx context.Context, c cli
 	}
 	mg.Spec.InitProvider.InstanceID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.InstanceIDRef = rsp.ResolvedReference
+
+	for i3 := 0; i3 < len(mg.Spec.InitProvider.Routes); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Routes[i3].InstanceDomain),
+			Extract:      common.CrEeInstanceVPCDomainExtractor(),
+			Reference:    mg.Spec.InitProvider.Routes[i3].InstanceDomainRef,
+			Selector:     mg.Spec.InitProvider.Routes[i3].InstanceDomainSelector,
+			To: reference.To{
+				List:    &EeInstanceList{},
+				Managed: &EeInstance{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.InitProvider.Routes[i3].InstanceDomain")
+		}
+		mg.Spec.InitProvider.Routes[i3].InstanceDomain = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.InitProvider.Routes[i3].InstanceDomainRef = rsp.ResolvedReference
+
+	}
+	for i3 := 0; i3 < len(mg.Spec.InitProvider.Routes); i3++ {
+		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.Routes[i3].StorageDomain),
+			Extract:      common.CrEeInstanceOssStorageDomainExtractor(),
+			Reference:    mg.Spec.InitProvider.Routes[i3].StorageDomainRef,
+			Selector:     mg.Spec.InitProvider.Routes[i3].StorageDomainSelector,
+			To: reference.To{
+				List:    &EeInstanceList{},
+				Managed: &EeInstance{},
+			},
+		})
+		if err != nil {
+			return errors.Wrap(err, "mg.Spec.InitProvider.Routes[i3].StorageDomain")
+		}
+		mg.Spec.InitProvider.Routes[i3].StorageDomain = reference.ToPtrValue(rsp.ResolvedValue)
+		mg.Spec.InitProvider.Routes[i3].StorageDomainRef = rsp.ResolvedReference
+
+	}
 
 	return nil
 }

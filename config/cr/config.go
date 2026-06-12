@@ -96,6 +96,25 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("alicloud_cr_storage_domain_routing_rule", func(r *config.Resource) {
 		r.ShortGroup = "cr"
+		// instance_id is the Enterprise Edition instance ID.
+		r.References["instance_id"] = config.Reference{
+			TerraformName: "alicloud_cr_ee_instance",
+			Extractor:     common.PathIdExtractor,
+		}
+		// routes[].instance_domain and routes[].storage_domain are templated
+		// URLs that embed the EE instance's name/id and region (Terraform
+		// interpolates them in the upstream example). Plain selectors cannot
+		// produce a substring, so resolve each from the referenced
+		// alicloud_cr_ee_instance via a custom extractor that builds the full
+		// domain.
+		r.References["routes.instance_domain"] = config.Reference{
+			TerraformName: "alicloud_cr_ee_instance",
+			Extractor:     common.PathCrEeInstanceVPCDomainExtractor,
+		}
+		r.References["routes.storage_domain"] = config.Reference{
+			TerraformName: "alicloud_cr_ee_instance",
+			Extractor:     common.PathCrEeInstanceOssStorageDomainExtractor,
+		}
 	})
 
 	p.AddResourceConfigurator("alicloud_cr_vpc_endpoint_linked_vpc", func(r *config.Resource) {

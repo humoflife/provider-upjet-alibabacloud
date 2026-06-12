@@ -3536,10 +3536,30 @@ func (in *RoutesInitParameters) DeepCopyInto(out *RoutesInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.InstanceDomainRef != nil {
+		in, out := &in.InstanceDomainRef, &out.InstanceDomainRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.InstanceDomainSelector != nil {
+		in, out := &in.InstanceDomainSelector, &out.InstanceDomainSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.StorageDomain != nil {
 		in, out := &in.StorageDomain, &out.StorageDomain
 		*out = new(string)
 		**out = **in
+	}
+	if in.StorageDomainRef != nil {
+		in, out := &in.StorageDomainRef, &out.StorageDomainRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.StorageDomainSelector != nil {
+		in, out := &in.StorageDomainSelector, &out.StorageDomainSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 }
 
@@ -3596,10 +3616,30 @@ func (in *RoutesParameters) DeepCopyInto(out *RoutesParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.InstanceDomainRef != nil {
+		in, out := &in.InstanceDomainRef, &out.InstanceDomainRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.InstanceDomainSelector != nil {
+		in, out := &in.InstanceDomainSelector, &out.InstanceDomainSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.StorageDomain != nil {
 		in, out := &in.StorageDomain, &out.StorageDomain
 		*out = new(string)
 		**out = **in
+	}
+	if in.StorageDomainRef != nil {
+		in, out := &in.StorageDomainRef, &out.StorageDomainRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.StorageDomainSelector != nil {
+		in, out := &in.StorageDomainSelector, &out.StorageDomainSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 }
 
