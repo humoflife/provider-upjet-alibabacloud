@@ -1,6 +1,4 @@
-# SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>
-#
-# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>#
 
 version: "2"
 
@@ -28,9 +26,6 @@ linters:
     - unused       # This remains separate in v2
     - misspell
     - nakedret
-
-  presets:
-    - bugs
 
   settings:
     errcheck:
@@ -188,8 +183,7 @@ formatters:
       # put imports beginning with prefix after 3rd-party packages;
       # it's a comma-separated list of prefixes
       local-prefixes:
-        - github.com/upbound/provider-aws/v2
-
+        - github.com/crossplane-contrib/provider-alibabacloud
   exclusions:
     paths:
       - "zz_.*go$"
