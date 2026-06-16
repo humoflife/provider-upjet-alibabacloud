@@ -10,10 +10,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/crossplane-contrib/provider-alibabacloud/internal/version"
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 	"github.com/crossplane/crossplane-runtime/pkg/fieldpath"
 	"k8s.io/apimachinery/pkg/runtime"
+
+	"github.com/crossplane-contrib/provider-alibabacloud/internal/version"
 
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 	"github.com/pkg/errors"

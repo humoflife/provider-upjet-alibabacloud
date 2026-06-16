@@ -11,6 +11,8 @@ import (
 	"github.com/crossplane-contrib/provider-alibabacloud/config/fcv3"
 	"github.com/crossplane-contrib/provider-alibabacloud/config/slb"
 
+	"github.com/crossplane/upjet/pkg/registry/reference"
+
 	"github.com/crossplane-contrib/provider-alibabacloud/config/ack"
 	"github.com/crossplane-contrib/provider-alibabacloud/config/ackone"
 	"github.com/crossplane-contrib/provider-alibabacloud/config/alb"
@@ -30,7 +32,6 @@ import (
 	"github.com/crossplane-contrib/provider-alibabacloud/config/tair"
 	"github.com/crossplane-contrib/provider-alibabacloud/config/vpc"
 	"github.com/crossplane-contrib/provider-alibabacloud/hack"
-	"github.com/crossplane/upjet/pkg/registry/reference"
 
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 )
