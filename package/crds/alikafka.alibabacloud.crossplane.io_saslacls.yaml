@@ -74,12 +74,17 @@ spec:
               forProvider:
                 properties:
                   aclOperationType:
-                    description: Operation type for this acl. The operation type can
-                      only be "Write" and "Read".
+                    description: 'Operation type. Valid values:'
+                    type: string
+                  aclOperationTypes:
+                    description: 'Batch authorization operation types. Multiple operations
+                      are separated by commas (,). Valid values:'
+                    type: string
+                  aclPermissionType:
+                    description: 'Authorization method. Value:'
                     type: string
                   aclResourceName:
-                    description: Resource name for this acl. The resource name should
-                      be a topic or consumer group name.
+                    description: The resource name.
                     type: string
                   aclResourceNameRef:
                     description: Reference to a Topic in alikafka to populate aclResourceName.
@@ -156,20 +161,18 @@ spec:
                         type: object
                     type: object
                   aclResourcePatternType:
-                    description: 'Resource pattern type for this acl. The resource
-                      pattern support two types "LITERAL" and "PREFIXED". "LITERAL":
-                      A literal name defines the full name of a resource. The special
-                      wildcard character "*" can be used to represent a resource with
-                      any name. "PREFIXED": A prefixed name defines a prefix for a
-                      resource.'
+                    description: 'Match the pattern. Valid values:'
                     type: string
                   aclResourceType:
-                    description: Resource type for this acl. The resource type can
-                      only be "Topic", "Group". Since version 1.247.0, the resource
-                      type support "Cluster" and "TransactionalId".
+                    description: 'The resource type. Valid values:'
+                    type: string
+                  host:
+                    description: |-
+                      The host of the acl.
+                      -> NOTE: From version 1.270.0, host can be set.
                     type: string
                   instanceId:
-                    description: ID of the ALIKAFKA Instance that owns the groups.
+                    description: The instance ID.
                     type: string
                   instanceIdRef:
                     description: Reference to a Instance in alikafka to populate instanceId.
@@ -250,8 +253,7 @@ spec:
                       be created in.
                     type: string
                   username:
-                    description: Username for the sasl user. The length should between
-                      1 to 64 characters. The user should be an existed sasl user.
+                    description: The user name.
                     type: string
                   usernameRef:
                     description: Reference to a SaslUser in alikafka to populate username.
@@ -342,12 +344,17 @@ spec:
                   autoscaler.
                 properties:
                   aclOperationType:
-                    description: Operation type for this acl. The operation type can
-                      only be "Write" and "Read".
+                    description: 'Operation type. Valid values:'
+                    type: string
+                  aclOperationTypes:
+                    description: 'Batch authorization operation types. Multiple operations
+                      are separated by commas (,). Valid values:'
+                    type: string
+                  aclPermissionType:
+                    description: 'Authorization method. Value:'
                     type: string
                   aclResourceName:
-                    description: Resource name for this acl. The resource name should
-                      be a topic or consumer group name.
+                    description: The resource name.
                     type: string
                   aclResourceNameRef:
                     description: Reference to a Topic in alikafka to populate aclResourceName.
@@ -424,20 +431,18 @@ spec:
                         type: object
                     type: object
                   aclResourcePatternType:
-                    description: 'Resource pattern type for this acl. The resource
-                      pattern support two types "LITERAL" and "PREFIXED". "LITERAL":
-                      A literal name defines the full name of a resource. The special
-                      wildcard character "*" can be used to represent a resource with
-                      any name. "PREFIXED": A prefixed name defines a prefix for a
-                      resource.'
+                    description: 'Match the pattern. Valid values:'
                     type: string
                   aclResourceType:
-                    description: Resource type for this acl. The resource type can
-                      only be "Topic", "Group". Since version 1.247.0, the resource
-                      type support "Cluster" and "TransactionalId".
+                    description: 'The resource type. Valid values:'
+                    type: string
+                  host:
+                    description: |-
+                      The host of the acl.
+                      -> NOTE: From version 1.270.0, host can be set.
                     type: string
                   instanceId:
-                    description: ID of the ALIKAFKA Instance that owns the groups.
+                    description: The instance ID.
                     type: string
                   instanceIdRef:
                     description: Reference to a Instance in alikafka to populate instanceId.
@@ -514,8 +519,7 @@ spec:
                         type: object
                     type: object
                   username:
-                    description: Username for the sasl user. The length should between
-                      1 to 64 characters. The user should be an existed sasl user.
+                    description: The user name.
                     type: string
                   usernameRef:
                     description: Reference to a SaslUser in alikafka to populate username.
@@ -778,39 +782,38 @@ spec:
               atProvider:
                 properties:
                   aclOperationType:
-                    description: Operation type for this acl. The operation type can
-                      only be "Write" and "Read".
+                    description: 'Operation type. Valid values:'
+                    type: string
+                  aclOperationTypes:
+                    description: 'Batch authorization operation types. Multiple operations
+                      are separated by commas (,). Valid values:'
+                    type: string
+                  aclPermissionType:
+                    description: 'Authorization method. Value:'
                     type: string
                   aclResourceName:
-                    description: Resource name for this acl. The resource name should
-                      be a topic or consumer group name.
+                    description: The resource name.
                     type: string
                   aclResourcePatternType:
-                    description: 'Resource pattern type for this acl. The resource
-                      pattern support two types "LITERAL" and "PREFIXED". "LITERAL":
-                      A literal name defines the full name of a resource. The special
-                      wildcard character "*" can be used to represent a resource with
-                      any name. "PREFIXED": A prefixed name defines a prefix for a
-                      resource.'
+                    description: 'Match the pattern. Valid values:'
                     type: string
                   aclResourceType:
-                    description: Resource type for this acl. The resource type can
-                      only be "Topic", "Group". Since version 1.247.0, the resource
-                      type support "Cluster" and "TransactionalId".
+                    description: 'The resource type. Valid values:'
                     type: string
                   host:
-                    description: The host of the acl.
+                    description: |-
+                      The host of the acl.
+                      -> NOTE: From version 1.270.0, host can be set.
                     type: string
                   id:
-                    description: The key of the resource supplied above. The value
+                    description: The ID of the resource supplied above. The value
                       is formulated as <instance_id>:<username>:<acl_resource_type>:<acl_resource_name>:<acl_resource_pattern_type>:<acl_operation_type>.
                     type: string
                   instanceId:
-                    description: ID of the ALIKAFKA Instance that owns the groups.
+                    description: The instance ID.
                     type: string
                   username:
-                    description: Username for the sasl user. The length should between
-                      1 to 64 characters. The user should be an existed sasl user.
+                    description: The user name.
                     type: string
                 type: object
               conditions:

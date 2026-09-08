@@ -1,8 +1,9 @@
 package ecs
 
 import (
-	"github.com/crossplane-contrib/provider-alibabacloud/config/common"
 	"github.com/crossplane/upjet/pkg/config"
+
+	"github.com/crossplane-contrib/provider-alibabacloud/config/common"
 )
 
 // Configure configures individual resources by adding custom ResourceConfigurators.

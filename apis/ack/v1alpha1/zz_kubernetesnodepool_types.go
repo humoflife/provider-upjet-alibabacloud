@@ -2159,7 +2159,7 @@ type UpgradePolicyInitParameters struct {
 	// Node Runtime Version
 	RuntimeVersion *string `json:"runtimeVersion,omitempty" tf:"runtime_version,omitempty"`
 
-	// Whether to use replacement disk upgrade
+	// Whether to use replacement disk upgrade. Valid values:
 	UseReplace *bool `json:"useReplace,omitempty" tf:"use_replace,omitempty"`
 }
 
@@ -2177,7 +2177,7 @@ type UpgradePolicyObservation struct {
 	// Node Runtime Version
 	RuntimeVersion *string `json:"runtimeVersion,omitempty" tf:"runtime_version,omitempty"`
 
-	// Whether to use replacement disk upgrade
+	// Whether to use replacement disk upgrade. Valid values:
 	UseReplace *bool `json:"useReplace,omitempty" tf:"use_replace,omitempty"`
 }
 
@@ -2209,7 +2209,7 @@ type UpgradePolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	RuntimeVersion *string `json:"runtimeVersion,omitempty" tf:"runtime_version,omitempty"`
 
-	// Whether to use replacement disk upgrade
+	// Whether to use replacement disk upgrade. Valid values:
 	// +kubebuilder:validation:Optional
 	UseReplace *bool `json:"useReplace,omitempty" tf:"use_replace,omitempty"`
 }

@@ -190,9 +190,8 @@ spec:
                       or none. Default to none.
                     type: string
                   customSan:
-                    description: |-
-                      Customize the certificate SAN, multiple IP or domain names are separated by English commas (,).
-                      -> NOTE: Make sure you have specified all certificate SANs before updating. Updating this field will lead APIServer to restart.
+                    description: Customize the certificate SAN, multiple IP or domain
+                      names are separated by English commas (,).
                     type: string
                   deleteOptions:
                     description: Delete options, only work for deleting resource.
@@ -212,6 +211,10 @@ spec:
                     type: array
                   deletionProtection:
                     description: Whether to enable cluster deletion protection.
+                    type: boolean
+                  disableEncryption:
+                    description: Whether to disable encryption for Kubernetes Secrets.
+                      Default value is false. Set to true to disable encryption.
                     type: boolean
                   enableRrsa:
                     description: Whether to enable cluster to support RRSA for kubernetes
@@ -422,8 +425,8 @@ spec:
                     description: 'The profile of cluster. Valid values:'
                     type: string
                   proxyMode:
-                    description: 'Proxy mode is option of kube-proxy. options: iptables|ipvs.
-                      default: ipvs.'
+                    description: 'kube-proxy proxy mode. Default: ipvs. Options: iptables,
+                      ipvs, nftables.'
                     type: string
                   rdsInstances:
                     description: (Removed since v1.212.0) RDS instance list, You can
@@ -591,9 +594,8 @@ spec:
                       nodes.
                     type: string
                   upgradePolicy:
-                    description: |-
-                      Configuration block for cluster upgrade operations. See upgrade_policy below.
-                      -> NOTE: This parameter only applies during resource update.
+                    description: Configuration block for cluster upgrade operations.
+                      See upgrade_policy below.
                     items:
                       properties:
                         controlPlaneOnly:
@@ -623,9 +625,7 @@ spec:
                       for more information.
                     type: string
                   vswitchIds:
-                    description: |-
-                      The vSwitches of the control plane.
-                      -> NOTE: Please take of note before updating the vswitch_ids:
+                    description: The vSwitches of the control plane.
                     items:
                       type: string
                     type: array
@@ -991,9 +991,8 @@ spec:
                       or none. Default to none.
                     type: string
                   customSan:
-                    description: |-
-                      Customize the certificate SAN, multiple IP or domain names are separated by English commas (,).
-                      -> NOTE: Make sure you have specified all certificate SANs before updating. Updating this field will lead APIServer to restart.
+                    description: Customize the certificate SAN, multiple IP or domain
+                      names are separated by English commas (,).
                     type: string
                   deleteOptions:
                     description: Delete options, only work for deleting resource.
@@ -1013,6 +1012,10 @@ spec:
                     type: array
                   deletionProtection:
                     description: Whether to enable cluster deletion protection.
+                    type: boolean
+                  disableEncryption:
+                    description: Whether to disable encryption for Kubernetes Secrets.
+                      Default value is false. Set to true to disable encryption.
                     type: boolean
                   enableRrsa:
                     description: Whether to enable cluster to support RRSA for kubernetes
@@ -1223,8 +1226,8 @@ spec:
                     description: 'The profile of cluster. Valid values:'
                     type: string
                   proxyMode:
-                    description: 'Proxy mode is option of kube-proxy. options: iptables|ipvs.
-                      default: ipvs.'
+                    description: 'kube-proxy proxy mode. Default: ipvs. Options: iptables,
+                      ipvs, nftables.'
                     type: string
                   rdsInstances:
                     description: (Removed since v1.212.0) RDS instance list, You can
@@ -1388,9 +1391,8 @@ spec:
                       nodes.
                     type: string
                   upgradePolicy:
-                    description: |-
-                      Configuration block for cluster upgrade operations. See upgrade_policy below.
-                      -> NOTE: This parameter only applies during resource update.
+                    description: Configuration block for cluster upgrade operations.
+                      See upgrade_policy below.
                     items:
                       properties:
                         controlPlaneOnly:
@@ -1420,9 +1422,7 @@ spec:
                       for more information.
                     type: string
                   vswitchIds:
-                    description: |-
-                      The vSwitches of the control plane.
-                      -> NOTE: Please take of note before updating the vswitch_ids:
+                    description: The vSwitches of the control plane.
                     items:
                       type: string
                     type: array
@@ -1962,9 +1962,8 @@ spec:
                       or none. Default to none.
                     type: string
                   customSan:
-                    description: |-
-                      Customize the certificate SAN, multiple IP or domain names are separated by English commas (,).
-                      -> NOTE: Make sure you have specified all certificate SANs before updating. Updating this field will lead APIServer to restart.
+                    description: Customize the certificate SAN, multiple IP or domain
+                      names are separated by English commas (,).
                     type: string
                   deleteOptions:
                     description: Delete options, only work for deleting resource.
@@ -1984,6 +1983,10 @@ spec:
                     type: array
                   deletionProtection:
                     description: Whether to enable cluster deletion protection.
+                    type: boolean
+                  disableEncryption:
+                    description: Whether to disable encryption for Kubernetes Secrets.
+                      Default value is false. Set to true to disable encryption.
                     type: boolean
                   enableRrsa:
                     description: Whether to enable cluster to support RRSA for kubernetes
@@ -2180,8 +2183,8 @@ spec:
                     description: 'The profile of cluster. Valid values:'
                     type: string
                   proxyMode:
-                    description: 'Proxy mode is option of kube-proxy. options: iptables|ipvs.
-                      default: ipvs.'
+                    description: 'kube-proxy proxy mode. Default: ipvs. Options: iptables,
+                      ipvs, nftables.'
                     type: string
                   rdsInstances:
                     description: (Removed since v1.212.0) RDS instance list, You can
@@ -2302,9 +2305,8 @@ spec:
                       nodes.
                     type: string
                   upgradePolicy:
-                    description: |-
-                      Configuration block for cluster upgrade operations. See upgrade_policy below.
-                      -> NOTE: This parameter only applies during resource update.
+                    description: Configuration block for cluster upgrade operations.
+                      See upgrade_policy below.
                     items:
                       properties:
                         controlPlaneOnly:
@@ -2337,9 +2339,7 @@ spec:
                     description: The ID of VPC where the current cluster is located.
                     type: string
                   vswitchIds:
-                    description: |-
-                      The vSwitches of the control plane.
-                      -> NOTE: Please take of note before updating the vswitch_ids:
+                    description: The vSwitches of the control plane.
                     items:
                       type: string
                     type: array

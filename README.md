@@ -154,6 +154,10 @@ If it does not, you can manually run the GitHub workflow named CI on the release
 
 Tag the release branch with the version by running the GitHub workflow named `Tag` on the release branch.
 
+### Prerequisite for Publishing New Smaller Scoped Providers
+
+Please ask an authorized person to create a smaller scoped provider repository in the upbound.io crossplane-contrib organization, so that the consecutive "Publish The Providers" step can succeed. The respository needs to be publicly accessible and be published to the Upbound marketplace itself.
+
 ### Publish The Providers
 
 Build and push the family packages using the `Publish Provider Packages` Github Actions workflow. To do this, you need to provide the values of the following parameters:

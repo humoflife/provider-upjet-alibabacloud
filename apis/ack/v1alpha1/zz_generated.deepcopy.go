@@ -8711,6 +8711,11 @@ func (in *ManagedKubernetesInitParameters) DeepCopyInto(out *ManagedKubernetesIn
 		*out = new(bool)
 		**out = **in
 	}
+	if in.DisableEncryption != nil {
+		in, out := &in.DisableEncryption, &out.DisableEncryption
+		*out = new(bool)
+		**out = **in
+	}
 	if in.EnableRrsa != nil {
 		in, out := &in.EnableRrsa, &out.EnableRrsa
 		*out = new(bool)
@@ -9415,6 +9420,11 @@ func (in *ManagedKubernetesObservation) DeepCopyInto(out *ManagedKubernetesObser
 		*out = new(bool)
 		**out = **in
 	}
+	if in.DisableEncryption != nil {
+		in, out := &in.DisableEncryption, &out.DisableEncryption
+		*out = new(bool)
+		**out = **in
+	}
 	if in.EnableRrsa != nil {
 		in, out := &in.EnableRrsa, &out.EnableRrsa
 		*out = new(bool)
@@ -9994,6 +10004,11 @@ func (in *ManagedKubernetesParameters) DeepCopyInto(out *ManagedKubernetesParame
 	}
 	if in.DeletionProtection != nil {
 		in, out := &in.DeletionProtection, &out.DeletionProtection
+		*out = new(bool)
+		**out = **in
+	}
+	if in.DisableEncryption != nil {
+		in, out := &in.DisableEncryption, &out.DisableEncryption
 		*out = new(bool)
 		**out = **in
 	}

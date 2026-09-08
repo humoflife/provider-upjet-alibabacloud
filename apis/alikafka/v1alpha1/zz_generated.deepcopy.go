@@ -1688,6 +1688,16 @@ func (in *SaslACLInitParameters) DeepCopyInto(out *SaslACLInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ACLOperationTypes != nil {
+		in, out := &in.ACLOperationTypes, &out.ACLOperationTypes
+		*out = new(string)
+		**out = **in
+	}
+	if in.ACLPermissionType != nil {
+		in, out := &in.ACLPermissionType, &out.ACLPermissionType
+		*out = new(string)
+		**out = **in
+	}
 	if in.ACLResourceName != nil {
 		in, out := &in.ACLResourceName, &out.ACLResourceName
 		*out = new(string)
@@ -1710,6 +1720,11 @@ func (in *SaslACLInitParameters) DeepCopyInto(out *SaslACLInitParameters) {
 	}
 	if in.ACLResourceType != nil {
 		in, out := &in.ACLResourceType, &out.ACLResourceType
+		*out = new(string)
+		**out = **in
+	}
+	if in.Host != nil {
+		in, out := &in.Host, &out.Host
 		*out = new(string)
 		**out = **in
 	}
@@ -1795,6 +1810,16 @@ func (in *SaslACLObservation) DeepCopyInto(out *SaslACLObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ACLOperationTypes != nil {
+		in, out := &in.ACLOperationTypes, &out.ACLOperationTypes
+		*out = new(string)
+		**out = **in
+	}
+	if in.ACLPermissionType != nil {
+		in, out := &in.ACLPermissionType, &out.ACLPermissionType
+		*out = new(string)
+		**out = **in
+	}
 	if in.ACLResourceName != nil {
 		in, out := &in.ACLResourceName, &out.ACLResourceName
 		*out = new(string)
@@ -1850,6 +1875,16 @@ func (in *SaslACLParameters) DeepCopyInto(out *SaslACLParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ACLOperationTypes != nil {
+		in, out := &in.ACLOperationTypes, &out.ACLOperationTypes
+		*out = new(string)
+		**out = **in
+	}
+	if in.ACLPermissionType != nil {
+		in, out := &in.ACLPermissionType, &out.ACLPermissionType
+		*out = new(string)
+		**out = **in
+	}
 	if in.ACLResourceName != nil {
 		in, out := &in.ACLResourceName, &out.ACLResourceName
 		*out = new(string)
@@ -1872,6 +1907,11 @@ func (in *SaslACLParameters) DeepCopyInto(out *SaslACLParameters) {
 	}
 	if in.ACLResourceType != nil {
 		in, out := &in.ACLResourceType, &out.ACLResourceType
+		*out = new(string)
+		**out = **in
+	}
+	if in.Host != nil {
+		in, out := &in.Host, &out.Host
 		*out = new(string)
 		**out = **in
 	}

@@ -18,10 +18,10 @@ type IPv6CidrBlocksInitParameters struct {
 
 type IPv6CidrBlocksObservation struct {
 
-	// The IPv6 CIDR block of the default VPC.
+	// The IPv6 CIDR block of the default VPC. Please use the new resource alicloud_vpc_ipv6_cidr_block.
 	IPv6CidrBlock *string `json:"ipv6CidrBlock,omitempty" tf:"ipv6_cidr_block,omitempty"`
 
-	// The IPv6 address segment type of the VPC. Value:
+	// The IPv6 address segment type of the VPC. Please use the new resource alicloud_vpc_ipv6_cidr_block. Value:
 	IPv6Isp *string `json:"ipv6Isp,omitempty" tf:"ipv6_isp,omitempty"`
 }
 
@@ -58,10 +58,10 @@ type VPCInitParameters struct {
 	// The ID of the IP Address Manager (IPAM) pool that contains IPv4 addresses.
 	IPv4IpamPoolID *string `json:"ipv4IpamPoolId,omitempty" tf:"ipv4_ipam_pool_id,omitempty"`
 
-	// The IPv6 CIDR block of the default VPC.
+	// The IPv6 CIDR block of the default VPC. Please use the new resource alicloud_vpc_ipv6_cidr_block.
 	IPv6CidrBlock *string `json:"ipv6CidrBlock,omitempty" tf:"ipv6_cidr_block,omitempty"`
 
-	// The IPv6 address segment type of the VPC. Value:
+	// The IPv6 address segment type of the VPC. Please use the new resource alicloud_vpc_ipv6_cidr_block. Value:
 	IPv6Isp *string `json:"ipv6Isp,omitempty" tf:"ipv6_isp,omitempty"`
 
 	// Specifies whether to create the default VPC in the specified region. Valid values:
@@ -138,13 +138,13 @@ type VPCObservation struct {
 	// The ID of the IP Address Manager (IPAM) pool that contains IPv4 addresses.
 	IPv4IpamPoolID *string `json:"ipv4IpamPoolId,omitempty" tf:"ipv4_ipam_pool_id,omitempty"`
 
-	// The IPv6 CIDR block of the default VPC.
+	// The IPv6 CIDR block of the default VPC. Please use the new resource alicloud_vpc_ipv6_cidr_block.
 	IPv6CidrBlock *string `json:"ipv6CidrBlock,omitempty" tf:"ipv6_cidr_block,omitempty"`
 
 	// The IPv6 CIDR block information of the VPC.
 	IPv6CidrBlocks []IPv6CidrBlocksObservation `json:"ipv6CidrBlocks,omitempty" tf:"ipv6_cidr_blocks,omitempty"`
 
-	// The IPv6 address segment type of the VPC. Value:
+	// The IPv6 address segment type of the VPC. Please use the new resource alicloud_vpc_ipv6_cidr_block. Value:
 	IPv6Isp *string `json:"ipv6Isp,omitempty" tf:"ipv6_isp,omitempty"`
 
 	// Specifies whether to create the default VPC in the specified region. Valid values:
@@ -239,11 +239,11 @@ type VPCParameters struct {
 	// +kubebuilder:validation:Optional
 	IPv4IpamPoolID *string `json:"ipv4IpamPoolId,omitempty" tf:"ipv4_ipam_pool_id,omitempty"`
 
-	// The IPv6 CIDR block of the default VPC.
+	// The IPv6 CIDR block of the default VPC. Please use the new resource alicloud_vpc_ipv6_cidr_block.
 	// +kubebuilder:validation:Optional
 	IPv6CidrBlock *string `json:"ipv6CidrBlock,omitempty" tf:"ipv6_cidr_block,omitempty"`
 
-	// The IPv6 address segment type of the VPC. Value:
+	// The IPv6 address segment type of the VPC. Please use the new resource alicloud_vpc_ipv6_cidr_block. Value:
 	// +kubebuilder:validation:Optional
 	IPv6Isp *string `json:"ipv6Isp,omitempty" tf:"ipv6_isp,omitempty"`
 

@@ -266,7 +266,6 @@ type ManagedKubernetesInitParameters struct {
 	ControlPlaneLogTTL *string `json:"controlPlaneLogTtl,omitempty" tf:"control_plane_log_ttl,omitempty"`
 
 	// Customize the certificate SAN, multiple IP or domain names are separated by English commas (,).
-	// -> NOTE: Make sure you have specified all certificate SANs before updating. Updating this field will lead APIServer to restart.
 	CustomSan *string `json:"customSan,omitempty" tf:"custom_san,omitempty"`
 
 	// Delete options, only work for deleting resource. See delete_options below.
@@ -274,6 +273,9 @@ type ManagedKubernetesInitParameters struct {
 
 	// Whether to enable cluster deletion protection.
 	DeletionProtection *bool `json:"deletionProtection,omitempty" tf:"deletion_protection,omitempty"`
+
+	// Whether to disable encryption for Kubernetes Secrets. Default value is false. Set to true to disable encryption.
+	DisableEncryption *bool `json:"disableEncryption,omitempty" tf:"disable_encryption,omitempty"`
 
 	// Whether to enable cluster to support RRSA for kubernetes version 1.22.3+. Default to false. Once the RRSA function is turned on, it is not allowed to turn off. If your cluster has enabled this function, please manually modify your tf file and add the rrsa configuration to the file, learn more RAM Roles for Service Accounts.
 	EnableRrsa *bool `json:"enableRrsa,omitempty" tf:"enable_rrsa,omitempty"`
@@ -361,7 +363,7 @@ type ManagedKubernetesInitParameters struct {
 	// The profile of cluster. Valid values:
 	Profile *string `json:"profile,omitempty" tf:"profile,omitempty"`
 
-	// Proxy mode is option of kube-proxy. options: iptables|ipvs. default: ipvs.
+	// kube-proxy proxy mode. Default: ipvs. Options: iptables, ipvs, nftables.
 	ProxyMode *string `json:"proxyMode,omitempty" tf:"proxy_mode,omitempty"`
 
 	// (Removed since v1.212.0) RDS instance list, You can choose which RDS instances whitelist to add instances to.
@@ -412,7 +414,6 @@ type ManagedKubernetesInitParameters struct {
 	Timezone *string `json:"timezone,omitempty" tf:"timezone,omitempty"`
 
 	// Configuration block for cluster upgrade operations. See upgrade_policy below.
-	// -> NOTE: This parameter only applies during resource update.
 	UpgradePolicy []ManagedKubernetesUpgradePolicyInitParameters `json:"upgradePolicy,omitempty" tf:"upgrade_policy,omitempty"`
 
 	// The path of customized CA cert, you can use this CA to sign client certs to connect your cluster.
@@ -425,7 +426,6 @@ type ManagedKubernetesInitParameters struct {
 	Version *string `json:"version,omitempty" tf:"version,omitempty"`
 
 	// The vSwitches of the control plane.
-	// -> NOTE: Please take of note before updating the vswitch_ids:
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/vpc/v1alpha1.Vswitch
 	VswitchIds []*string `json:"vswitchIds,omitempty" tf:"vswitch_ids,omitempty"`
 
@@ -581,7 +581,6 @@ type ManagedKubernetesObservation struct {
 	ControlPlaneLogTTL *string `json:"controlPlaneLogTtl,omitempty" tf:"control_plane_log_ttl,omitempty"`
 
 	// Customize the certificate SAN, multiple IP or domain names are separated by English commas (,).
-	// -> NOTE: Make sure you have specified all certificate SANs before updating. Updating this field will lead APIServer to restart.
 	CustomSan *string `json:"customSan,omitempty" tf:"custom_san,omitempty"`
 
 	// Delete options, only work for deleting resource. See delete_options below.
@@ -589,6 +588,9 @@ type ManagedKubernetesObservation struct {
 
 	// Whether to enable cluster deletion protection.
 	DeletionProtection *bool `json:"deletionProtection,omitempty" tf:"deletion_protection,omitempty"`
+
+	// Whether to disable encryption for Kubernetes Secrets. Default value is false. Set to true to disable encryption.
+	DisableEncryption *bool `json:"disableEncryption,omitempty" tf:"disable_encryption,omitempty"`
 
 	// Whether to enable cluster to support RRSA for kubernetes version 1.22.3+. Default to false. Once the RRSA function is turned on, it is not allowed to turn off. If your cluster has enabled this function, please manually modify your tf file and add the rrsa configuration to the file, learn more RAM Roles for Service Accounts.
 	EnableRrsa *bool `json:"enableRrsa,omitempty" tf:"enable_rrsa,omitempty"`
@@ -679,7 +681,7 @@ type ManagedKubernetesObservation struct {
 	// The profile of cluster. Valid values:
 	Profile *string `json:"profile,omitempty" tf:"profile,omitempty"`
 
-	// Proxy mode is option of kube-proxy. options: iptables|ipvs. default: ipvs.
+	// kube-proxy proxy mode. Default: ipvs. Options: iptables, ipvs, nftables.
 	ProxyMode *string `json:"proxyMode,omitempty" tf:"proxy_mode,omitempty"`
 
 	// (Removed since v1.212.0) RDS instance list, You can choose which RDS instances whitelist to add instances to.
@@ -733,7 +735,6 @@ type ManagedKubernetesObservation struct {
 	Timezone *string `json:"timezone,omitempty" tf:"timezone,omitempty"`
 
 	// Configuration block for cluster upgrade operations. See upgrade_policy below.
-	// -> NOTE: This parameter only applies during resource update.
 	UpgradePolicy []ManagedKubernetesUpgradePolicyObservation `json:"upgradePolicy,omitempty" tf:"upgrade_policy,omitempty"`
 
 	// The path of customized CA cert, you can use this CA to sign client certs to connect your cluster.
@@ -749,7 +750,6 @@ type ManagedKubernetesObservation struct {
 	Version *string `json:"version,omitempty" tf:"version,omitempty"`
 
 	// The vSwitches of the control plane.
-	// -> NOTE: Please take of note before updating the vswitch_ids:
 	VswitchIds []*string `json:"vswitchIds,omitempty" tf:"vswitch_ids,omitempty"`
 
 	// (Removed since v1.212.0) Enable worker payment auto-renew, defaults to false.
@@ -877,7 +877,6 @@ type ManagedKubernetesParameters struct {
 	ControlPlaneLogTTL *string `json:"controlPlaneLogTtl,omitempty" tf:"control_plane_log_ttl,omitempty"`
 
 	// Customize the certificate SAN, multiple IP or domain names are separated by English commas (,).
-	// -> NOTE: Make sure you have specified all certificate SANs before updating. Updating this field will lead APIServer to restart.
 	// +kubebuilder:validation:Optional
 	CustomSan *string `json:"customSan,omitempty" tf:"custom_san,omitempty"`
 
@@ -888,6 +887,10 @@ type ManagedKubernetesParameters struct {
 	// Whether to enable cluster deletion protection.
 	// +kubebuilder:validation:Optional
 	DeletionProtection *bool `json:"deletionProtection,omitempty" tf:"deletion_protection,omitempty"`
+
+	// Whether to disable encryption for Kubernetes Secrets. Default value is false. Set to true to disable encryption.
+	// +kubebuilder:validation:Optional
+	DisableEncryption *bool `json:"disableEncryption,omitempty" tf:"disable_encryption,omitempty"`
 
 	// Whether to enable cluster to support RRSA for kubernetes version 1.22.3+. Default to false. Once the RRSA function is turned on, it is not allowed to turn off. If your cluster has enabled this function, please manually modify your tf file and add the rrsa configuration to the file, learn more RAM Roles for Service Accounts.
 	// +kubebuilder:validation:Optional
@@ -1003,7 +1006,7 @@ type ManagedKubernetesParameters struct {
 	// +kubebuilder:validation:Optional
 	Profile *string `json:"profile,omitempty" tf:"profile,omitempty"`
 
-	// Proxy mode is option of kube-proxy. options: iptables|ipvs. default: ipvs.
+	// kube-proxy proxy mode. Default: ipvs. Options: iptables, ipvs, nftables.
 	// +kubebuilder:validation:Optional
 	ProxyMode *string `json:"proxyMode,omitempty" tf:"proxy_mode,omitempty"`
 
@@ -1072,7 +1075,6 @@ type ManagedKubernetesParameters struct {
 	Timezone *string `json:"timezone,omitempty" tf:"timezone,omitempty"`
 
 	// Configuration block for cluster upgrade operations. See upgrade_policy below.
-	// -> NOTE: This parameter only applies during resource update.
 	// +kubebuilder:validation:Optional
 	UpgradePolicy []ManagedKubernetesUpgradePolicyParameters `json:"upgradePolicy,omitempty" tf:"upgrade_policy,omitempty"`
 
@@ -1089,7 +1091,6 @@ type ManagedKubernetesParameters struct {
 	Version *string `json:"version,omitempty" tf:"version,omitempty"`
 
 	// The vSwitches of the control plane.
-	// -> NOTE: Please take of note before updating the vswitch_ids:
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/vpc/v1alpha1.Vswitch
 	// +kubebuilder:validation:Optional
 	VswitchIds []*string `json:"vswitchIds,omitempty" tf:"vswitch_ids,omitempty"`

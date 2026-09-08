@@ -15,10 +15,16 @@ import (
 
 type SaslACLInitParameters struct {
 
-	// Operation type for this acl. The operation type can only be "Write" and "Read".
+	// Operation type. Valid values:
 	ACLOperationType *string `json:"aclOperationType,omitempty" tf:"acl_operation_type,omitempty"`
 
-	// Resource name for this acl. The resource name should be a topic or consumer group name.
+	// Batch authorization operation types. Multiple operations are separated by commas (,). Valid values:
+	ACLOperationTypes *string `json:"aclOperationTypes,omitempty" tf:"acl_operation_types,omitempty"`
+
+	// Authorization method. Value:
+	ACLPermissionType *string `json:"aclPermissionType,omitempty" tf:"acl_permission_type,omitempty"`
+
+	// The resource name.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/alikafka/v1alpha1.Topic
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("topic",false)
 	ACLResourceName *string `json:"aclResourceName,omitempty" tf:"acl_resource_name,omitempty"`
@@ -31,13 +37,17 @@ type SaslACLInitParameters struct {
 	// +kubebuilder:validation:Optional
 	ACLResourceNameSelector *v1.Selector `json:"aclResourceNameSelector,omitempty" tf:"-"`
 
-	// Resource pattern type for this acl. The resource pattern support two types "LITERAL" and "PREFIXED". "LITERAL": A literal name defines the full name of a resource. The special wildcard character "*" can be used to represent a resource with any name. "PREFIXED": A prefixed name defines a prefix for a resource.
+	// Match the pattern. Valid values:
 	ACLResourcePatternType *string `json:"aclResourcePatternType,omitempty" tf:"acl_resource_pattern_type,omitempty"`
 
-	// Resource type for this acl. The resource type can only be "Topic", "Group". Since version 1.247.0, the resource type support "Cluster" and "TransactionalId".
+	// The resource type. Valid values:
 	ACLResourceType *string `json:"aclResourceType,omitempty" tf:"acl_resource_type,omitempty"`
 
-	// ID of the ALIKAFKA Instance that owns the groups.
+	// The host of the acl.
+	// -> NOTE: From version 1.270.0, host can be set.
+	Host *string `json:"host,omitempty" tf:"host,omitempty"`
+
+	// The instance ID.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/alikafka/v1alpha1.Instance
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.IdExtractor()
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
@@ -50,7 +60,7 @@ type SaslACLInitParameters struct {
 	// +kubebuilder:validation:Optional
 	InstanceIDSelector *v1.Selector `json:"instanceIdSelector,omitempty" tf:"-"`
 
-	// Username for the sasl user. The length should between 1 to 64 characters. The user should be an existed sasl user.
+	// The user name.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/alikafka/v1alpha1.SaslUser
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.AliKafkaSaslUserUsernameExtractor()
 	Username *string `json:"username,omitempty" tf:"username,omitempty"`
@@ -66,38 +76,53 @@ type SaslACLInitParameters struct {
 
 type SaslACLObservation struct {
 
-	// Operation type for this acl. The operation type can only be "Write" and "Read".
+	// Operation type. Valid values:
 	ACLOperationType *string `json:"aclOperationType,omitempty" tf:"acl_operation_type,omitempty"`
 
-	// Resource name for this acl. The resource name should be a topic or consumer group name.
+	// Batch authorization operation types. Multiple operations are separated by commas (,). Valid values:
+	ACLOperationTypes *string `json:"aclOperationTypes,omitempty" tf:"acl_operation_types,omitempty"`
+
+	// Authorization method. Value:
+	ACLPermissionType *string `json:"aclPermissionType,omitempty" tf:"acl_permission_type,omitempty"`
+
+	// The resource name.
 	ACLResourceName *string `json:"aclResourceName,omitempty" tf:"acl_resource_name,omitempty"`
 
-	// Resource pattern type for this acl. The resource pattern support two types "LITERAL" and "PREFIXED". "LITERAL": A literal name defines the full name of a resource. The special wildcard character "*" can be used to represent a resource with any name. "PREFIXED": A prefixed name defines a prefix for a resource.
+	// Match the pattern. Valid values:
 	ACLResourcePatternType *string `json:"aclResourcePatternType,omitempty" tf:"acl_resource_pattern_type,omitempty"`
 
-	// Resource type for this acl. The resource type can only be "Topic", "Group". Since version 1.247.0, the resource type support "Cluster" and "TransactionalId".
+	// The resource type. Valid values:
 	ACLResourceType *string `json:"aclResourceType,omitempty" tf:"acl_resource_type,omitempty"`
 
 	// The host of the acl.
+	// -> NOTE: From version 1.270.0, host can be set.
 	Host *string `json:"host,omitempty" tf:"host,omitempty"`
 
-	// The key of the resource supplied above. The value is formulated as <instance_id>:<username>:<acl_resource_type>:<acl_resource_name>:<acl_resource_pattern_type>:<acl_operation_type>.
+	// The ID of the resource supplied above. The value is formulated as <instance_id>:<username>:<acl_resource_type>:<acl_resource_name>:<acl_resource_pattern_type>:<acl_operation_type>.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// ID of the ALIKAFKA Instance that owns the groups.
+	// The instance ID.
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
 
-	// Username for the sasl user. The length should between 1 to 64 characters. The user should be an existed sasl user.
+	// The user name.
 	Username *string `json:"username,omitempty" tf:"username,omitempty"`
 }
 
 type SaslACLParameters struct {
 
-	// Operation type for this acl. The operation type can only be "Write" and "Read".
+	// Operation type. Valid values:
 	// +kubebuilder:validation:Optional
 	ACLOperationType *string `json:"aclOperationType,omitempty" tf:"acl_operation_type,omitempty"`
 
-	// Resource name for this acl. The resource name should be a topic or consumer group name.
+	// Batch authorization operation types. Multiple operations are separated by commas (,). Valid values:
+	// +kubebuilder:validation:Optional
+	ACLOperationTypes *string `json:"aclOperationTypes,omitempty" tf:"acl_operation_types,omitempty"`
+
+	// Authorization method. Value:
+	// +kubebuilder:validation:Optional
+	ACLPermissionType *string `json:"aclPermissionType,omitempty" tf:"acl_permission_type,omitempty"`
+
+	// The resource name.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/alikafka/v1alpha1.Topic
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("topic",false)
 	// +kubebuilder:validation:Optional
@@ -111,15 +136,20 @@ type SaslACLParameters struct {
 	// +kubebuilder:validation:Optional
 	ACLResourceNameSelector *v1.Selector `json:"aclResourceNameSelector,omitempty" tf:"-"`
 
-	// Resource pattern type for this acl. The resource pattern support two types "LITERAL" and "PREFIXED". "LITERAL": A literal name defines the full name of a resource. The special wildcard character "*" can be used to represent a resource with any name. "PREFIXED": A prefixed name defines a prefix for a resource.
+	// Match the pattern. Valid values:
 	// +kubebuilder:validation:Optional
 	ACLResourcePatternType *string `json:"aclResourcePatternType,omitempty" tf:"acl_resource_pattern_type,omitempty"`
 
-	// Resource type for this acl. The resource type can only be "Topic", "Group". Since version 1.247.0, the resource type support "Cluster" and "TransactionalId".
+	// The resource type. Valid values:
 	// +kubebuilder:validation:Optional
 	ACLResourceType *string `json:"aclResourceType,omitempty" tf:"acl_resource_type,omitempty"`
 
-	// ID of the ALIKAFKA Instance that owns the groups.
+	// The host of the acl.
+	// -> NOTE: From version 1.270.0, host can be set.
+	// +kubebuilder:validation:Optional
+	Host *string `json:"host,omitempty" tf:"host,omitempty"`
+
+	// The instance ID.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/alikafka/v1alpha1.Instance
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.IdExtractor()
 	// +kubebuilder:validation:Optional
@@ -138,7 +168,7 @@ type SaslACLParameters struct {
 	// +kubebuilder:validation:Optional
 	Region *string `json:"region,omitempty" tf:"-"`
 
-	// Username for the sasl user. The length should between 1 to 64 characters. The user should be an existed sasl user.
+	// The user name.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/alikafka/v1alpha1.SaslUser
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.AliKafkaSaslUserUsernameExtractor()
 	// +kubebuilder:validation:Optional

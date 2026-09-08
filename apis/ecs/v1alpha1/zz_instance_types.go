@@ -60,7 +60,7 @@ type InstanceDataDisksInitParameters struct {
 	// Specifies whether to enable the performance burst feature for the system disk. Valid values:
 	BurstingEnabled *bool `json:"burstingEnabled,omitempty" tf:"bursting_enabled,omitempty"`
 
-	// The category of the disk:
+	// The category of the disk. Default value: cloud_efficiency. Valid values:
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
 	// Delete this data disk when the instance is destroyed. It only works on cloud, cloud_efficiency, cloud_essd, cloud_ssd disk. If the category of this data disk was ephemeral_ssd, please don't set this param. Default value: true.
@@ -112,7 +112,7 @@ type InstanceDataDisksObservation struct {
 	// Specifies whether to enable the performance burst feature for the system disk. Valid values:
 	BurstingEnabled *bool `json:"burstingEnabled,omitempty" tf:"bursting_enabled,omitempty"`
 
-	// The category of the disk:
+	// The category of the disk. Default value: cloud_efficiency. Valid values:
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
 	// Delete this data disk when the instance is destroyed. It only works on cloud, cloud_efficiency, cloud_essd, cloud_ssd disk. If the category of this data disk was ephemeral_ssd, please don't set this param. Default value: true.
@@ -156,7 +156,7 @@ type InstanceDataDisksParameters struct {
 	// +kubebuilder:validation:Optional
 	BurstingEnabled *bool `json:"burstingEnabled,omitempty" tf:"bursting_enabled,omitempty"`
 
-	// The category of the disk:
+	// The category of the disk. Default value: cloud_efficiency. Valid values:
 	// +kubebuilder:validation:Optional
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
@@ -425,7 +425,7 @@ type InstanceInitParameters struct {
 	// The Id of resource group which the instance belongs.
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
-	// The name of the Resource Access Management (RAM) role. NOTE: From version 1.250.0, If you want to use role_name, We recommend you to use the resource alicloud_ecs_ram_role_attachment.
+	// The name of the Resource Access Management (RAM) role. NOTE: From version 1.250.0, If you want to use role_name, We recommend you to use the resource alicloud_ecs_ram_role_attachment. Field role_name has been deprecated from provider version 1.275.0. New resource alicloud_ecs_ram_role_attachment instead. From version 1.276.0, role_name can be modified.
 	RoleName *string `json:"roleName,omitempty" tf:"role_name,omitempty"`
 
 	// The number of private IP addresses to be automatically assigned from within the CIDR block of the vswitch. NOTE: To assign secondary private IP addresses, you must specify secondary_private_ips or secondary_private_ip_address_count but not both.
@@ -455,6 +455,9 @@ type InstanceInitParameters struct {
 
 	// The retention time of the preemptive instance in hours. Valid values: 0, 1, 2, 3, 4, 5, 6. Retention duration 2~6 is under invitation test, please submit a work order if you need to open. If the value is 0, the mode is no protection period. Default value is 1.
 	SpotDuration *float64 `json:"spotDuration,omitempty" tf:"spot_duration,omitempty"`
+
+	// The interruption mode of the spot instance. Default value: Terminate. Valid values:
+	SpotInterruptionBehavior *string `json:"spotInterruptionBehavior,omitempty" tf:"spot_interruption_behavior,omitempty"`
 
 	// The hourly price threshold of a instance, and it takes effect only when parameter 'spot_strategy' is 'SpotWithPriceLimit'. Three decimals is allowed at most.
 	SpotPriceLimit *float64 `json:"spotPriceLimit,omitempty" tf:"spot_price_limit,omitempty"`
@@ -810,7 +813,7 @@ type InstanceObservation struct {
 	// The Id of resource group which the instance belongs.
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
-	// The name of the Resource Access Management (RAM) role. NOTE: From version 1.250.0, If you want to use role_name, We recommend you to use the resource alicloud_ecs_ram_role_attachment.
+	// The name of the Resource Access Management (RAM) role. NOTE: From version 1.250.0, If you want to use role_name, We recommend you to use the resource alicloud_ecs_ram_role_attachment. Field role_name has been deprecated from provider version 1.275.0. New resource alicloud_ecs_ram_role_attachment instead. From version 1.276.0, role_name can be modified.
 	RoleName *string `json:"roleName,omitempty" tf:"role_name,omitempty"`
 
 	// The number of private IP addresses to be automatically assigned from within the CIDR block of the vswitch. NOTE: To assign secondary private IP addresses, you must specify secondary_private_ips or secondary_private_ip_address_count but not both.
@@ -829,6 +832,9 @@ type InstanceObservation struct {
 
 	// The retention time of the preemptive instance in hours. Valid values: 0, 1, 2, 3, 4, 5, 6. Retention duration 2~6 is under invitation test, please submit a work order if you need to open. If the value is 0, the mode is no protection period. Default value is 1.
 	SpotDuration *float64 `json:"spotDuration,omitempty" tf:"spot_duration,omitempty"`
+
+	// The interruption mode of the spot instance. Default value: Terminate. Valid values:
+	SpotInterruptionBehavior *string `json:"spotInterruptionBehavior,omitempty" tf:"spot_interruption_behavior,omitempty"`
 
 	// The hourly price threshold of a instance, and it takes effect only when parameter 'spot_strategy' is 'SpotWithPriceLimit'. Three decimals is allowed at most.
 	SpotPriceLimit *float64 `json:"spotPriceLimit,omitempty" tf:"spot_price_limit,omitempty"`
@@ -1157,7 +1163,7 @@ type InstanceParameters struct {
 	// +kubebuilder:validation:Optional
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
 
-	// The name of the Resource Access Management (RAM) role. NOTE: From version 1.250.0, If you want to use role_name, We recommend you to use the resource alicloud_ecs_ram_role_attachment.
+	// The name of the Resource Access Management (RAM) role. NOTE: From version 1.250.0, If you want to use role_name, We recommend you to use the resource alicloud_ecs_ram_role_attachment. Field role_name has been deprecated from provider version 1.275.0. New resource alicloud_ecs_ram_role_attachment instead. From version 1.276.0, role_name can be modified.
 	// +kubebuilder:validation:Optional
 	RoleName *string `json:"roleName,omitempty" tf:"role_name,omitempty"`
 
@@ -1193,6 +1199,10 @@ type InstanceParameters struct {
 	// The retention time of the preemptive instance in hours. Valid values: 0, 1, 2, 3, 4, 5, 6. Retention duration 2~6 is under invitation test, please submit a work order if you need to open. If the value is 0, the mode is no protection period. Default value is 1.
 	// +kubebuilder:validation:Optional
 	SpotDuration *float64 `json:"spotDuration,omitempty" tf:"spot_duration,omitempty"`
+
+	// The interruption mode of the spot instance. Default value: Terminate. Valid values:
+	// +kubebuilder:validation:Optional
+	SpotInterruptionBehavior *string `json:"spotInterruptionBehavior,omitempty" tf:"spot_interruption_behavior,omitempty"`
 
 	// The hourly price threshold of a instance, and it takes effect only when parameter 'spot_strategy' is 'SpotWithPriceLimit'. Three decimals is allowed at most.
 	// +kubebuilder:validation:Optional
