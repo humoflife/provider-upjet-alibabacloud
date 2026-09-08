@@ -4,8 +4,8 @@ metadata:
   annotations:
     meta.upbound.io/example-id: alikafka/v1alpha1/sasluser
   labels:
-    testing.upbound.io/example-name: sasluser
-  name: sasluser
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
     region: cn-beijing
@@ -16,7 +16,7 @@ spec:
       namespace: upbound-system
     instanceIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: sasluser
+        testing.upbound.io/example-name: default
 
 ---
 
@@ -37,12 +37,12 @@ metadata:
   annotations:
     meta.upbound.io/example-id: alikafka/v1alpha1/sasluser
   labels:
-    testing.upbound.io/example-name: sasluser
-  name: sasluser
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
     region: cn-beijing
-    name: crossplane-example-for-alikafka-sasluser
+    name: crossplane-example-for-alikafka
     config: '{"enable.acl":"true"}'
     partitionNum: 50
     diskType: 1
@@ -53,10 +53,10 @@ spec:
     serviceVersion: 2.2.0
     vswitchIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: sasluser
+        testing.upbound.io/example-name: default
     securityGroupSelector:
       matchLabels:
-        testing.upbound.io/example-name: sasluser
+        testing.upbound.io/example-name: default
 
 ---
 
@@ -66,14 +66,14 @@ metadata:
   annotations:
     meta.upbound.io/example-id: alikafka/v1alpha1/sasluser
   labels:
-    testing.upbound.io/example-name: sasluser
-  name: sasluser
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
     region: cn-beijing
     vpcIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: sasluser
+        testing.upbound.io/example-name: default
 
 ---
 
@@ -83,13 +83,13 @@ metadata:
   annotations:
     meta.upbound.io/example-id: alikafka/v1alpha1/sasluser
   labels:
-    testing.upbound.io/example-name: sasluser
-  name: sasluser
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
     region: cn-beijing
-    vpcName: crossplane-example-for-alikafka-sasluser
-    cidrBlock: 10.4.0.0/16
+    vpcName: crossplane-example-for-alikafka
+    cidrBlock: 172.16.0.0/12
 
 ---
 
@@ -99,14 +99,14 @@ metadata:
   annotations:
     meta.upbound.io/example-id: alikafka/v1alpha1/sasluser
   labels:
-    testing.upbound.io/example-name: sasluser
-  name: sasluser
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
     region: cn-beijing
-    vswitchName: crossplane-example-for-alikafka-sasluser
-    cidrBlock: 10.4.0.0/24
+    vswitchName: crossplane-example-for-alikafka
+    cidrBlock: 172.16.0.0/24
     zoneId: cn-beijing-h
     vpcIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: sasluser
+        testing.upbound.io/example-name: default

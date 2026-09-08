@@ -4,8 +4,8 @@ metadata:
   annotations:
     meta.upbound.io/example-id: alikafka/v1alpha1/scheduledscalingrule
   labels:
-    testing.upbound.io/example-name: scheduledscalingrule
-  name: scheduledscalingrule
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
     region: cn-beijing
@@ -19,14 +19,15 @@ spec:
       - Thursday
       - Friday
     durationMinutes: 100
-    firstScheduledTime: 1769578000000
+    # 2030-01-07T10:00:00 GMT+8, must stay in the future
+    firstScheduledTime: 1893981600000
     reservedPubFlow: 200
     reservedSubFlow: 200
     timeZone: GMT+8
     enable: false
     instanceIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: scheduledscalingrule
+        testing.upbound.io/example-name: serverless
 
 ---
 
@@ -36,8 +37,8 @@ metadata:
   annotations:
     meta.upbound.io/example-id: alikafka/v1alpha1/scheduledscalingrule
   labels:
-    testing.upbound.io/example-name: scheduledscalingrule
-  name: scheduledscalingrule
+    testing.upbound.io/example-name: serverless
+  name: serverless
 spec:
   forProvider:
     region: cn-beijing
@@ -51,10 +52,10 @@ spec:
         reservedSubscribeCapacity: 60
     vswitchIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: scheduledscalingrule
+        testing.upbound.io/example-name: default
     securityGroupSelector:
       matchLabels:
-        testing.upbound.io/example-name: scheduledscalingrule
+        testing.upbound.io/example-name: default
 
 ---
 
@@ -64,14 +65,14 @@ metadata:
   annotations:
     meta.upbound.io/example-id: alikafka/v1alpha1/scheduledscalingrule
   labels:
-    testing.upbound.io/example-name: scheduledscalingrule
-  name: scheduledscalingrule
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
     region: cn-beijing
     vpcIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: scheduledscalingrule
+        testing.upbound.io/example-name: default
 
 ---
 
@@ -81,13 +82,13 @@ metadata:
   annotations:
     meta.upbound.io/example-id: alikafka/v1alpha1/scheduledscalingrule
   labels:
-    testing.upbound.io/example-name: scheduledscalingrule
-  name: scheduledscalingrule
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
     region: cn-beijing
-    vpcName: crossplane-example-for-alikafka-scalingrule
-    cidrBlock: 10.4.0.0/16
+    vpcName: crossplane-example-for-alikafka
+    cidrBlock: 172.16.0.0/12
 
 ---
 
@@ -97,14 +98,14 @@ metadata:
   annotations:
     meta.upbound.io/example-id: alikafka/v1alpha1/scheduledscalingrule
   labels:
-    testing.upbound.io/example-name: scheduledscalingrule
-  name: scheduledscalingrule
+    testing.upbound.io/example-name: default
+  name: default
 spec:
   forProvider:
     region: cn-beijing
-    vswitchName: crossplane-example-for-alikafka-scalingrule
-    cidrBlock: 10.4.0.0/24
+    vswitchName: crossplane-example-for-alikafka
+    cidrBlock: 172.16.0.0/24
     zoneId: cn-beijing-h
     vpcIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: scheduledscalingrule
+        testing.upbound.io/example-name: default

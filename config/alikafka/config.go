@@ -82,10 +82,13 @@ func Configure(p *config.Provider) {
 			TerraformName: "alicloud_alikafka_sasl_user",
 			Extractor:     common.PathAliKafkaSaslUserUsernameExtractor,
 		}
-		// acl_resource_name is intentionally left unreferenced: it is
-		// polymorphic (topic name, group id, cluster name, or transaction id)
-		// and may be an asterisk, so it cannot be tied to a single resource
-		// kind.
+		// acl_resource_name is not configured here: upjet derives its
+		// reference to Topic from the upstream documentation example
+		// (alicloud_alikafka_topic.topic), which is what the ACL example uses.
+		// The field is polymorphic though (topic name, group id, cluster name
+		// or transaction id, and it may be an asterisk), so the reference is
+		// only a convenience: set acl_resource_name directly for anything that
+		// is not a topic managed by this provider.
 	})
 
 	p.AddResourceConfigurator("alicloud_alikafka_instance_allowed_ip_attachment", func(r *config.Resource) {
