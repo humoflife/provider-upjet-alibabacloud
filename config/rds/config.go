@@ -25,7 +25,6 @@ func Configure(p *config.Provider) {
 		// ConflictsWith: ["security_group_ids"] while both are
 		// Optional+Computed, so late-init would populate the pair and every
 		// plan would then error.
-		delete(r.TerraformResource.Schema, "security_group_id")
 		// Neither secret is flagged Sensitive upstream, so upjet would emit
 		// both as plain strings in spec and status.atProvider. Mark them so
 		// they become secret references instead.
@@ -78,11 +77,6 @@ func Configure(p *config.Provider) {
 		// the alias and its canonical field, so late-init would copy the
 		// aliases into spec alongside the canonical values. Drop them so only
 		// the canonical field is managed.
-		delete(r.TerraformResource.Schema, "backup_period")        // -> preferred_backup_period
-		delete(r.TerraformResource.Schema, "backup_time")          // -> preferred_backup_time
-		delete(r.TerraformResource.Schema, "log_backup")           // -> enable_backup_log
-		delete(r.TerraformResource.Schema, "log_retention_period") // -> log_backup_retention_period
-		delete(r.TerraformResource.Schema, "retention_period")     // -> backup_retention_period
 	})
 	p.AddResourceConfigurator("alicloud_db_connection", func(r *config.Resource) {
 		r.ShortGroup = string(common.RDS)
@@ -100,7 +94,6 @@ func Configure(p *config.Provider) {
 		// "name" is a deprecated, computed alias of "data_base_name"; both
 		// being computed causes TF refresh to fail with a ConflictsWith error
 		// ("data_base_name" conflicts with "name"). Drop the deprecated one.
-		delete(r.TerraformResource.Schema, "name")
 		// With the alias gone there is no other way to name a database, and TF
 		// create errors if neither is set, so make it required at the CRD level
 		// rather than letting it fail at apply time.
@@ -125,11 +118,6 @@ func Configure(p *config.Provider) {
 		// Deprecated, computed aliases that collide with their non-deprecated
 		// replacements on TF refresh (ConflictsWith). Drop each so only the
 		// canonical field is managed.
-		delete(r.TerraformResource.Schema, "name")        // -> account_name
-		delete(r.TerraformResource.Schema, "type")        // -> account_type
-		delete(r.TerraformResource.Schema, "instance_id") // -> db_instance_id
-		delete(r.TerraformResource.Schema, "description") // -> account_description
-		delete(r.TerraformResource.Schema, "password")    // -> account_password
 		// Same reasoning as data_base_name above: the alias is gone, so
 		// account_name is effectively mandatory.
 		r.TerraformResource.Schema["account_name"].Required = true

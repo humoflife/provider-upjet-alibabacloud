@@ -17,8 +17,6 @@ func Configure(p *config.Provider) {
 		// "name" is deprecated in favour of "certificate_name" and "lang" is
 		// deprecated upstream; drop them so the CRD only exposes the current
 		// fields.
-		delete(r.TerraformResource.Schema, "name")
-		delete(r.TerraformResource.Schema, "lang")
 
 		// The certificate body is not flagged sensitive upstream, so upjet
 		// generates it as a plain string. Mark it sensitive so it is supplied

@@ -34,9 +34,5 @@ func Configure(p *config.Provider) {
 		// appends the flat fields after zone_mappings, outside the alphabetical
 		// argument list, and the blocks cover every field they do
 		// (enabled/reason, status/reason) plus a read-only enabled_time.
-		delete(r.TerraformResource.Schema, "deletion_protection_enabled")    // -> deletion_protection_config.enabled
-		delete(r.TerraformResource.Schema, "deletion_protection_reason")     // -> deletion_protection_config.reason
-		delete(r.TerraformResource.Schema, "modification_protection_status") // -> modification_protection_config.status
-		delete(r.TerraformResource.Schema, "modification_protection_reason") // -> modification_protection_config.reason
 	})
 }

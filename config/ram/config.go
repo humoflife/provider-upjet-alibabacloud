@@ -7,7 +7,6 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("alicloud_ram_security_preference", func(r *config.Resource) {
 		// The provider no longer reads or writes this deprecated field.
 		// Use mfa_operation_for_login to configure the login MFA policy.
-		delete(r.TerraformResource.Schema, "enforce_mfa_for_login")
 		// Upstream documentation still claims the removed field is effective.
 		if r.MetaResource == nil {
 			return
@@ -23,7 +22,6 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "ram"
 
 		// Name has been deprecated in favor of groupName
-		delete(r.TerraformResource.Schema, "name")
 	})
 
 	p.AddResourceConfigurator("alicloud_ram_policy", func(r *config.Resource) {
@@ -32,13 +30,9 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "ram"
 
 		// Document has been deprecated in favor of policyDocument
-		delete(r.TerraformResource.Schema, "document")
 		// Name has been deprecated in favor of policyName
-		delete(r.TerraformResource.Schema, "name")
 		// Statement has been deprecated
-		delete(r.TerraformResource.Schema, "statement")
 		// Version has been deprecated
-		delete(r.TerraformResource.Schema, "version")
 	})
 
 	// alicloud_ram_group drops the deprecated "name" above, so references that
@@ -75,13 +69,5 @@ func Configure(p *config.Provider) {
 		// this resource, which would be "ram"
 		r.ShortGroup = "ram"
 
-		// Read returns both canonical fields and their deprecated aliases.
-		// Exclude the aliases so late initialization cannot add conflicting
-		// arguments to the configuration on the next refresh.
-		delete(r.TerraformResource.Schema, "name")
-		delete(r.TerraformResource.Schema, "document")
-		delete(r.TerraformResource.Schema, "ram_users")
-		delete(r.TerraformResource.Schema, "services")
-		delete(r.TerraformResource.Schema, "version")
 	})
 }

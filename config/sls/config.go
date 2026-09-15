@@ -18,7 +18,6 @@ func Configure(p *config.Provider) {
 		r.Kind = "Project"
 		// "name" is a deprecated alias of "project_name"; drop it so only the
 		// canonical field is generated.
-		delete(r.TerraformResource.Schema, "name")
 		// Upstream leaves project_name Optional+Computed only because the
 		// deprecated "name" alias could supply it instead. With that alias
 		// dropped there is no other way to name a project, so promote it to
@@ -36,8 +35,6 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = string(common.SLS)
 		r.Kind = "Store"
 		// "name"/"project" are deprecated aliases of "logstore_name"/"project_name".
-		delete(r.TerraformResource.Schema, "name")
-		delete(r.TerraformResource.Schema, "project")
 		// The scraped registry example still wires the deprecated "project" to
 		// alicloud_log_project's "name", which is deleted there as well. With the
 		// field gone no resolver is generated for it, so drop the dead reference.
