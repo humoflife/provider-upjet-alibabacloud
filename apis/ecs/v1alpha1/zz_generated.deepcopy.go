@@ -3801,11 +3801,6 @@ func (in *DiskInitParameters) DeepCopyInto(out *DiskInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.DedicatedBlockStorageClusterID != nil {
-		in, out := &in.DedicatedBlockStorageClusterID, &out.DedicatedBlockStorageClusterID
-		*out = new(string)
-		**out = **in
-	}
 	if in.DeleteAutoSnapshot != nil {
 		in, out := &in.DeleteAutoSnapshot, &out.DeleteAutoSnapshot
 		*out = new(bool)
@@ -4014,11 +4009,6 @@ func (in *DiskObservation) DeepCopyInto(out *DiskObservation) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.DedicatedBlockStorageClusterID != nil {
-		in, out := &in.DedicatedBlockStorageClusterID, &out.DedicatedBlockStorageClusterID
-		*out = new(string)
-		**out = **in
-	}
 	if in.DeleteAutoSnapshot != nil {
 		in, out := &in.DeleteAutoSnapshot, &out.DeleteAutoSnapshot
 		*out = new(bool)
@@ -4182,11 +4172,6 @@ func (in *DiskParameters) DeepCopyInto(out *DiskParameters) {
 	}
 	if in.Category != nil {
 		in, out := &in.Category, &out.Category
-		*out = new(string)
-		**out = **in
-	}
-	if in.DedicatedBlockStorageClusterID != nil {
-		in, out := &in.DedicatedBlockStorageClusterID, &out.DedicatedBlockStorageClusterID
 		*out = new(string)
 		**out = **in
 	}

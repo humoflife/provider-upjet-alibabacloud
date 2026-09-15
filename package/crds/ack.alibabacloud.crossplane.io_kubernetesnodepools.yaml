@@ -1151,22 +1151,6 @@ spec:
                           type: string
                       type: object
                     type: array
-                  rolloutPolicy:
-                    description: Rollout policy is used to specify the strategy when
-                      the node pool is rolling update. This field works when node
-                      pool updating. Please use rolling_policy to instead it from
-                      provider version 1.185.0. See rollout_policy below.
-                    items:
-                      properties:
-                        maxUnavailable:
-                          description: Maximum number of unavailable nodes during
-                            rolling upgrade. The value of this field should be greater
-                            than 0, and if it's set to a number less than or equal
-                            to 0, the default setting will be used. Please use max_parallelism
-                            to instead it from provider version 1.185.0.
-                          type: number
-                      type: object
-                    type: array
                   runtimeName:
                     description: The runtime name of containers. If not set, the cluster
                       runtime will be used as the node pool runtime. If you select
@@ -2720,22 +2704,6 @@ spec:
                           type: string
                       type: object
                     type: array
-                  rolloutPolicy:
-                    description: Rollout policy is used to specify the strategy when
-                      the node pool is rolling update. This field works when node
-                      pool updating. Please use rolling_policy to instead it from
-                      provider version 1.185.0. See rollout_policy below.
-                    items:
-                      properties:
-                        maxUnavailable:
-                          description: Maximum number of unavailable nodes during
-                            rolling upgrade. The value of this field should be greater
-                            than 0, and if it's set to a number less than or equal
-                            to 0, the default setting will be used. Please use max_parallelism
-                            to instead it from provider version 1.185.0.
-                          type: number
-                      type: object
-                    type: array
                   runtimeName:
                     description: The runtime name of containers. If not set, the cluster
                       runtime will be used as the node pool runtime. If you select
@@ -4187,22 +4155,6 @@ spec:
                           type: string
                       type: object
                     type: array
-                  rolloutPolicy:
-                    description: Rollout policy is used to specify the strategy when
-                      the node pool is rolling update. This field works when node
-                      pool updating. Please use rolling_policy to instead it from
-                      provider version 1.185.0. See rollout_policy below.
-                    items:
-                      properties:
-                        maxUnavailable:
-                          description: Maximum number of unavailable nodes during
-                            rolling upgrade. The value of this field should be greater
-                            than 0, and if it's set to a number less than or equal
-                            to 0, the default setting will be used. Please use max_parallelism
-                            to instead it from provider version 1.185.0.
-                          type: number
-                      type: object
-                    type: array
                   runtimeName:
                     description: The runtime name of containers. If not set, the cluster
                       runtime will be used as the node pool runtime. If you select
@@ -4434,10 +4386,6 @@ spec:
                     type: array
                   userData:
                     description: Node custom data, base64-encoded.
-                    type: string
-                  vpcId:
-                    description: The ID of the resource supplied above. The value
-                      is formulated as <cluster_id>:<node_pool_id>.
                     type: string
                   vswitchIds:
                     description: The vswitches used by node pool workers.
