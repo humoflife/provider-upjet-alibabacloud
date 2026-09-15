@@ -5,6 +5,7 @@ go 1.27.1
 require (
 	dario.cat/mergo v1.0.1
 	github.com/alecthomas/kingpin/v2 v2.4.0
+	github.com/aliyun/terraform-provider-alicloud v1.290.1-0.20260827115952-d31d4a12eca0
 	github.com/crossplane/crossplane-runtime v1.20.11
 	github.com/crossplane/crossplane-tools v0.0.0-20250725062323-29da02534659
 	github.com/crossplane/upjet v1.9.0
@@ -143,3 +144,13 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.6.0 // indirect
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )
+
+// Pinned deliberately. The v2.0.0 tag declares module path
+// "github.com/aliyun/terraform-provider-alicloud" (no /v2), so Go resolves it
+// to a pseudo-version that sorts BELOW the v1.29x releases. Without this
+// replace, any MVS bump or Renovate run would silently move the provider off
+// the SDK v2 code line and back onto v1, which cannot work with no-fork.
+// Remove once upstream ships a release with a proper /v2 module path.
+// Must refer to the same upstream commit as TERRAFORM_PROVIDER_VERSION in the
+// Makefile, which pins the registry release config/schema.json is generated from.
+replace github.com/aliyun/terraform-provider-alicloud => github.com/aliyun/terraform-provider-alicloud v1.290.1-0.20260827115952-d31d4a12eca0
