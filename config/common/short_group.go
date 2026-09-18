@@ -21,6 +21,7 @@ const (
 	POLARDB                = ShortGroup("polardb")
 	PRIVATELINK            = ShortGroup("privatelink")
 	QUOTAS                 = ShortGroup("quotas")
+	RDS                    = ShortGroup("rds")
 	SLS                    = ShortGroup("sls")
 	SSLCertificatesService = ShortGroup("sslcertificatesservice")
 	Tair                   = ShortGroup("tair")
