@@ -163,8 +163,16 @@ jobs:
         run: |
           make controlplane.dump
 
-      - name: Upload Cluster Dump
+      - name: Scrub Credentials From The Dump
+        id: scrub
         if: always()
+        run: |
+          ./scripts/scrub-dump.sh ./_output/controlplane-dump
+
+      # Losing the dump is better than publishing credentials with it, so the
+      # upload waits on the scrub rather than running unconditionally.
+      - name: Upload Cluster Dump
+        if: always() && steps.scrub.outcome == 'success'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: controlplane-dump

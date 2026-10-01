@@ -7,6 +7,12 @@ PROJECT_NAME := provider-$(PROVIDER_NAME)
 PROJECT_REPO ?= github.com/crossplane-contrib/$(PROJECT_NAME)
 
 SUBPACKAGES ?= monolith
+# The release workflow asks for "*" so it does not have to carry a hand-written
+# list of every service group; expand it to the family config package plus each
+# service, which is exactly what gets published.
+ifeq ($(strip $(SUBPACKAGES)),*)
+override SUBPACKAGES := $(filter-out monolith,$(shell find cmd/provider -mindepth 1 -maxdepth 1 -type d | cut -d/ -f3 | sort))
+endif
 
 # Family provider package resolution
 XPKG_SKIP_DEP_RESOLUTION := true
@@ -368,7 +374,11 @@ schema-version-diff:
 	./scripts/version_diff.py config/generated.lst "$(WORK_DIR)/schema.json.$${PREV_PROVIDER_VERSION}" config/schema.json
 	@$(OK) Checking for native state schema version changes
 
-.PHONY: cobertura submodules fallthrough run crds.clean
+# Resolve the subpackage list for the release workflow, which reads stdout.
+print-subpackages:
+	@echo $(SUBPACKAGES)
+
+.PHONY: cobertura submodules fallthrough run crds.clean print-subpackages
 
 # ====================================================================================
 # Special Targets
