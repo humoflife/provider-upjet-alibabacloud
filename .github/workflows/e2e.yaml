@@ -163,11 +163,25 @@ jobs:
         run: |
           make controlplane.dump
 
+      # This workflow always runs from the default branch, but it checks out the
+      # pull request, which may predate scripts/scrub-dump.sh. Take the script
+      # from the default branch so older branches are scrubbed too.
       - name: Scrub Credentials From The Dump
         id: scrub
         if: always()
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
-          ./scripts/scrub-dump.sh ./_output/controlplane-dump
+          set -euo pipefail
+          script=./scripts/scrub-dump.sh
+          if [[ ! -x "${script}" ]]; then
+            script="$(mktemp)"
+            git fetch --depth=1 origin "${DEFAULT_BRANCH}"
+            git show "FETCH_HEAD:scripts/scrub-dump.sh" > "${script}"
+            chmod +x "${script}"
+            echo "using scrub-dump.sh from ${DEFAULT_BRANCH}"
+          fi
+          "${script}" ./_output/controlplane-dump
 
       # Losing the dump is better than publishing credentials with it, so the
       # upload waits on the scrub rather than running unconditionally.
