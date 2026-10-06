@@ -351,8 +351,9 @@ type StoreStatus struct {
 type Store struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              StoreSpec   `json:"spec"`
-	Status            StoreStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.logstoreName) || (has(self.initProvider) && has(self.initProvider.logstoreName))",message="spec.forProvider.logstoreName is a required parameter"
+	Spec   StoreSpec   `json:"spec"`
+	Status StoreStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -741,6 +741,11 @@ spec:
             required:
             - forProvider
             type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.logstoreName is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.logstoreName)
+                || (has(self.initProvider) && has(self.initProvider.logstoreName))'
           status:
             description: StoreStatus defines the observed state of Store.
             properties:

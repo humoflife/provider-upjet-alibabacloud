@@ -125,8 +125,9 @@ type ProjectStatus struct {
 type Project struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              ProjectSpec   `json:"spec"`
-	Status            ProjectStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.projectName) || (has(self.initProvider) && has(self.initProvider.projectName))",message="spec.forProvider.projectName is a required parameter"
+	Spec   ProjectSpec   `json:"spec"`
+	Status ProjectStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -19,6 +19,17 @@ func Configure(p *config.Provider) {
 		// "name" is a deprecated alias of "project_name"; drop it so only the
 		// canonical field is generated.
 		delete(r.TerraformResource.Schema, "name")
+		// Upstream leaves project_name Optional+Computed only because the
+		// deprecated "name" alias could supply it instead. With that alias
+		// dropped there is no other way to name a project, so promote it to
+		// Required: otherwise a Project with just "region" set passes CRD
+		// admission and only fails later at plan time. Required and Computed
+		// are mutually exclusive in Terraform, so Computed is cleared too.
+		if s := r.TerraformResource.Schema["project_name"]; s != nil {
+			s.Required = true
+			s.Optional = false
+			s.Computed = false
+		}
 	})
 
 	p.AddResourceConfigurator("alicloud_log_store", func(r *config.Resource) {
@@ -27,6 +38,17 @@ func Configure(p *config.Provider) {
 		// "name"/"project" are deprecated aliases of "logstore_name"/"project_name".
 		delete(r.TerraformResource.Schema, "name")
 		delete(r.TerraformResource.Schema, "project")
+		// Same reasoning as Project.project_name above: upstream documents
+		// logstore_name as "one of logstore_name, name", and the "name" alias is
+		// gone, so it is effectively mandatory.
+		if s := r.TerraformResource.Schema["logstore_name"]; s != nil {
+			s.Required = true
+			s.Optional = false
+			s.Computed = false
+		}
+		// project_name deliberately stays optional: every example supplies it
+		// through projectNameRef/projectNameSelector, and a Required field
+		// cannot be omitted in favour of a reference.
 		r.References["project_name"] = config.Reference{
 			TerraformName: "alicloud_log_project",
 			Extractor:     common.PathIdExtractor,
