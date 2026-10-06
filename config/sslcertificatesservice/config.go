@@ -9,9 +9,9 @@ import (
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("alicloud_ssl_certificates_service_certificate", func(r *config.Resource) {
-		// Override the default group that upjet would generate for this
-		// resource (which would be "sslcertificatesservice") and shorten the
-		// Kind from "ssl_certificates_service_certificate".
+		// Set the short group explicitly (upjet's name-derived default would
+		// otherwise group this under the full Terraform resource prefix), and
+		// shorten the Kind from "ssl_certificates_service_certificate".
 		r.ShortGroup = string(common.SSLCertificatesService)
 		r.Kind = "Certificate"
 
