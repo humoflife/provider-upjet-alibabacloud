@@ -106,7 +106,7 @@ spec:
     instanceType: mysql.x4.medium.xc
     zoneId: cn-beijing-l
     zoneIdSlaveA: cn-beijing-l
-    monitoringPeriod: "60"
+    monitoringPeriod: 60
     securityGroupIdSelector:
       matchLabels:
         testing.upbound.io/example-name: default
