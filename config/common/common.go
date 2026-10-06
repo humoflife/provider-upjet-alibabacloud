@@ -333,6 +333,12 @@ func AliKafkaSaslUserUsernameExtractor() reference.ExtractValueFn {
 // expects ("<casCertId>-<region>") from a certificate resource, i.e. it joins
 // "status.atProvider.id" with "spec.forProvider.region".
 //
+// The region in the suffix must be CAS's home region (cn-hangzhou on the
+// China site), not the region the Certificate happens to be created through:
+// CAS stores certificates centrally in that region regardless of where the
+// Certificate resource itself is configured, and ALB rejects any other
+// suffix. Set "region: cn-hangzhou" on the referenced Certificate.
+//
 // When the referenced certificate does not pin a region it falls back to the
 // bare identifier: the region then comes from the ProviderConfig, which is not
 // visible from here. In that case set "region" on the referenced certificate,

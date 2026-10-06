@@ -42,9 +42,9 @@ spec:
       key: key
       name: crossplane-example-additional-key
       namespace: upbound-system
-    # CAS stores certificates centrally in cn-hangzhou, and ALB resolves
-    # "<casCertId>-<region>" against where the certificate lives, not where the
-    # load balancer is.
+    # The region suffix ALB expects in "<casCertId>-<region>" is CAS's home
+    # region (cn-hangzhou on the China site), not the region the Certificate
+    # was created through.
     region: cn-hangzhou
 
 ---
@@ -69,9 +69,9 @@ spec:
       key: key
       name: crossplane-example-default-key
       namespace: upbound-system
-    # CAS stores certificates centrally in cn-hangzhou, and ALB resolves
-    # "<casCertId>-<region>" against where the certificate lives, not where the
-    # load balancer is.
+    # The region suffix ALB expects in "<casCertId>-<region>" is CAS's home
+    # region (cn-hangzhou on the China site), not the region the Certificate
+    # was created through.
     region: cn-hangzhou
 
 ---
@@ -130,7 +130,7 @@ spec:
       - status: NonProtection
     region: cn-beijing
     tags:
-      Created: TF
+      Created: crossplane
     vpcIdSelector:
       matchLabels:
         testing.upbound.io/example-name: for-listener-additional-certificate-attachment

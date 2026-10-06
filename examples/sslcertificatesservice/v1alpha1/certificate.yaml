@@ -8,7 +8,10 @@ metadata:
   name: example-certificate
 spec:
   forProvider:
-    region: cn-beijing
+    # CAS stores certificates centrally in cn-hangzhou regardless of where
+    # this resource is configured; common.AlbCertificateIdExtractor() needs
+    # this to be the CAS home region to build an id ALB will accept.
+    region: cn-hangzhou
     certificateName: example-certificate
     # Both the certificate body and the private key are supplied via Secrets.
     certSecretRef:
