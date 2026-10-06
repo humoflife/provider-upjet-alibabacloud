@@ -88,7 +88,9 @@ func Configure(p *config.Provider) {
 			TerraformName: "alicloud_db_instance",
 			Extractor:     common.PathIdExtractor,
 		}
-		// Same deprecated-alias conflict as alicloud_db_account (see above).
+		// Deprecated, computed aliases that collide with their non-deprecated
+		// replacements on TF refresh (ConflictsWith). Drop each so only the
+		// canonical field is managed.
 		delete(r.TerraformResource.Schema, "name")        // -> account_name
 		delete(r.TerraformResource.Schema, "type")        // -> account_type
 		delete(r.TerraformResource.Schema, "instance_id") // -> db_instance_id
@@ -97,6 +99,7 @@ func Configure(p *config.Provider) {
 	})
 	p.AddResourceConfigurator("alicloud_rds_backup", func(r *config.Resource) {
 		r.ShortGroup = string(common.RDS)
+		r.UseAsync = true
 		r.References["db_instance_id"] = config.Reference{
 			TerraformName: "alicloud_db_instance",
 			Extractor:     common.PathIdExtractor,
@@ -104,6 +107,7 @@ func Configure(p *config.Provider) {
 	})
 	p.AddResourceConfigurator("alicloud_rds_db_instance_endpoint", func(r *config.Resource) {
 		r.ShortGroup = string(common.RDS)
+		r.UseAsync = true
 		r.References["db_instance_id"] = config.Reference{
 			TerraformName: "alicloud_db_instance",
 			Extractor:     common.PathIdExtractor,
@@ -122,6 +126,7 @@ func Configure(p *config.Provider) {
 	})
 	p.AddResourceConfigurator("alicloud_rds_db_node", func(r *config.Resource) {
 		r.ShortGroup = string(common.RDS)
+		r.UseAsync = true
 		r.References["db_instance_id"] = config.Reference{
 			TerraformName: "alicloud_db_instance",
 			Extractor:     common.PathIdExtractor,
@@ -129,6 +134,7 @@ func Configure(p *config.Provider) {
 	})
 	p.AddResourceConfigurator("alicloud_rds_db_proxy", func(r *config.Resource) {
 		r.ShortGroup = string(common.RDS)
+		r.UseAsync = true
 		r.References["instance_id"] = config.Reference{
 			TerraformName: "alicloud_db_instance",
 			Extractor:     common.PathIdExtractor,

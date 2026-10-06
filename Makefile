@@ -285,6 +285,7 @@ UPTEST_EXAMPLE_LIST_QUOTAS=$(QUOTAS)/quotaalarm.yaml,$(QUOTAS)/quotaapplication.
 UPTEST_EXAMPLE_LIST_RAM=$(RAM)/accesskey.yaml,$(RAM)/accountalias.yaml,$(RAM)/accountpasswordpolicy.yaml,$(RAM)/group.yaml,$(RAM)/groupmembership.yaml,$(RAM)/grouppolicyattachment.yaml,$(RAM)/loginprofile.yaml,$(RAM)/passwordpolicy.yaml,$(RAM)/policy.yaml,$(RAM)/role.yaml,$(RAM)/rolepolicyattachment.yaml,$(RAM)/samlprovider.yaml,$(RAM)/user.yaml,$(RAM)/usergroupattachment.yaml,$(RAM)/userpolicyattachment.yaml
 UPTEST_EXAMPLE_LIST_SSLCERTIFICATESSERVICE=$(SSLCERTIFICATESSERVICE)/certificate.yaml
 UPTEST_EXAMPLE_LIST_SLS=$(SLS)/project.yaml,$(SLS)/store.yaml,$(SLS)/storeindex.yaml,$(SLS)/machinegroup.yaml,$(SLS)/logtailconfig.yaml,$(SLS)/logtailattachment.yaml
+UPTEST_EXAMPLE_LIST_RDS=$(RDS)/instance.yaml,$(RDS)/database.yaml,$(RDS)/account.yaml
 UPTEST_EXAMPLE_LIST_TAIR=$(TAIR)/account.yaml,$(TAIR)/auditlogconfig.yaml,$(TAIR)/connection.yaml,$(TAIR)/instance.yaml,$(TAIR)/tairinstance.yaml
 UPTEST_EXAMPLE_LIST_VPC=$(VPC)/vpc.yaml
 UPTEST_EXAMPLE_LIST ?= $(VPC)/vpc.yaml
