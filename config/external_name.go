@@ -242,6 +242,11 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 
 	// SSL Certificates Service
 	"alicloud_ssl_certificates_service_certificate": config.IdentifierFromProvider,
+	// SLB
+	"alicloud_slb_acl":           config.IdentifierFromProvider,
+	"alicloud_slb_load_balancer": config.IdentifierFromProvider,
+	"alicloud_slb_listener":      config.IdentifierFromProvider,
+
 	// SLS - Simple Log Service
 	"alicloud_log_project":        config.IdentifierFromProvider,
 	"alicloud_log_store":          config.IdentifierFromProvider,
@@ -249,11 +254,6 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"alicloud_log_machine_group":  config.IdentifierFromProvider,
 	"alicloud_logtail_config":     config.IdentifierFromProvider,
 	"alicloud_logtail_attachment": config.IdentifierFromProvider,
-
-	// SLB
-	"alicloud_slb_acl":           config.IdentifierFromProvider,
-	"alicloud_slb_load_balancer": config.IdentifierFromProvider,
-	"alicloud_slb_listener":      config.IdentifierFromProvider,
 
 	// Tair
 	"alicloud_kvstore_account":          config.IdentifierFromProvider,
