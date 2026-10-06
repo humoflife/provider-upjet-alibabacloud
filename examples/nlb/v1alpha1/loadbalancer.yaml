@@ -13,9 +13,8 @@ spec:
     loadBalancerName: crossplane-example
     loadBalancerType: Network
     region: cn-beijing
-#    resourceGroupId: ${data.alicloud_resource_manager_resource_groups.default.ids.0}
     tags:
-      Created: TF
+      Created: crossplane
     vpcIdSelector:
       matchLabels:
         testing.upbound.io/example-name: for-loadbalancer
