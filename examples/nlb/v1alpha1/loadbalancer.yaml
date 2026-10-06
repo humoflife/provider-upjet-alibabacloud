@@ -10,27 +10,27 @@ spec:
   forProvider:
     addressIpVersion: Ipv4
     addressType: Internet
-    loadBalancerName: crossplane-example
+    loadBalancerName: crossplane-example-nlb
     loadBalancerType: Network
     region: cn-beijing
     tags:
       Created: crossplane
     vpcIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: for-loadbalancer
+        testing.upbound.io/example-name: nlb-loadbalancer
     zoneMappings:
     - vswitchIdSelector:
         matchLabels:
-          testing.upbound.io/example-name: for-loadbalancer-1
+          testing.upbound.io/example-name: nlb-loadbalancer-1
       zoneIdSelector:
         matchLabels:
-          testing.upbound.io/example-name: for-loadbalancer-1
+          testing.upbound.io/example-name: nlb-loadbalancer-1
     - vswitchIdSelector:
         matchLabels:
-          testing.upbound.io/example-name: for-loadbalancer-2
+          testing.upbound.io/example-name: nlb-loadbalancer-2
       zoneIdSelector:
         matchLabels:
-          testing.upbound.io/example-name: for-loadbalancer-2
+          testing.upbound.io/example-name: nlb-loadbalancer-2
 
 ---
 
@@ -40,13 +40,13 @@ metadata:
   annotations:
     meta.upbound.io/example-id: nlb/v1alpha1/loadbalancer
   labels:
-    testing.upbound.io/example-name: for-loadbalancer
-  name: for-loadbalancer
+    testing.upbound.io/example-name: nlb-loadbalancer
+  name: nlb-loadbalancer
 spec:
   forProvider:
     cidrBlock: 10.4.0.0/16
     region: cn-beijing
-    vpcName: crossplane-example
+    vpcName: crossplane-example-nlb
 
 ---
 
@@ -56,16 +56,16 @@ metadata:
   annotations:
     meta.upbound.io/example-id: nlb/v1alpha1/loadbalancer
   labels:
-    testing.upbound.io/example-name: for-loadbalancer-1
-  name: for-loadbalancer-1
+    testing.upbound.io/example-name: nlb-loadbalancer-1
+  name: nlb-loadbalancer-1
 spec:
   forProvider:
     cidrBlock: 10.4.1.0/24
     region: cn-beijing
     vpcIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: for-loadbalancer
-    vswitchName: crossplane-example_1
+        testing.upbound.io/example-name: nlb-loadbalancer
+    vswitchName: crossplane-example-nlb_1
     zoneId: cn-beijing-f
 
 ---
@@ -76,14 +76,14 @@ metadata:
   annotations:
     meta.upbound.io/example-id: nlb/v1alpha1/loadbalancer
   labels:
-    testing.upbound.io/example-name: for-loadbalancer-2
-  name: for-loadbalancer-2
+    testing.upbound.io/example-name: nlb-loadbalancer-2
+  name: nlb-loadbalancer-2
 spec:
   forProvider:
     cidrBlock: 10.4.2.0/24
     region: cn-beijing
     vpcIdSelector:
       matchLabels:
-        testing.upbound.io/example-name: for-loadbalancer
-    vswitchName: crossplane-example_2
+        testing.upbound.io/example-name: nlb-loadbalancer
+    vswitchName: crossplane-example-nlb_2
     zoneId: cn-beijing-g

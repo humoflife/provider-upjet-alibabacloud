@@ -65,12 +65,6 @@ type LoadBalancerInitParameters struct {
 	// Specifies whether to enable deletion protection. Default value: false. See deletion_protection_config below.
 	DeletionProtectionConfig []DeletionProtectionConfigInitParameters `json:"deletionProtectionConfig,omitempty" tf:"deletion_protection_config,omitempty"`
 
-	// Specifies whether to enable deletion protection. Default value: false. Valid values:
-	DeletionProtectionEnabled *bool `json:"deletionProtectionEnabled,omitempty" tf:"deletion_protection_enabled,omitempty"`
-
-	// The reason why the deletion protection feature is enabled or disabled. The deletion_protection_reason takes effect only when deletion_protection_enabled is set to true.
-	DeletionProtectionReason *string `json:"deletionProtectionReason,omitempty" tf:"deletion_protection_reason,omitempty"`
-
 	// The type of IPv6 address used by the NLB instance. Valid values:
 	IPv6AddressType *string `json:"ipv6AddressType,omitempty" tf:"ipv6_address_type,omitempty"`
 
@@ -83,12 +77,6 @@ type LoadBalancerInitParameters struct {
 
 	// Specifies whether to enable the configuration read-only mode. Default value: NonProtection. See modification_protection_config below.
 	ModificationProtectionConfig []ModificationProtectionConfigInitParameters `json:"modificationProtectionConfig,omitempty" tf:"modification_protection_config,omitempty"`
-
-	// The reason why the configuration read-only mode is enabled. The modification_protection_reason takes effect only when modification_protection_status is set to ConsoleProtection.
-	ModificationProtectionReason *string `json:"modificationProtectionReason,omitempty" tf:"modification_protection_reason,omitempty"`
-
-	// Specifies whether to enable the configuration read-only mode. Default value: NonProtection. Valid values:
-	ModificationProtectionStatus *string `json:"modificationProtectionStatus,omitempty" tf:"modification_protection_status,omitempty"`
 
 	// The payment type of the resource
 	PaymentType *string `json:"paymentType,omitempty" tf:"payment_type,omitempty"`
@@ -158,12 +146,6 @@ type LoadBalancerObservation struct {
 	// Specifies whether to enable deletion protection. Default value: false. See deletion_protection_config below.
 	DeletionProtectionConfig []DeletionProtectionConfigObservation `json:"deletionProtectionConfig,omitempty" tf:"deletion_protection_config,omitempty"`
 
-	// Specifies whether to enable deletion protection. Default value: false. Valid values:
-	DeletionProtectionEnabled *bool `json:"deletionProtectionEnabled,omitempty" tf:"deletion_protection_enabled,omitempty"`
-
-	// The reason why the deletion protection feature is enabled or disabled. The deletion_protection_reason takes effect only when deletion_protection_enabled is set to true.
-	DeletionProtectionReason *string `json:"deletionProtectionReason,omitempty" tf:"deletion_protection_reason,omitempty"`
-
 	// The ID of the resource supplied above.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
@@ -182,12 +164,6 @@ type LoadBalancerObservation struct {
 
 	// Specifies whether to enable the configuration read-only mode. Default value: NonProtection. See modification_protection_config below.
 	ModificationProtectionConfig []ModificationProtectionConfigObservation `json:"modificationProtectionConfig,omitempty" tf:"modification_protection_config,omitempty"`
-
-	// The reason why the configuration read-only mode is enabled. The modification_protection_reason takes effect only when modification_protection_status is set to ConsoleProtection.
-	ModificationProtectionReason *string `json:"modificationProtectionReason,omitempty" tf:"modification_protection_reason,omitempty"`
-
-	// Specifies whether to enable the configuration read-only mode. Default value: NonProtection. Valid values:
-	ModificationProtectionStatus *string `json:"modificationProtectionStatus,omitempty" tf:"modification_protection_status,omitempty"`
 
 	// The payment type of the resource
 	PaymentType *string `json:"paymentType,omitempty" tf:"payment_type,omitempty"`
@@ -243,14 +219,6 @@ type LoadBalancerParameters struct {
 	// +kubebuilder:validation:Optional
 	DeletionProtectionConfig []DeletionProtectionConfigParameters `json:"deletionProtectionConfig,omitempty" tf:"deletion_protection_config,omitempty"`
 
-	// Specifies whether to enable deletion protection. Default value: false. Valid values:
-	// +kubebuilder:validation:Optional
-	DeletionProtectionEnabled *bool `json:"deletionProtectionEnabled,omitempty" tf:"deletion_protection_enabled,omitempty"`
-
-	// The reason why the deletion protection feature is enabled or disabled. The deletion_protection_reason takes effect only when deletion_protection_enabled is set to true.
-	// +kubebuilder:validation:Optional
-	DeletionProtectionReason *string `json:"deletionProtectionReason,omitempty" tf:"deletion_protection_reason,omitempty"`
-
 	// The type of IPv6 address used by the NLB instance. Valid values:
 	// +kubebuilder:validation:Optional
 	IPv6AddressType *string `json:"ipv6AddressType,omitempty" tf:"ipv6_address_type,omitempty"`
@@ -267,14 +235,6 @@ type LoadBalancerParameters struct {
 	// Specifies whether to enable the configuration read-only mode. Default value: NonProtection. See modification_protection_config below.
 	// +kubebuilder:validation:Optional
 	ModificationProtectionConfig []ModificationProtectionConfigParameters `json:"modificationProtectionConfig,omitempty" tf:"modification_protection_config,omitempty"`
-
-	// The reason why the configuration read-only mode is enabled. The modification_protection_reason takes effect only when modification_protection_status is set to ConsoleProtection.
-	// +kubebuilder:validation:Optional
-	ModificationProtectionReason *string `json:"modificationProtectionReason,omitempty" tf:"modification_protection_reason,omitempty"`
-
-	// Specifies whether to enable the configuration read-only mode. Default value: NonProtection. Valid values:
-	// +kubebuilder:validation:Optional
-	ModificationProtectionStatus *string `json:"modificationProtectionStatus,omitempty" tf:"modification_protection_status,omitempty"`
 
 	// The payment type of the resource
 	// +kubebuilder:validation:Optional
@@ -382,7 +342,6 @@ type ZoneMappingsInitParameters struct {
 
 	// The vSwitch in the zone. You can specify only one vSwitch (subnet) in each zone of an NLB instance. You must add at least two zones. You can add a maximum of 10 zones.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/vpc/v1alpha1.Vswitch
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractResourceID()
 	VswitchID *string `json:"vswitchId,omitempty" tf:"vswitch_id,omitempty"`
 
 	// Reference to a Vswitch in vpc to populate vswitchId.
@@ -470,7 +429,6 @@ type ZoneMappingsParameters struct {
 
 	// The vSwitch in the zone. You can specify only one vSwitch (subnet) in each zone of an NLB instance. You must add at least two zones. You can add a maximum of 10 zones.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/vpc/v1alpha1.Vswitch
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractResourceID()
 	// +kubebuilder:validation:Optional
 	VswitchID *string `json:"vswitchId,omitempty" tf:"vswitch_id,omitempty"`
 

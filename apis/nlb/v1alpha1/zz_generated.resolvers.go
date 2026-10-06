@@ -12,7 +12,6 @@ import (
 	v1alpha11 "github.com/crossplane-contrib/provider-alibabacloud/apis/vpc/v1alpha1"
 	common "github.com/crossplane-contrib/provider-alibabacloud/config/common"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
-	resource "github.com/crossplane/upjet/pkg/resource"
 	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -60,7 +59,7 @@ func (mg *LoadBalancer) ResolveReferences(ctx context.Context, c client.Reader) 
 	for i3 := 0; i3 < len(mg.Spec.ForProvider.ZoneMappings); i3++ {
 		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ZoneMappings[i3].VswitchID),
-			Extract:      resource.ExtractResourceID(),
+			Extract:      reference.ExternalName(),
 			Reference:    mg.Spec.ForProvider.ZoneMappings[i3].VswitchIDRef,
 			Selector:     mg.Spec.ForProvider.ZoneMappings[i3].VswitchIDSelector,
 			To: reference.To{
@@ -128,7 +127,7 @@ func (mg *LoadBalancer) ResolveReferences(ctx context.Context, c client.Reader) 
 	for i3 := 0; i3 < len(mg.Spec.InitProvider.ZoneMappings); i3++ {
 		rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 			CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ZoneMappings[i3].VswitchID),
-			Extract:      resource.ExtractResourceID(),
+			Extract:      reference.ExternalName(),
 			Reference:    mg.Spec.InitProvider.ZoneMappings[i3].VswitchIDRef,
 			Selector:     mg.Spec.InitProvider.ZoneMappings[i3].VswitchIDSelector,
 			To: reference.To{

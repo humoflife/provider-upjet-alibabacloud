@@ -155,16 +155,6 @@ func (in *LoadBalancerInitParameters) DeepCopyInto(out *LoadBalancerInitParamete
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	if in.DeletionProtectionEnabled != nil {
-		in, out := &in.DeletionProtectionEnabled, &out.DeletionProtectionEnabled
-		*out = new(bool)
-		**out = **in
-	}
-	if in.DeletionProtectionReason != nil {
-		in, out := &in.DeletionProtectionReason, &out.DeletionProtectionReason
-		*out = new(string)
-		**out = **in
-	}
 	if in.IPv6AddressType != nil {
 		in, out := &in.IPv6AddressType, &out.IPv6AddressType
 		*out = new(string)
@@ -186,16 +176,6 @@ func (in *LoadBalancerInitParameters) DeepCopyInto(out *LoadBalancerInitParamete
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
-	}
-	if in.ModificationProtectionReason != nil {
-		in, out := &in.ModificationProtectionReason, &out.ModificationProtectionReason
-		*out = new(string)
-		**out = **in
-	}
-	if in.ModificationProtectionStatus != nil {
-		in, out := &in.ModificationProtectionStatus, &out.ModificationProtectionStatus
-		*out = new(string)
-		**out = **in
 	}
 	if in.PaymentType != nil {
 		in, out := &in.PaymentType, &out.PaymentType
@@ -357,16 +337,6 @@ func (in *LoadBalancerObservation) DeepCopyInto(out *LoadBalancerObservation) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	if in.DeletionProtectionEnabled != nil {
-		in, out := &in.DeletionProtectionEnabled, &out.DeletionProtectionEnabled
-		*out = new(bool)
-		**out = **in
-	}
-	if in.DeletionProtectionReason != nil {
-		in, out := &in.DeletionProtectionReason, &out.DeletionProtectionReason
-		*out = new(string)
-		**out = **in
-	}
 	if in.ID != nil {
 		in, out := &in.ID, &out.ID
 		*out = new(string)
@@ -398,16 +368,6 @@ func (in *LoadBalancerObservation) DeepCopyInto(out *LoadBalancerObservation) {
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
-	}
-	if in.ModificationProtectionReason != nil {
-		in, out := &in.ModificationProtectionReason, &out.ModificationProtectionReason
-		*out = new(string)
-		**out = **in
-	}
-	if in.ModificationProtectionStatus != nil {
-		in, out := &in.ModificationProtectionStatus, &out.ModificationProtectionStatus
-		*out = new(string)
-		**out = **in
 	}
 	if in.PaymentType != nil {
 		in, out := &in.PaymentType, &out.PaymentType
@@ -515,16 +475,6 @@ func (in *LoadBalancerParameters) DeepCopyInto(out *LoadBalancerParameters) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	if in.DeletionProtectionEnabled != nil {
-		in, out := &in.DeletionProtectionEnabled, &out.DeletionProtectionEnabled
-		*out = new(bool)
-		**out = **in
-	}
-	if in.DeletionProtectionReason != nil {
-		in, out := &in.DeletionProtectionReason, &out.DeletionProtectionReason
-		*out = new(string)
-		**out = **in
-	}
 	if in.IPv6AddressType != nil {
 		in, out := &in.IPv6AddressType, &out.IPv6AddressType
 		*out = new(string)
@@ -546,16 +496,6 @@ func (in *LoadBalancerParameters) DeepCopyInto(out *LoadBalancerParameters) {
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
-	}
-	if in.ModificationProtectionReason != nil {
-		in, out := &in.ModificationProtectionReason, &out.ModificationProtectionReason
-		*out = new(string)
-		**out = **in
-	}
-	if in.ModificationProtectionStatus != nil {
-		in, out := &in.ModificationProtectionStatus, &out.ModificationProtectionStatus
-		*out = new(string)
-		**out = **in
 	}
 	if in.PaymentType != nil {
 		in, out := &in.PaymentType, &out.PaymentType
