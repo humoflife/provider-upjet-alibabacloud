@@ -73,14 +73,15 @@ spec:
     engine: MySQL
     engineVersion: "8.0"
     # DBInstanceEndpoint requires an RDS MySQL Cluster Edition instance.
-    # Cluster Edition classes (e.g. mysql.x4.medium.2c) are region/zone
-    # specific, verify availability before applying.
+    # Cluster Edition classes use the "xc" suffix (e.g. mysql.x4.medium.xc),
+    # not "2c" -- confirmed via `aliyun rds DescribeAvailableClasses` against
+    # cn-beijing-l.
     category: cluster
     dbInstanceStorageType: cloud_essd
     instanceChargeType: Postpaid
     instanceName: crossplane-example-cluster
     instanceStorage: 20
-    instanceType: mysql.x4.medium.2c
+    instanceType: mysql.x4.medium.xc
     zoneId: cn-beijing-l
     zoneIdSlaveA: cn-beijing-l
     monitoringPeriod: "60"
