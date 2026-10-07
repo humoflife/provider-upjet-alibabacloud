@@ -61,6 +61,7 @@ func GetProvider() *ujconfig.Provider {
 		NamePrefixRemoval(),
 		AddExternalTagsField(),
 		DocumentationForTags(),
+		DocumentationForEmptyCodeSpans(),
 	}
 
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),

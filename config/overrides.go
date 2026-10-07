@@ -5,6 +5,7 @@
 package config
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/crossplane-contrib/provider-alibabacloud/config/common"
@@ -157,6 +158,60 @@ func AddExternalTagsField() config.ResourceOption {
 	return func(r *config.Resource) {
 		if s, ok := r.TerraformResource.Schema["tags"]; ok && s.Type == schema.TypeMap {
 			r.InitializerFns = append(r.InitializerFns, config.TagInitializer)
+		}
+	}
+}
+
+// backtickRun matches a run of backticks together with any spaces before it,
+// so removing an empty span does not leave a space stranded before the
+// following punctuation. The callback narrows this to runs of exactly two.
+var backtickRun = regexp.MustCompile(" *`+")
+
+// DocumentationForEmptyCodeSpans removes empty inline code spans from the
+// scraped upstream documentation.
+//
+// Nine alicloud resources document their computed id as
+//
+//	The ID of the resource supplied above.The value is formulated as ``.
+//
+// where upstream left the inline code span empty (other resources carry
+// something like <db_cluster_id>:<account_name> there). Those two backticks
+// make the generated output depend on which Go toolchain built the goimports
+// binary that upjet shells out to: typewriter emits field comments at column 1,
+// so go/printer treats them as top-level doc comments and runs them through
+// go/doc/comment, which rewrites an empty code span into a U+201C quote. Go
+// 1.27's printer skips that for field comments, so the same source yields
+// different bytes under different toolchains and check-diff fails depending on
+// how goimports was compiled.
+//
+// Dropping the empty span removes the trigger, so generation is reproducible
+// under every toolchain. Runs of three or more backticks are left alone so
+// fenced blocks and real code spans are unaffected, as are single backticks,
+// which is what a non-empty span is made of.
+//
+// Only alicloud_hbase_instance.core_disk_type has the span mid-sentence rather
+// than before a full stop; there the surrounding punctuation is left as the
+// upstream docs wrote it. That resource is not generated here today.
+//
+// A two-backtick span with content, as in “a`b“, would lose its delimiters
+// rather than being left alone. No description in provider-metadata.yaml uses
+// that form -- every occurrence of two backticks there is an empty span -- so
+// this is noted rather than handled.
+func DocumentationForEmptyCodeSpans() config.ResourceOption {
+	return func(r *config.Resource) {
+		if r.MetaResource == nil {
+			return
+		}
+		for k, v := range r.MetaResource.ArgumentDocs {
+			if !strings.Contains(v, "``") {
+				continue
+			}
+			r.MetaResource.ArgumentDocs[k] = backtickRun.ReplaceAllStringFunc(v, func(match string) string {
+				if strings.Count(match, "`") == 2 {
+					return ""
+				}
+				return match
+			})
 		}
 	}
 }
