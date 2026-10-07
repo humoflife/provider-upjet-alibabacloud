@@ -66,7 +66,7 @@ func (mg *GroupMembership) ResolveReferences(ctx context.Context, c client.Reade
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GroupName),
-		Extract:      resource.ExtractParamPath("name", false),
+		Extract:      resource.ExtractParamPath("group_name", false),
 		Reference:    mg.Spec.ForProvider.GroupNameRef,
 		Selector:     mg.Spec.ForProvider.GroupNameSelector,
 		To: reference.To{
@@ -98,7 +98,7 @@ func (mg *GroupMembership) ResolveReferences(ctx context.Context, c client.Reade
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GroupName),
-		Extract:      resource.ExtractParamPath("name", false),
+		Extract:      resource.ExtractParamPath("group_name", false),
 		Reference:    mg.Spec.InitProvider.GroupNameRef,
 		Selector:     mg.Spec.InitProvider.GroupNameSelector,
 		To: reference.To{
@@ -140,7 +140,7 @@ func (mg *GroupPolicyAttachment) ResolveReferences(ctx context.Context, c client
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.GroupName),
-		Extract:      resource.ExtractParamPath("name", false),
+		Extract:      resource.ExtractParamPath("group_name", false),
 		Reference:    mg.Spec.ForProvider.GroupNameRef,
 		Selector:     mg.Spec.ForProvider.GroupNameSelector,
 		To: reference.To{
@@ -188,7 +188,7 @@ func (mg *GroupPolicyAttachment) ResolveReferences(ctx context.Context, c client
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.GroupName),
-		Extract:      resource.ExtractParamPath("name", false),
+		Extract:      resource.ExtractParamPath("group_name", false),
 		Reference:    mg.Spec.InitProvider.GroupNameRef,
 		Selector:     mg.Spec.InitProvider.GroupNameSelector,
 		To: reference.To{
@@ -320,7 +320,7 @@ func (mg *RolePolicyAttachment) ResolveReferences(ctx context.Context, c client.
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.RoleName),
-		Extract:      resource.ExtractParamPath("name", false),
+		Extract:      resource.ExtractParamPath("role_name", false),
 		Reference:    mg.Spec.ForProvider.RoleNameRef,
 		Selector:     mg.Spec.ForProvider.RoleNameSelector,
 		To: reference.To{
@@ -368,7 +368,7 @@ func (mg *RolePolicyAttachment) ResolveReferences(ctx context.Context, c client.
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.RoleName),
-		Extract:      resource.ExtractParamPath("name", false),
+		Extract:      resource.ExtractParamPath("role_name", false),
 		Reference:    mg.Spec.InitProvider.RoleNameRef,
 		Selector:     mg.Spec.InitProvider.RoleNameSelector,
 		To: reference.To{
