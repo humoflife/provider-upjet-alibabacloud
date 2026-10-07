@@ -44,7 +44,7 @@ spec:
       matchLabels:
         testing.upbound.io/example-name: vpc-amp-instance-example
     vpcNum: 7
-    vswitchRefs:
+    vswitchIdsRefs:
     - name: vswitch-j
     - name: vswitch
     zoneIds:
