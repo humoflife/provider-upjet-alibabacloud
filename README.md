@@ -162,7 +162,7 @@ Please ask an authorized person to create a smaller scoped provider repository i
 
 Build and push the family packages using the `Publish Provider Packages` Github Actions workflow. To do this, you need to provide the values of the following parameters:
 
-- subpackages (to be built individually, e.g. config ram): config ack ackone alb alidns alikafka cdn cloudmonitorservice cr ecs fcv3 kms messageservice nlb oos oss polardb privatelink quotas ram slb sls tair vpc
+- subpackages (to be built individually, e.g. config ram): config ack ackone alb alidns alikafka cdn cloudmonitorservice cr ecs fcv3 kms messageservice nlb oos oss polardb privatelink quotas ram rds slb sls tair vpc
 - size (Number of smaller provider packages to build and push with each build job): 30
 - concurrency (Number of parallel package builds within each build job): 1
 - version (Version string to use while publishing the packages,e.g. v1.2.0): v1.2.0

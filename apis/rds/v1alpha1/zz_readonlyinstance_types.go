@@ -80,17 +80,7 @@ type ReadonlyInstanceInitParameters struct {
 	InstanceName *string `json:"instanceName,omitempty" tf:"instance_name,omitempty"`
 
 	// User-defined DB instance storage space. Value range: [5, 2000] for MySQL/SQL Server HA dual node edition. Increase progressively at a rate of 5 GB. For details, see Instance type table.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/rds/v1alpha1.Instance
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("instance_storage",false)
 	InstanceStorage *float64 `json:"instanceStorage,omitempty" tf:"instance_storage,omitempty"`
-
-	// Reference to a Instance in rds to populate instanceStorage.
-	// +kubebuilder:validation:Optional
-	InstanceStorageRef *v1.Reference `json:"instanceStorageRef,omitempty" tf:"-"`
-
-	// Selector for a Instance in rds to populate instanceStorage.
-	// +kubebuilder:validation:Optional
-	InstanceStorageSelector *v1.Selector `json:"instanceStorageSelector,omitempty" tf:"-"`
 
 	// DB Instance type. For details, see Instance type table.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/rds/v1alpha1.Instance
@@ -147,7 +137,7 @@ type ReadonlyInstanceInitParameters struct {
 	ServerCert *string `json:"serverCert,omitempty" tf:"server_cert,omitempty"`
 
 	// The private key of the server certificate. This parameter is supported only when the instance runs PostgreSQL with standard or enhanced SSDs. If you set the CAType parameter to custom, you must also specify this parameter. It is valid only when ssl_enabled  = 1.
-	ServerKey *string `json:"serverKey,omitempty" tf:"server_key,omitempty"`
+	ServerKeySecretRef *v1.SecretKeySelector `json:"serverKeySecretRef,omitempty" tf:"-"`
 
 	// The specific point in time when you want to perform the update. Specify the time in the ISO 8601 standard in the yyyy-MM-ddTHH:mm:ssZ format. It is valid only when upgrade_db_instance_kernel_version = true. The time must be in UTC.
 	SwitchTime *string `json:"switchTime,omitempty" tf:"switch_time,omitempty"`
@@ -300,9 +290,6 @@ type ReadonlyInstanceObservation struct {
 	// The content of the server certificate. This parameter is supported only when the instance runs PostgreSQL with standard or enhanced SSDs. If you set the CAType parameter to custom, you must also specify this parameter. It is valid only when ssl_enabled  = 1.
 	ServerCert *string `json:"serverCert,omitempty" tf:"server_cert,omitempty"`
 
-	// The private key of the server certificate. This parameter is supported only when the instance runs PostgreSQL with standard or enhanced SSDs. If you set the CAType parameter to custom, you must also specify this parameter. It is valid only when ssl_enabled  = 1.
-	ServerKey *string `json:"serverKey,omitempty" tf:"server_key,omitempty"`
-
 	// The specific point in time when you want to perform the update. Specify the time in the ISO 8601 standard in the yyyy-MM-ddTHH:mm:ssZ format. It is valid only when upgrade_db_instance_kernel_version = true. The time must be in UTC.
 	SwitchTime *string `json:"switchTime,omitempty" tf:"switch_time,omitempty"`
 
@@ -414,18 +401,8 @@ type ReadonlyInstanceParameters struct {
 	InstanceName *string `json:"instanceName,omitempty" tf:"instance_name,omitempty"`
 
 	// User-defined DB instance storage space. Value range: [5, 2000] for MySQL/SQL Server HA dual node edition. Increase progressively at a rate of 5 GB. For details, see Instance type table.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/rds/v1alpha1.Instance
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("instance_storage",false)
 	// +kubebuilder:validation:Optional
 	InstanceStorage *float64 `json:"instanceStorage,omitempty" tf:"instance_storage,omitempty"`
-
-	// Reference to a Instance in rds to populate instanceStorage.
-	// +kubebuilder:validation:Optional
-	InstanceStorageRef *v1.Reference `json:"instanceStorageRef,omitempty" tf:"-"`
-
-	// Selector for a Instance in rds to populate instanceStorage.
-	// +kubebuilder:validation:Optional
-	InstanceStorageSelector *v1.Selector `json:"instanceStorageSelector,omitempty" tf:"-"`
 
 	// DB Instance type. For details, see Instance type table.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/rds/v1alpha1.Instance
@@ -499,7 +476,7 @@ type ReadonlyInstanceParameters struct {
 
 	// The private key of the server certificate. This parameter is supported only when the instance runs PostgreSQL with standard or enhanced SSDs. If you set the CAType parameter to custom, you must also specify this parameter. It is valid only when ssl_enabled  = 1.
 	// +kubebuilder:validation:Optional
-	ServerKey *string `json:"serverKey,omitempty" tf:"server_key,omitempty"`
+	ServerKeySecretRef *v1.SecretKeySelector `json:"serverKeySecretRef,omitempty" tf:"-"`
 
 	// The specific point in time when you want to perform the update. Specify the time in the ISO 8601 standard in the yyyy-MM-ddTHH:mm:ssZ format. It is valid only when upgrade_db_instance_kernel_version = true. The time must be in UTC.
 	// +kubebuilder:validation:Optional
@@ -620,8 +597,9 @@ type ReadonlyInstanceStatus struct {
 type ReadonlyInstance struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              ReadonlyInstanceSpec   `json:"spec"`
-	Status            ReadonlyInstanceStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.instanceStorage) || (has(self.initProvider) && has(self.initProvider.instanceStorage))",message="spec.forProvider.instanceStorage is a required parameter"
+	Spec   ReadonlyInstanceSpec   `json:"spec"`
+	Status ReadonlyInstanceStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

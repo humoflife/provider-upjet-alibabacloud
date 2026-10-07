@@ -10,7 +10,7 @@ BASE_IMAGE_DIR="$ROOT_DIR/cluster/images/provider-upjet-alibabacloud"
 IMAGES_DIR="$ROOT_DIR/cluster/images"
 
 # Get the provider families from SUBPACKAGES environment variable, fallback to all if not set
-FAMILY_PROVIDERS="${SUBPACKAGES:-ack ackone alb alidns alikafka cdn cloudmonitorservice cr ecs fcv3 kms messageservice nlb oos oss polardb privatelink quotas ram slb sls tair vpc config}"
+FAMILY_PROVIDERS="${SUBPACKAGES:-ack ackone alb alidns alikafka cdn cloudmonitorservice cr ecs fcv3 kms messageservice nlb oos oss polardb privatelink quotas ram rds slb sls tair vpc config}"
 
 echo "Setting up family provider image directories for: $FAMILY_PROVIDERS"
 

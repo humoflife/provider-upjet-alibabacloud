@@ -12,9 +12,7 @@ spec:
       matchLabels:
         testing.upbound.io/example-name: example
     instanceName: ${var.name}readonly
-    instanceStorageSelector:
-      matchLabels:
-        testing.upbound.io/example-name: example
+    instanceStorage: ${alicloud_db_instance.example.instance_storage}
     instanceTypeSelector:
       matchLabels:
         testing.upbound.io/example-name: example

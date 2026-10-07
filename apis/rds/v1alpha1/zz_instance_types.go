@@ -19,7 +19,7 @@ type BabelfishConfigInitParameters struct {
 	BabelfishEnabled *string `json:"babelfishEnabled,omitempty" tf:"babelfish_enabled,omitempty"`
 
 	// The password of the administrator account. The password must contain at least three of the following character types: uppercase letters, lowercase letters, digits, and special characters. It must be 8 to 32 characters in length. The password can contain any of the following characters:! @ # $ % ^ & * () _ + - =
-	MasterUserPassword *string `json:"masterUserPassword,omitempty" tf:"master_user_password,omitempty"`
+	MasterUserPasswordSecretRef v1.SecretKeySelector `json:"masterUserPasswordSecretRef" tf:"-"`
 
 	// The name of the administrator account. The name can contain lowercase letters, digits, and underscores (_). It must start with a letter and end with a letter or digit. It can be up to 63 characters in length and cannot start with pg.
 	MasterUsername *string `json:"masterUsername,omitempty" tf:"master_username,omitempty"`
@@ -32,9 +32,6 @@ type BabelfishConfigObservation struct {
 
 	// specifies whether to enable the Babelfish for the instance. If you set this parameter to true, you enable Babelfish for the instance. If you leave this parameter empty, you disable Babelfish for the instance.
 	BabelfishEnabled *string `json:"babelfishEnabled,omitempty" tf:"babelfish_enabled,omitempty"`
-
-	// The password of the administrator account. The password must contain at least three of the following character types: uppercase letters, lowercase letters, digits, and special characters. It must be 8 to 32 characters in length. The password can contain any of the following characters:! @ # $ % ^ & * () _ + - =
-	MasterUserPassword *string `json:"masterUserPassword,omitempty" tf:"master_user_password,omitempty"`
 
 	// The name of the administrator account. The name can contain lowercase letters, digits, and underscores (_). It must start with a letter and end with a letter or digit. It can be up to 63 characters in length and cannot start with pg.
 	MasterUsername *string `json:"masterUsername,omitempty" tf:"master_username,omitempty"`
@@ -51,7 +48,7 @@ type BabelfishConfigParameters struct {
 
 	// The password of the administrator account. The password must contain at least three of the following character types: uppercase letters, lowercase letters, digits, and special characters. It must be 8 to 32 characters in length. The password can contain any of the following characters:! @ # $ % ^ & * () _ + - =
 	// +kubebuilder:validation:Optional
-	MasterUserPassword *string `json:"masterUserPassword" tf:"master_user_password,omitempty"`
+	MasterUserPasswordSecretRef v1.SecretKeySelector `json:"masterUserPasswordSecretRef" tf:"-"`
 
 	// The name of the administrator account. The name can contain lowercase letters, digits, and underscores (_). It must start with a letter and end with a letter or digit. It can be up to 63 characters in length and cannot start with pg.
 	// +kubebuilder:validation:Optional
@@ -295,7 +292,7 @@ type InstanceInitParameters struct {
 	ServerCertSecretRef *v1.SecretKeySelector `json:"serverCertSecretRef,omitempty" tf:"-"`
 
 	// The private key of the server certificate. This parameter is supported only when the instance runs PostgreSQL or MySQL with standard or enhanced SSDs. If you set the CAType parameter to custom, you must also specify this parameter. NOTE: From version 1.231.0, server_key start support MySQL engine.
-	ServerKey *string `json:"serverKey,omitempty" tf:"server_key,omitempty"`
+	ServerKeySecretRef *v1.SecretKeySelector `json:"serverKeySecretRef,omitempty" tf:"-"`
 
 	// The settings of the serverless instance. This parameter is required when you create a serverless instance. This parameter takes effect only when you create an ApsaraDB RDS for Serverless instance. See serverless_config below.
 	ServerlessConfig []ServerlessConfigInitParameters `json:"serverlessConfig,omitempty" tf:"serverless_config,omitempty"`
@@ -606,9 +603,6 @@ type InstanceObservation struct {
 	// List of IP addresses allowed to access all databases of an instance. The list contains up to 1,000 IP addresses, separated by commas. Supported formats include 0.0.0.0/0, 10.23.12.24 (IP), and 10.23.12.24/24 (Classless Inter-Domain Routing (CIDR) mode. /24 represents the length of the prefix in an IP address. The range of the prefix length is [1,32]).
 	// +listType=set
 	SecurityIps []*string `json:"securityIps,omitempty" tf:"security_ips,omitempty"`
-
-	// The private key of the server certificate. This parameter is supported only when the instance runs PostgreSQL or MySQL with standard or enhanced SSDs. If you set the CAType parameter to custom, you must also specify this parameter. NOTE: From version 1.231.0, server_key start support MySQL engine.
-	ServerKey *string `json:"serverKey,omitempty" tf:"server_key,omitempty"`
 
 	// The settings of the serverless instance. This parameter is required when you create a serverless instance. This parameter takes effect only when you create an ApsaraDB RDS for Serverless instance. See serverless_config below.
 	ServerlessConfig []ServerlessConfigObservation `json:"serverlessConfig,omitempty" tf:"serverless_config,omitempty"`
@@ -989,7 +983,7 @@ type InstanceParameters struct {
 
 	// The private key of the server certificate. This parameter is supported only when the instance runs PostgreSQL or MySQL with standard or enhanced SSDs. If you set the CAType parameter to custom, you must also specify this parameter. NOTE: From version 1.231.0, server_key start support MySQL engine.
 	// +kubebuilder:validation:Optional
-	ServerKey *string `json:"serverKey,omitempty" tf:"server_key,omitempty"`
+	ServerKeySecretRef *v1.SecretKeySelector `json:"serverKeySecretRef,omitempty" tf:"-"`
 
 	// The settings of the serverless instance. This parameter is required when you create a serverless instance. This parameter takes effect only when you create an ApsaraDB RDS for Serverless instance. See serverless_config below.
 	// +kubebuilder:validation:Optional

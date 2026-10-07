@@ -368,11 +368,7 @@ func (in *BabelfishConfigInitParameters) DeepCopyInto(out *BabelfishConfigInitPa
 		*out = new(string)
 		**out = **in
 	}
-	if in.MasterUserPassword != nil {
-		in, out := &in.MasterUserPassword, &out.MasterUserPassword
-		*out = new(string)
-		**out = **in
-	}
+	out.MasterUserPasswordSecretRef = in.MasterUserPasswordSecretRef
 	if in.MasterUsername != nil {
 		in, out := &in.MasterUsername, &out.MasterUsername
 		*out = new(string)
@@ -400,11 +396,6 @@ func (in *BabelfishConfigObservation) DeepCopyInto(out *BabelfishConfigObservati
 	*out = *in
 	if in.BabelfishEnabled != nil {
 		in, out := &in.BabelfishEnabled, &out.BabelfishEnabled
-		*out = new(string)
-		**out = **in
-	}
-	if in.MasterUserPassword != nil {
-		in, out := &in.MasterUserPassword, &out.MasterUserPassword
 		*out = new(string)
 		**out = **in
 	}
@@ -438,11 +429,7 @@ func (in *BabelfishConfigParameters) DeepCopyInto(out *BabelfishConfigParameters
 		*out = new(string)
 		**out = **in
 	}
-	if in.MasterUserPassword != nil {
-		in, out := &in.MasterUserPassword, &out.MasterUserPassword
-		*out = new(string)
-		**out = **in
-	}
+	out.MasterUserPasswordSecretRef = in.MasterUserPasswordSecretRef
 	if in.MasterUsername != nil {
 		in, out := &in.MasterUsername, &out.MasterUsername
 		*out = new(string)
@@ -4060,9 +4047,9 @@ func (in *InstanceInitParameters) DeepCopyInto(out *InstanceInitParameters) {
 		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
-	if in.ServerKey != nil {
-		in, out := &in.ServerKey, &out.ServerKey
-		*out = new(string)
+	if in.ServerKeySecretRef != nil {
+		in, out := &in.ServerKeySecretRef, &out.ServerKeySecretRef
+		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
 	if in.ServerlessConfig != nil {
@@ -4624,11 +4611,6 @@ func (in *InstanceObservation) DeepCopyInto(out *InstanceObservation) {
 			}
 		}
 	}
-	if in.ServerKey != nil {
-		in, out := &in.ServerKey, &out.ServerKey
-		*out = new(string)
-		**out = **in
-	}
 	if in.ServerlessConfig != nil {
 		in, out := &in.ServerlessConfig, &out.ServerlessConfig
 		*out = make([]ServerlessConfigObservation, len(*in))
@@ -5170,9 +5152,9 @@ func (in *InstanceParameters) DeepCopyInto(out *InstanceParameters) {
 		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
-	if in.ServerKey != nil {
-		in, out := &in.ServerKey, &out.ServerKey
-		*out = new(string)
+	if in.ServerKeySecretRef != nil {
+		in, out := &in.ServerKeySecretRef, &out.ServerKeySecretRef
+		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
 	if in.ServerlessConfig != nil {
@@ -6548,16 +6530,6 @@ func (in *ReadonlyInstanceInitParameters) DeepCopyInto(out *ReadonlyInstanceInit
 		*out = new(float64)
 		**out = **in
 	}
-	if in.InstanceStorageRef != nil {
-		in, out := &in.InstanceStorageRef, &out.InstanceStorageRef
-		*out = new(v1.Reference)
-		(*in).DeepCopyInto(*out)
-	}
-	if in.InstanceStorageSelector != nil {
-		in, out := &in.InstanceStorageSelector, &out.InstanceStorageSelector
-		*out = new(v1.Selector)
-		(*in).DeepCopyInto(*out)
-	}
 	if in.InstanceType != nil {
 		in, out := &in.InstanceType, &out.InstanceType
 		*out = new(string)
@@ -6641,9 +6613,9 @@ func (in *ReadonlyInstanceInitParameters) DeepCopyInto(out *ReadonlyInstanceInit
 		*out = new(string)
 		**out = **in
 	}
-	if in.ServerKey != nil {
-		in, out := &in.ServerKey, &out.ServerKey
-		*out = new(string)
+	if in.ServerKeySecretRef != nil {
+		in, out := &in.ServerKeySecretRef, &out.ServerKeySecretRef
+		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
 	if in.SwitchTime != nil {
@@ -6942,11 +6914,6 @@ func (in *ReadonlyInstanceObservation) DeepCopyInto(out *ReadonlyInstanceObserva
 		*out = new(string)
 		**out = **in
 	}
-	if in.ServerKey != nil {
-		in, out := &in.ServerKey, &out.ServerKey
-		*out = new(string)
-		**out = **in
-	}
 	if in.SwitchTime != nil {
 		in, out := &in.SwitchTime, &out.SwitchTime
 		*out = new(string)
@@ -7118,16 +7085,6 @@ func (in *ReadonlyInstanceParameters) DeepCopyInto(out *ReadonlyInstanceParamete
 		*out = new(float64)
 		**out = **in
 	}
-	if in.InstanceStorageRef != nil {
-		in, out := &in.InstanceStorageRef, &out.InstanceStorageRef
-		*out = new(v1.Reference)
-		(*in).DeepCopyInto(*out)
-	}
-	if in.InstanceStorageSelector != nil {
-		in, out := &in.InstanceStorageSelector, &out.InstanceStorageSelector
-		*out = new(v1.Selector)
-		(*in).DeepCopyInto(*out)
-	}
 	if in.InstanceType != nil {
 		in, out := &in.InstanceType, &out.InstanceType
 		*out = new(string)
@@ -7216,9 +7173,9 @@ func (in *ReadonlyInstanceParameters) DeepCopyInto(out *ReadonlyInstanceParamete
 		*out = new(string)
 		**out = **in
 	}
-	if in.ServerKey != nil {
-		in, out := &in.ServerKey, &out.ServerKey
-		*out = new(string)
+	if in.ServerKeySecretRef != nil {
+		in, out := &in.ServerKeySecretRef, &out.ServerKeySecretRef
+		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
 	if in.SwitchTime != nil {

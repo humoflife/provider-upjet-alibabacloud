@@ -21,7 +21,7 @@ func (mg *ReadonlyInstance) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this ReadonlyInstance
 func (tr *ReadonlyInstance) GetConnectionDetailsMapping() map[string]string {
-	return nil
+	return map[string]string{"server_key": "serverKeySecretRef"}
 }
 
 // GetObservation of this ReadonlyInstance

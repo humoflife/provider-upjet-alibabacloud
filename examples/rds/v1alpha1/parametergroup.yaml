@@ -11,7 +11,7 @@ spec:
     region: cn-beijing
     engine: mysql
     engineVersion: "8.0"
-    parameterGroupName: crossplane-example
+    parameterGroupName: crossplane_example
     parameterGroupDesc: crossplane example parameter group
     paramDetail:
       - paramName: back_log

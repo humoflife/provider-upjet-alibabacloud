@@ -105,14 +105,28 @@ spec:
                             Babelfish for the instance. If you leave this parameter
                             empty, you disable Babelfish for the instance.
                           type: string
-                        masterUserPassword:
+                        masterUserPasswordSecretRef:
                           description: 'The password of the administrator account.
                             The password must contain at least three of the following
                             character types: uppercase letters, lowercase letters,
                             digits, and special characters. It must be 8 to 32 characters
                             in length. The password can contain any of the following
                             characters:! @ # $ % ^ & * () _ + - ='
-                          type: string
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
                         masterUsername:
                           description: The name of the administrator account. The
                             name can contain lowercase letters, digits, and underscores
@@ -638,13 +652,27 @@ spec:
                     - name
                     - namespace
                     type: object
-                  serverKey:
+                  serverKeySecretRef:
                     description: 'The private key of the server certificate. This
                       parameter is supported only when the instance runs PostgreSQL
                       or MySQL with standard or enhanced SSDs. If you set the CAType
                       parameter to custom, you must also specify this parameter. NOTE:
                       From version 1.231.0, server_key start support MySQL engine.'
-                    type: string
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
                   serverlessConfig:
                     description: The settings of the serverless instance. This parameter
                       is required when you create a serverless instance. This parameter
@@ -1074,14 +1102,28 @@ spec:
                             Babelfish for the instance. If you leave this parameter
                             empty, you disable Babelfish for the instance.
                           type: string
-                        masterUserPassword:
+                        masterUserPasswordSecretRef:
                           description: 'The password of the administrator account.
                             The password must contain at least three of the following
                             character types: uppercase letters, lowercase letters,
                             digits, and special characters. It must be 8 to 32 characters
                             in length. The password can contain any of the following
                             characters:! @ # $ % ^ & * () _ + - ='
-                          type: string
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
                         masterUsername:
                           description: The name of the administrator account. The
                             name can contain lowercase letters, digits, and underscores
@@ -1093,6 +1135,8 @@ spec:
                           description: 'The migration mode of the instance. Valid
                             values: single-db and multi-db.'
                           type: string
+                      required:
+                      - masterUserPasswordSecretRef
                       type: object
                     type: array
                   babelfishPort:
@@ -1603,13 +1647,27 @@ spec:
                     - name
                     - namespace
                     type: object
-                  serverKey:
+                  serverKeySecretRef:
                     description: 'The private key of the server certificate. This
                       parameter is supported only when the instance runs PostgreSQL
                       or MySQL with standard or enhanced SSDs. If you set the CAType
                       parameter to custom, you must also specify this parameter. NOTE:
                       From version 1.231.0, server_key start support MySQL engine.'
-                    type: string
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
                   serverlessConfig:
                     description: The settings of the serverless instance. This parameter
                       is required when you create a serverless instance. This parameter
@@ -2215,14 +2273,6 @@ spec:
                             Babelfish for the instance. If you leave this parameter
                             empty, you disable Babelfish for the instance.
                           type: string
-                        masterUserPassword:
-                          description: 'The password of the administrator account.
-                            The password must contain at least three of the following
-                            character types: uppercase letters, lowercase letters,
-                            digits, and special characters. It must be 8 to 32 characters
-                            in length. The password can contain any of the following
-                            characters:! @ # $ % ^ & * () _ + - ='
-                          type: string
                         masterUsername:
                           description: The name of the administrator account. The
                             name can contain lowercase letters, digits, and underscores
@@ -2564,13 +2614,6 @@ spec:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
-                  serverKey:
-                    description: 'The private key of the server certificate. This
-                      parameter is supported only when the instance runs PostgreSQL
-                      or MySQL with standard or enhanced SSDs. If you set the CAType
-                      parameter to custom, you must also specify this parameter. NOTE:
-                      From version 1.231.0, server_key start support MySQL engine.'
-                    type: string
                   serverlessConfig:
                     description: The settings of the serverless instance. This parameter
                       is required when you create a serverless instance. This parameter

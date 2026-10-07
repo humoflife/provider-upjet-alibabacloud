@@ -9,7 +9,7 @@ metadata:
 spec:
   forProvider:
     region: cn-beijing
-    backupMethod: Physical
+    backupMethod: Snapshot
     dbInstanceIdSelector:
       matchLabels:
         testing.upbound.io/example-name: default

@@ -67,9 +67,7 @@ spec:
     engineVersionSelector:
       matchLabels:
         testing.upbound.io/example-name: default
-    instanceStorageSelector:
-      matchLabels:
-        testing.upbound.io/example-name: default
+    instanceStorage: 20
     instanceTypeSelector:
       matchLabels:
         testing.upbound.io/example-name: default
@@ -98,12 +96,15 @@ spec:
     region: cn-beijing
     engine: MySQL
     engineVersion: "8.0"
-    category: Basic
+    # The dedicated proxy is not offered on Basic Edition, so this primary must
+    # be High-availability. HA classes use the "2c" suffix (mysql.n2.medium.2c)
+    # where Basic uses "1"; confirmed via aliyun rds DescribeAvailableClasses.
+    category: HighAvailability
     dbInstanceStorageType: cloud_essd
     instanceChargeType: Postpaid
     instanceName: crossplane-example
     instanceStorage: 20
-    instanceType: mysql.n2.medium.1
+    instanceType: mysql.n2.medium.2c
     zoneId: cn-beijing-l
     securityIps:
       - 10.0.0.0/8

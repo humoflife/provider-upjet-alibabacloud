@@ -21,7 +21,7 @@ func (mg *Instance) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this Instance
 func (tr *Instance) GetConnectionDetailsMapping() map[string]string {
-	return map[string]string{"client_ca_cert": "clientCaCertSecretRef", "server_cert": "serverCertSecretRef", "ssl_certificate": "sslCertificateSecretRef", "ssl_password": "sslPasswordSecretRef", "tde_certificate": "tdeCertificateSecretRef", "tde_password": "tdePasswordSecretRef", "tde_private_key": "tdePrivateKeySecretRef"}
+	return map[string]string{"babelfish_config[*].master_user_password": "babelfishConfig[*].masterUserPasswordSecretRef", "client_ca_cert": "clientCaCertSecretRef", "server_cert": "serverCertSecretRef", "server_key": "serverKeySecretRef", "ssl_certificate": "sslCertificateSecretRef", "ssl_password": "sslPasswordSecretRef", "tde_certificate": "tdeCertificateSecretRef", "tde_password": "tdePasswordSecretRef", "tde_private_key": "tdePrivateKeySecretRef"}
 }
 
 // GetObservation of this Instance

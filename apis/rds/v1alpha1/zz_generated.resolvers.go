@@ -337,7 +337,7 @@ func (mg *DBInstanceEndpointAddress) ResolveReferences(ctx context.Context, c cl
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.DBInstanceEndpointID),
-		Extract:      common.IdExtractor(),
+		Extract:      resource.ExtractParamPath("db_instance_endpoint_id", true),
 		Reference:    mg.Spec.ForProvider.DBInstanceEndpointIDRef,
 		Selector:     mg.Spec.ForProvider.DBInstanceEndpointIDSelector,
 		To: reference.To{
@@ -369,7 +369,7 @@ func (mg *DBInstanceEndpointAddress) ResolveReferences(ctx context.Context, c cl
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.DBInstanceEndpointID),
-		Extract:      common.IdExtractor(),
+		Extract:      resource.ExtractParamPath("db_instance_endpoint_id", true),
 		Reference:    mg.Spec.InitProvider.DBInstanceEndpointIDRef,
 		Selector:     mg.Spec.InitProvider.DBInstanceEndpointIDSelector,
 		To: reference.To{
@@ -1013,22 +1013,6 @@ func (mg *ReadonlyInstance) ResolveReferences(ctx context.Context, c client.Read
 	mg.Spec.ForProvider.EngineVersionRef = rsp.ResolvedReference
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromFloatPtrValue(mg.Spec.ForProvider.InstanceStorage),
-		Extract:      resource.ExtractParamPath("instance_storage", false),
-		Reference:    mg.Spec.ForProvider.InstanceStorageRef,
-		Selector:     mg.Spec.ForProvider.InstanceStorageSelector,
-		To: reference.To{
-			List:    &InstanceList{},
-			Managed: &Instance{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.InstanceStorage")
-	}
-	mg.Spec.ForProvider.InstanceStorage = reference.ToFloatPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.InstanceStorageRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.InstanceType),
 		Extract:      resource.ExtractParamPath("instance_type", false),
 		Reference:    mg.Spec.ForProvider.InstanceTypeRef,
@@ -1107,22 +1091,6 @@ func (mg *ReadonlyInstance) ResolveReferences(ctx context.Context, c client.Read
 	}
 	mg.Spec.InitProvider.EngineVersion = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.EngineVersionRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromFloatPtrValue(mg.Spec.InitProvider.InstanceStorage),
-		Extract:      resource.ExtractParamPath("instance_storage", false),
-		Reference:    mg.Spec.InitProvider.InstanceStorageRef,
-		Selector:     mg.Spec.InitProvider.InstanceStorageSelector,
-		To: reference.To{
-			List:    &InstanceList{},
-			Managed: &Instance{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.InstanceStorage")
-	}
-	mg.Spec.InitProvider.InstanceStorage = reference.ToFloatPtrValue(rsp.ResolvedValue)
-	mg.Spec.InitProvider.InstanceStorageRef = rsp.ResolvedReference
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.InstanceType),

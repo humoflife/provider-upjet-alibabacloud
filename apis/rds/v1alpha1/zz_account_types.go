@@ -186,8 +186,9 @@ type AccountStatus struct {
 type Account struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              AccountSpec   `json:"spec"`
-	Status            AccountStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.accountName) || (has(self.initProvider) && has(self.initProvider.accountName))",message="spec.forProvider.accountName is a required parameter"
+	Spec   AccountSpec   `json:"spec"`
+	Status AccountStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

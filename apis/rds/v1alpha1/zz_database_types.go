@@ -147,8 +147,9 @@ type DatabaseStatus struct {
 type Database struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              DatabaseSpec   `json:"spec"`
-	Status            DatabaseStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.dataBaseName) || (has(self.initProvider) && has(self.initProvider.dataBaseName))",message="spec.forProvider.dataBaseName is a required parameter"
+	Spec   DatabaseSpec   `json:"spec"`
+	Status DatabaseStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
