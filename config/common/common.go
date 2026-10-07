@@ -32,6 +32,7 @@ const (
 	PathFcv3FunctionVersionFunctionNameExtractor = SelfPackagePath + ".Fcv3FunctionVersionFunctionNameExtractor()"
 	PathFcv3LayerVersionArnExtractor             = SelfPackagePath + ".Fcv3LayerVersionArnExtractor()"
 	PathVSwitchZoneIdExtractor                   = SelfPackagePath + ".VSwitchZoneIdExtractor()"
+	PathAlbCertificateIdExtractor                = SelfPackagePath + ".AlbCertificateIdExtractor()"
 	PathCrEeInstanceVPCDomainExtractor           = SelfPackagePath + ".CrEeInstanceVPCDomainExtractor()"
 	PathCrEeInstanceOssStorageDomainExtractor    = SelfPackagePath + ".CrEeInstanceOssStorageDomainExtractor()"
 	PathAliKafkaSaslUserUsernameExtractor        = SelfPackagePath + ".AliKafkaSaslUserUsernameExtractor()"
@@ -325,5 +326,40 @@ func AliKafkaSaslUserUsernameExtractor() reference.ExtractValueFn {
 			return ""
 		}
 		return r
+	}
+}
+
+// AlbCertificateIdExtractor composes the certificate identifier that ALB
+// expects ("<casCertId>-<region>") from a certificate resource, i.e. it joins
+// "status.atProvider.id" with "spec.forProvider.region".
+//
+// The region in the suffix must be CAS's home region (cn-hangzhou on the China
+// site, ap-southeast-1 on the International site), not the region the
+// Certificate happens to be created through: CAS stores certificates centrally
+// in that region regardless of where the Certificate resource itself is
+// configured, and ALB rejects any other suffix. Set "region: cn-hangzhou" on
+// the referenced Certificate.
+//
+// A certificate that pins no region yields nothing rather than the bare
+// identifier. The region comes from the ProviderConfig in that case and is not
+// visible here, and ALB requires the suffix, so a bare id would only fail at
+// apply time; returning nothing makes crossplane-runtime report the reference
+// as unresolved instead. Set "region" on the referenced certificate, or supply
+// "certificateId" literally.
+func AlbCertificateIdExtractor() reference.ExtractValueFn {
+	return func(mg xpresource.Managed) string {
+		paved, err := fieldpath.PaveObject(mg)
+		if err != nil {
+			return ""
+		}
+		id, err := paved.GetString("status.atProvider.id")
+		if err != nil || id == "" {
+			return ""
+		}
+		region, err := paved.GetString("spec.forProvider.region")
+		if err != nil || region == "" {
+			return ""
+		}
+		return id + "-" + region
 	}
 }
