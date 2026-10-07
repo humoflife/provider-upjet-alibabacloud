@@ -41,6 +41,23 @@ func Configure(p *config.Provider) {
 		delete(r.TerraformResource.Schema, "version")
 	})
 
+	// alicloud_ram_group drops the deprecated "name" above, so references that
+	// extract it from a Group resolve to an empty value. Point them at the
+	// canonical field, as for Role below.
+	p.AddResourceConfigurator("alicloud_ram_group_membership", func(r *config.Resource) {
+		r.References["group_name"] = config.Reference{
+			TerraformName: "alicloud_ram_group",
+			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("group_name",false)`,
+		}
+	})
+
+	p.AddResourceConfigurator("alicloud_ram_group_policy_attachment", func(r *config.Resource) {
+		r.References["group_name"] = config.Reference{
+			TerraformName: "alicloud_ram_group",
+			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("group_name",false)`,
+		}
+	})
+
 	p.AddResourceConfigurator("alicloud_ram_role_policy_attachment", func(r *config.Resource) {
 		// Upstream documentation at the pinned provider version still points
 		// this reference at the Role's deprecated "name", which the Role
