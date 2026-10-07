@@ -162,10 +162,10 @@ func AddExternalTagsField() config.ResourceOption {
 	}
 }
 
-// emptyCodeSpan matches a run of backticks together with any spaces before it,
+// backtickRun matches a run of backticks together with any spaces before it,
 // so removing an empty span does not leave a space stranded before the
-// following punctuation.
-var emptyCodeSpan = regexp.MustCompile(" *`+")
+// following punctuation. The callback narrows this to runs of exactly two.
+var backtickRun = regexp.MustCompile(" *`+")
 
 // DocumentationForEmptyCodeSpans removes empty inline code spans from the
 // scraped upstream documentation.
@@ -192,6 +192,11 @@ var emptyCodeSpan = regexp.MustCompile(" *`+")
 // Only alicloud_hbase_instance.core_disk_type has the span mid-sentence rather
 // than before a full stop; there the surrounding punctuation is left as the
 // upstream docs wrote it. That resource is not generated here today.
+//
+// A two-backtick span with content, as in “a`b“, would lose its delimiters
+// rather than being left alone. No description in provider-metadata.yaml uses
+// that form -- every occurrence of two backticks there is an empty span -- so
+// this is noted rather than handled.
 func DocumentationForEmptyCodeSpans() config.ResourceOption {
 	return func(r *config.Resource) {
 		if r.MetaResource == nil {
@@ -201,7 +206,7 @@ func DocumentationForEmptyCodeSpans() config.ResourceOption {
 			if !strings.Contains(v, "``") {
 				continue
 			}
-			r.MetaResource.ArgumentDocs[k] = emptyCodeSpan.ReplaceAllStringFunc(v, func(match string) string {
+			r.MetaResource.ArgumentDocs[k] = backtickRun.ReplaceAllStringFunc(v, func(match string) string {
 				if strings.Count(match, "`") == 2 {
 					return ""
 				}

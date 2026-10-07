@@ -88,6 +88,12 @@ func TestDocumentationForEmptyCodeSpans(t *testing.T) {
 				if strings.Contains(doc, "``") {
 					t.Errorf("%s.%s still contains an empty code span: %q", name, field, doc)
 				}
+				// go/doc/comment rewrites '' to a right double quote in the
+				// same toolchain-dependent way. Nothing carries one today;
+				// fail here if a provider bump introduces one.
+				if strings.Contains(doc, "''") {
+					t.Errorf("%s.%s contains '', which go/doc/comment rewrites the same way: %q", name, field, doc)
+				}
 			}
 		}
 	})
