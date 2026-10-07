@@ -30,6 +30,7 @@ import (
 	v1alpha1quotas "github.com/crossplane-contrib/provider-alibabacloud/apis/quotas/v1alpha1"
 	v1alpha1ram "github.com/crossplane-contrib/provider-alibabacloud/apis/ram/v1alpha1"
 	v1alpha1slb "github.com/crossplane-contrib/provider-alibabacloud/apis/slb/v1alpha1"
+	v1alpha1sls "github.com/crossplane-contrib/provider-alibabacloud/apis/sls/v1alpha1"
 	v1alpha1sslcertificatesservice "github.com/crossplane-contrib/provider-alibabacloud/apis/sslcertificatesservice/v1alpha1"
 	v1alpha1tair "github.com/crossplane-contrib/provider-alibabacloud/apis/tair/v1alpha1"
 	v1alpha1apis "github.com/crossplane-contrib/provider-alibabacloud/apis/v1alpha1"
@@ -60,6 +61,7 @@ func init() {
 		v1alpha1quotas.SchemeBuilder.AddToScheme,
 		v1alpha1ram.SchemeBuilder.AddToScheme,
 		v1alpha1slb.SchemeBuilder.AddToScheme,
+		v1alpha1sls.SchemeBuilder.AddToScheme,
 		v1alpha1sslcertificatesservice.SchemeBuilder.AddToScheme,
 		v1alpha1tair.SchemeBuilder.AddToScheme,
 		v1alpha1apis.SchemeBuilder.AddToScheme,
