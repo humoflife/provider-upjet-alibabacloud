@@ -333,16 +333,19 @@ func AliKafkaSaslUserUsernameExtractor() reference.ExtractValueFn {
 // expects ("<casCertId>-<region>") from a certificate resource, i.e. it joins
 // "status.atProvider.id" with "spec.forProvider.region".
 //
-// The region in the suffix must be CAS's home region (cn-hangzhou on the
-// China site), not the region the Certificate happens to be created through:
-// CAS stores certificates centrally in that region regardless of where the
-// Certificate resource itself is configured, and ALB rejects any other
-// suffix. Set "region: cn-hangzhou" on the referenced Certificate.
+// The region in the suffix must be CAS's home region (cn-hangzhou on the China
+// site, ap-southeast-1 on the International site), not the region the
+// Certificate happens to be created through: CAS stores certificates centrally
+// in that region regardless of where the Certificate resource itself is
+// configured, and ALB rejects any other suffix. Set "region: cn-hangzhou" on
+// the referenced Certificate.
 //
-// When the referenced certificate does not pin a region it falls back to the
-// bare identifier: the region then comes from the ProviderConfig, which is not
-// visible from here. In that case set "region" on the referenced certificate,
-// or supply "certificateId" literally.
+// A certificate that pins no region yields nothing rather than the bare
+// identifier. The region comes from the ProviderConfig in that case and is not
+// visible here, and ALB requires the suffix, so a bare id would only fail at
+// apply time; returning nothing makes crossplane-runtime report the reference
+// as unresolved instead. Set "region" on the referenced certificate, or supply
+// "certificateId" literally.
 func AlbCertificateIdExtractor() reference.ExtractValueFn {
 	return func(mg xpresource.Managed) string {
 		paved, err := fieldpath.PaveObject(mg)
@@ -355,7 +358,7 @@ func AlbCertificateIdExtractor() reference.ExtractValueFn {
 		}
 		region, err := paved.GetString("spec.forProvider.region")
 		if err != nil || region == "" {
-			return id
+			return ""
 		}
 		return id + "-" + region
 	}

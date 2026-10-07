@@ -9,9 +9,8 @@ import (
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("alicloud_ssl_certificates_service_certificate", func(r *config.Resource) {
-		// Set the short group explicitly (upjet's name-derived default would
-		// otherwise group this under the full Terraform resource prefix), and
-		// shorten the Kind from "ssl_certificates_service_certificate".
+		// upjet's name-derived defaults would be group "ssl" and Kind
+		// "CertificatesServiceCertificate"; name both explicitly instead.
 		r.ShortGroup = string(common.SSLCertificatesService)
 		r.Kind = "Certificate"
 
@@ -27,5 +26,14 @@ func Configure(p *config.Provider) {
 		// (keySecretRef) is. The SM2 dual-certificate bodies (encrypt_cert,
 		// sign_cert) can be made secret-backed the same way if needed.
 		r.TerraformResource.Schema["cert"].Sensitive = true
+
+		// Upstream marks certificate_name with
+		// AtLeastOneOf: ["certificate_name", "name"], so dropping "name" above
+		// leaves it effectively required. It stays Optional+Computed in the
+		// schema, so without this the CRD carries no validation and a
+		// Certificate missing certificateName fails at plan time instead of at
+		// admission. MarkAsRequired records that without touching the schema,
+		// which keeps the 2.0 port simpler.
+		r.MarkAsRequired("certificate_name")
 	})
 }

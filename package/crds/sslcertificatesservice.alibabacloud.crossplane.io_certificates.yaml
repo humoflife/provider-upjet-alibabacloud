@@ -443,6 +443,11 @@ spec:
             required:
             - forProvider
             type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.certificateName is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.certificateName)
+                || (has(self.initProvider) && has(self.initProvider.certificateName))'
           status:
             description: CertificateStatus defines the observed state of Certificate.
             properties:
