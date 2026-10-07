@@ -1767,6 +1767,16 @@ func (in *CustomDomainInitParameters) DeepCopyInto(out *CustomDomainInitParamete
 		*out = new(string)
 		**out = **in
 	}
+	if in.CertificateIDRef != nil {
+		in, out := &in.CertificateIDRef, &out.CertificateIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.CertificateIDSelector != nil {
+		in, out := &in.CertificateIDSelector, &out.CertificateIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.CorsConfig != nil {
 		in, out := &in.CorsConfig, &out.CorsConfig
 		*out = make([]CorsConfigInitParameters, len(*in))
@@ -1972,6 +1982,16 @@ func (in *CustomDomainParameters) DeepCopyInto(out *CustomDomainParameters) {
 		in, out := &in.CertificateID, &out.CertificateID
 		*out = new(string)
 		**out = **in
+	}
+	if in.CertificateIDRef != nil {
+		in, out := &in.CertificateIDRef, &out.CertificateIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.CertificateIDSelector != nil {
+		in, out := &in.CertificateIDSelector, &out.CertificateIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.CorsConfig != nil {
 		in, out := &in.CorsConfig, &out.CorsConfig
