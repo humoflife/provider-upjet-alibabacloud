@@ -169,7 +169,18 @@ $(TERRAFORM_PROVIDER_SCHEMA): $(TERRAFORM)
 	@$(TERRAFORM) -chdir=$(TERRAFORM_WORKDIR) providers schema -json=true > $(TERRAFORM_PROVIDER_SCHEMA) 2>> $(TERRAFORM_WORKDIR)/terraform-logs.txt
 	@$(OK) generating provider schema for $(TERRAFORM_PROVIDER_SOURCE) $(TERRAFORM_PROVIDER_VERSION)
 
+# The clone is --depth 1 --branch v<version>, so HEAD is always exactly the tag.
+# A clone left over from a different pin would otherwise be reused silently:
+# provider-metadata.yaml is scraped from these docs, and upjet derives reference
+# extractors from it, so generating against the wrong version produces a tree
+# that builds and tests clean while encoding the previous provider's API
+# relationships.
 pull-docs:
+	@if [ -d "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)" ] && \
+		[ "$$(git -C "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)" describe --tags --exact-match 2>/dev/null)" != "v$(TERRAFORM_PROVIDER_VERSION)" ]; then \
+		$(INFO) refreshing provider docs for v$(TERRAFORM_PROVIDER_VERSION); \
+		rm -rf "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)"; \
+	fi
 	@if [ ! -d "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)" ]; then \
   		mkdir -p "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)" && \
 		git clone -c advice.detachedHead=false --depth 1 --filter=blob:none --branch "v$(TERRAFORM_PROVIDER_VERSION)" --sparse "$(TERRAFORM_PROVIDER_REPO)" "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)"; \
