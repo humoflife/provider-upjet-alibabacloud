@@ -5,6 +5,7 @@
 package config
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/crossplane-contrib/provider-alibabacloud/config/common"
@@ -157,6 +158,51 @@ func AddExternalTagsField() config.ResourceOption {
 	return func(r *config.Resource) {
 		if s, ok := r.TerraformResource.Schema["tags"]; ok && s.Type == schema.TypeMap {
 			r.InitializerFns = append(r.InitializerFns, config.TagInitializer)
+		}
+	}
+}
+
+// backtickRun matches a run of consecutive backticks.
+var backtickRun = regexp.MustCompile("`+")
+
+// DocumentationForEmptyCodeSpans removes empty inline code spans from the
+// scraped upstream documentation.
+//
+// Nine alicloud resources document their computed id as
+//
+//	The ID of the resource supplied above.The value is formulated as ``.
+//
+// where upstream left the inline code span empty (other resources carry
+// something like <db_cluster_id>:<account_name> there). Those two backticks
+// make the generated output depend on which Go toolchain built the goimports
+// binary that upjet shells out to: typewriter emits field comments at column 1,
+// so go/printer treats them as top-level doc comments and runs them through
+// go/doc/comment, which rewrites an empty code span into a U+201C quote. Go
+// 1.27's printer skips that for field comments, so the same source yields
+// different bytes under different toolchains and check-diff fails depending on
+// how goimports was compiled.
+//
+// Dropping the empty span removes the trigger, so generation is reproducible
+// under every toolchain. Runs of three or more backticks are left alone so
+// fenced blocks and real code spans are unaffected.
+func DocumentationForEmptyCodeSpans() config.ResourceOption {
+	return func(r *config.Resource) {
+		if r.MetaResource == nil {
+			return
+		}
+		for k, v := range r.MetaResource.ArgumentDocs {
+			if !strings.Contains(v, "``") {
+				continue
+			}
+			cleaned := backtickRun.ReplaceAllStringFunc(v, func(run string) string {
+				if len(run) == 2 {
+					return ""
+				}
+				return run
+			})
+			// Removing the span leaves a space before the sentence's period.
+			cleaned = strings.ReplaceAll(cleaned, " .", ".")
+			r.MetaResource.ArgumentDocs[k] = cleaned
 		}
 	}
 }
