@@ -25,6 +25,7 @@ import (
 	healthchecktemplate "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/alb/healthchecktemplate"
 	listener "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/alb/listener"
 	listeneraclattachment "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/alb/listeneraclattachment"
+	listeneradditionalcertificateattachment "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/alb/listeneradditionalcertificateattachment"
 	loadbalancer "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/alb/loadbalancer"
 	loadbalancersecuritygroupattachment "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/alb/loadbalancersecuritygroupattachment"
 	loadbalancerzoneshiftedattachment "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/alb/loadbalancerzoneshiftedattachment"
@@ -121,6 +122,7 @@ import (
 	queue "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/messageservice/queue"
 	subscription "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/messageservice/subscription"
 	topicmessageservice "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/messageservice/topic"
+	loadbalancernlb "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/nlb/loadbalancer"
 	application "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/application"
 	applicationgroup "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/applicationgroup"
 	defaultpatchbaseline "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/oos/defaultpatchbaseline"
@@ -204,6 +206,7 @@ import (
 	project "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/sls/project"
 	store "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/sls/store"
 	storeindex "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/sls/storeindex"
+	certificate "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/sslcertificatesservice/certificate"
 	accounttair "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/tair/account"
 	auditlogconfig "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/tair/auditlogconfig"
 	connection "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/tair/connection"
@@ -234,6 +237,7 @@ func Setup_monolith(mgr ctrl.Manager, o controller.Options) error {
 		healthchecktemplate.Setup,
 		listener.Setup,
 		listeneraclattachment.Setup,
+		listeneradditionalcertificateattachment.Setup,
 		loadbalancer.Setup,
 		loadbalancersecuritygroupattachment.Setup,
 		loadbalancerzoneshiftedattachment.Setup,
@@ -330,6 +334,7 @@ func Setup_monolith(mgr ctrl.Manager, o controller.Options) error {
 		queue.Setup,
 		subscription.Setup,
 		topicmessageservice.Setup,
+		loadbalancernlb.Setup,
 		application.Setup,
 		applicationgroup.Setup,
 		defaultpatchbaseline.Setup,
@@ -413,6 +418,7 @@ func Setup_monolith(mgr ctrl.Manager, o controller.Options) error {
 		project.Setup,
 		store.Setup,
 		storeindex.Setup,
+		certificate.Setup,
 		accounttair.Setup,
 		auditlogconfig.Setup,
 		connection.Setup,

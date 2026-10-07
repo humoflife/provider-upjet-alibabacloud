@@ -22,6 +22,7 @@ import (
 	v1alpha1fcv3 "github.com/crossplane-contrib/provider-alibabacloud/apis/fcv3/v1alpha1"
 	v1alpha1kms "github.com/crossplane-contrib/provider-alibabacloud/apis/kms/v1alpha1"
 	v1alpha1messageservice "github.com/crossplane-contrib/provider-alibabacloud/apis/messageservice/v1alpha1"
+	v1alpha1nlb "github.com/crossplane-contrib/provider-alibabacloud/apis/nlb/v1alpha1"
 	v1alpha1oos "github.com/crossplane-contrib/provider-alibabacloud/apis/oos/v1alpha1"
 	v1alpha1oss "github.com/crossplane-contrib/provider-alibabacloud/apis/oss/v1alpha1"
 	v1alpha1polardb "github.com/crossplane-contrib/provider-alibabacloud/apis/polardb/v1alpha1"
@@ -30,6 +31,7 @@ import (
 	v1alpha1ram "github.com/crossplane-contrib/provider-alibabacloud/apis/ram/v1alpha1"
 	v1alpha1slb "github.com/crossplane-contrib/provider-alibabacloud/apis/slb/v1alpha1"
 	v1alpha1sls "github.com/crossplane-contrib/provider-alibabacloud/apis/sls/v1alpha1"
+	v1alpha1sslcertificatesservice "github.com/crossplane-contrib/provider-alibabacloud/apis/sslcertificatesservice/v1alpha1"
 	v1alpha1tair "github.com/crossplane-contrib/provider-alibabacloud/apis/tair/v1alpha1"
 	v1alpha1apis "github.com/crossplane-contrib/provider-alibabacloud/apis/v1alpha1"
 	v1beta1 "github.com/crossplane-contrib/provider-alibabacloud/apis/v1beta1"
@@ -51,6 +53,7 @@ func init() {
 		v1alpha1fcv3.SchemeBuilder.AddToScheme,
 		v1alpha1kms.SchemeBuilder.AddToScheme,
 		v1alpha1messageservice.SchemeBuilder.AddToScheme,
+		v1alpha1nlb.SchemeBuilder.AddToScheme,
 		v1alpha1oos.SchemeBuilder.AddToScheme,
 		v1alpha1oss.SchemeBuilder.AddToScheme,
 		v1alpha1polardb.SchemeBuilder.AddToScheme,
@@ -59,6 +62,7 @@ func init() {
 		v1alpha1ram.SchemeBuilder.AddToScheme,
 		v1alpha1slb.SchemeBuilder.AddToScheme,
 		v1alpha1sls.SchemeBuilder.AddToScheme,
+		v1alpha1sslcertificatesservice.SchemeBuilder.AddToScheme,
 		v1alpha1tair.SchemeBuilder.AddToScheme,
 		v1alpha1apis.SchemeBuilder.AddToScheme,
 		v1beta1.SchemeBuilder.AddToScheme,
