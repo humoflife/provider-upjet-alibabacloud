@@ -162,8 +162,10 @@ func AddExternalTagsField() config.ResourceOption {
 	}
 }
 
-// backtickRun matches a run of consecutive backticks.
-var backtickRun = regexp.MustCompile("`+")
+// emptyCodeSpan matches a run of backticks together with any spaces before it,
+// so removing an empty span does not leave a space stranded before the
+// following punctuation.
+var emptyCodeSpan = regexp.MustCompile(" *`+")
 
 // DocumentationForEmptyCodeSpans removes empty inline code spans from the
 // scraped upstream documentation.
@@ -184,7 +186,12 @@ var backtickRun = regexp.MustCompile("`+")
 //
 // Dropping the empty span removes the trigger, so generation is reproducible
 // under every toolchain. Runs of three or more backticks are left alone so
-// fenced blocks and real code spans are unaffected.
+// fenced blocks and real code spans are unaffected, as are single backticks,
+// which is what a non-empty span is made of.
+//
+// Only alicloud_hbase_instance.core_disk_type has the span mid-sentence rather
+// than before a full stop; there the surrounding punctuation is left as the
+// upstream docs wrote it. That resource is not generated here today.
 func DocumentationForEmptyCodeSpans() config.ResourceOption {
 	return func(r *config.Resource) {
 		if r.MetaResource == nil {
@@ -194,15 +201,12 @@ func DocumentationForEmptyCodeSpans() config.ResourceOption {
 			if !strings.Contains(v, "``") {
 				continue
 			}
-			cleaned := backtickRun.ReplaceAllStringFunc(v, func(run string) string {
-				if len(run) == 2 {
+			r.MetaResource.ArgumentDocs[k] = emptyCodeSpan.ReplaceAllStringFunc(v, func(match string) string {
+				if strings.Count(match, "`") == 2 {
 					return ""
 				}
-				return run
+				return match
 			})
-			// Removing the span leaves a space before the sentence's period.
-			cleaned = strings.ReplaceAll(cleaned, " .", ".")
-			r.MetaResource.ArgumentDocs[k] = cleaned
 		}
 	}
 }
