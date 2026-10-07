@@ -1013,22 +1013,6 @@ func (mg *ReadonlyInstance) ResolveReferences(ctx context.Context, c client.Read
 	mg.Spec.ForProvider.EngineVersionRef = rsp.ResolvedReference
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.InstanceType),
-		Extract:      resource.ExtractParamPath("instance_type", false),
-		Reference:    mg.Spec.ForProvider.InstanceTypeRef,
-		Selector:     mg.Spec.ForProvider.InstanceTypeSelector,
-		To: reference.To{
-			List:    &InstanceList{},
-			Managed: &Instance{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.ForProvider.InstanceType")
-	}
-	mg.Spec.ForProvider.InstanceType = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.InstanceTypeRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.MasterDBInstanceID),
 		Extract:      common.IdExtractor(),
 		Reference:    mg.Spec.ForProvider.MasterDBInstanceIDRef,
@@ -1091,22 +1075,6 @@ func (mg *ReadonlyInstance) ResolveReferences(ctx context.Context, c client.Read
 	}
 	mg.Spec.InitProvider.EngineVersion = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.InitProvider.EngineVersionRef = rsp.ResolvedReference
-
-	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
-		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.InstanceType),
-		Extract:      resource.ExtractParamPath("instance_type", false),
-		Reference:    mg.Spec.InitProvider.InstanceTypeRef,
-		Selector:     mg.Spec.InitProvider.InstanceTypeSelector,
-		To: reference.To{
-			List:    &InstanceList{},
-			Managed: &Instance{},
-		},
-	})
-	if err != nil {
-		return errors.Wrap(err, "mg.Spec.InitProvider.InstanceType")
-	}
-	mg.Spec.InitProvider.InstanceType = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.InitProvider.InstanceTypeRef = rsp.ResolvedReference
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.MasterDBInstanceID),

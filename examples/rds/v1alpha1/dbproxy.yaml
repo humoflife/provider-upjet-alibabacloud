@@ -47,9 +47,11 @@ spec:
       matchLabels:
         testing.upbound.io/example-name: default
     instanceStorage: 20
-    instanceTypeSelector:
-      matchLabels:
-        testing.upbound.io/example-name: default
+    # A read-only instance takes a read-only class: the primary's
+    # mysql.n2.medium.2c is rejected with InvalidSaleComponentFault. This one is
+    # High-availability with cloud disks, matching the primary.
+    instanceType: mysqlro.n2.small.1c
+    dbInstanceStorageType: cloud_essd
     zoneIdSelector:
       matchLabels:
         testing.upbound.io/example-name: default

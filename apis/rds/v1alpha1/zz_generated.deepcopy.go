@@ -6535,16 +6535,6 @@ func (in *ReadonlyInstanceInitParameters) DeepCopyInto(out *ReadonlyInstanceInit
 		*out = new(string)
 		**out = **in
 	}
-	if in.InstanceTypeRef != nil {
-		in, out := &in.InstanceTypeRef, &out.InstanceTypeRef
-		*out = new(v1.Reference)
-		(*in).DeepCopyInto(*out)
-	}
-	if in.InstanceTypeSelector != nil {
-		in, out := &in.InstanceTypeSelector, &out.InstanceTypeSelector
-		*out = new(v1.Selector)
-		(*in).DeepCopyInto(*out)
-	}
 	if in.MasterDBInstanceID != nil {
 		in, out := &in.MasterDBInstanceID, &out.MasterDBInstanceID
 		*out = new(string)
@@ -7089,16 +7079,6 @@ func (in *ReadonlyInstanceParameters) DeepCopyInto(out *ReadonlyInstanceParamete
 		in, out := &in.InstanceType, &out.InstanceType
 		*out = new(string)
 		**out = **in
-	}
-	if in.InstanceTypeRef != nil {
-		in, out := &in.InstanceTypeRef, &out.InstanceTypeRef
-		*out = new(v1.Reference)
-		(*in).DeepCopyInto(*out)
-	}
-	if in.InstanceTypeSelector != nil {
-		in, out := &in.InstanceTypeSelector, &out.InstanceTypeSelector
-		*out = new(v1.Selector)
-		(*in).DeepCopyInto(*out)
 	}
 	if in.MasterDBInstanceID != nil {
 		in, out := &in.MasterDBInstanceID, &out.MasterDBInstanceID

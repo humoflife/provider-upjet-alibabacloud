@@ -53,6 +53,12 @@ func Configure(p *config.Provider) {
 		// always resolves to "" and reference resolution fails with
 		// "referenced field was empty". Supply the value literally instead.
 		delete(r.References, "instance_storage")
+		// The same example also contributes instance_type -> alicloud_db_instance,
+		// which resolves to the primary's class. A read-only instance takes a
+		// read-only class (mysqlro.*), and the primary's is rejected with
+		// InvalidSaleComponentFault, so the reference can only ever produce an
+		// invalid value. Supply the class literally instead.
+		delete(r.References, "instance_type")
 		// Also not Sensitive upstream; same reasoning as alicloud_db_instance.
 		r.TerraformResource.Schema["server_key"].Sensitive = true
 	})

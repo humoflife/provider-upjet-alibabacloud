@@ -83,17 +83,7 @@ type ReadonlyInstanceInitParameters struct {
 	InstanceStorage *float64 `json:"instanceStorage,omitempty" tf:"instance_storage,omitempty"`
 
 	// DB Instance type. For details, see Instance type table.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/rds/v1alpha1.Instance
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("instance_type",false)
 	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
-
-	// Reference to a Instance in rds to populate instanceType.
-	// +kubebuilder:validation:Optional
-	InstanceTypeRef *v1.Reference `json:"instanceTypeRef,omitempty" tf:"-"`
-
-	// Selector for a Instance in rds to populate instanceType.
-	// +kubebuilder:validation:Optional
-	InstanceTypeSelector *v1.Selector `json:"instanceTypeSelector,omitempty" tf:"-"`
 
 	// ID of the master instance.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/rds/v1alpha1.Instance
@@ -405,18 +395,8 @@ type ReadonlyInstanceParameters struct {
 	InstanceStorage *float64 `json:"instanceStorage,omitempty" tf:"instance_storage,omitempty"`
 
 	// DB Instance type. For details, see Instance type table.
-	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/rds/v1alpha1.Instance
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("instance_type",false)
 	// +kubebuilder:validation:Optional
 	InstanceType *string `json:"instanceType,omitempty" tf:"instance_type,omitempty"`
-
-	// Reference to a Instance in rds to populate instanceType.
-	// +kubebuilder:validation:Optional
-	InstanceTypeRef *v1.Reference `json:"instanceTypeRef,omitempty" tf:"-"`
-
-	// Selector for a Instance in rds to populate instanceType.
-	// +kubebuilder:validation:Optional
-	InstanceTypeSelector *v1.Selector `json:"instanceTypeSelector,omitempty" tf:"-"`
 
 	// ID of the master instance.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/rds/v1alpha1.Instance
@@ -598,6 +578,7 @@ type ReadonlyInstance struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.instanceStorage) || (has(self.initProvider) && has(self.initProvider.instanceStorage))",message="spec.forProvider.instanceStorage is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.instanceType) || (has(self.initProvider) && has(self.initProvider.instanceType))",message="spec.forProvider.instanceType is a required parameter"
 	Spec   ReadonlyInstanceSpec   `json:"spec"`
 	Status ReadonlyInstanceStatus `json:"status,omitempty"`
 }
