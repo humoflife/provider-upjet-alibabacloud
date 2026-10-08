@@ -15,13 +15,13 @@ import (
 
 type BackupPolicyInitParameters struct {
 
-	// Instance archive backup keep count. Valid when the enable_backup_log is true and instance is mysql local disk. When archive_backup_keep_policy is ByMonth Valid values: [1-31]. When archive_backup_keep_policy is ByWeek Valid values: [1-7].
+	// Instance archive backup keep count. Valid when the enable_backup_log is true and instance is MySQL local disk. When archive_backup_keep_policy is ByMonth, valid values: 1-31. When archive_backup_keep_policy is ByWeek, valid values: 1-7.
 	ArchiveBackupKeepCount *float64 `json:"archiveBackupKeepCount,omitempty" tf:"archive_backup_keep_count,omitempty"`
 
-	// Instance archive backup keep policy. Valid when the enable_backup_log is true and instance is mysql local disk. Valid values are ByMonth, ByWeek, KeepAll.
+	// Instance archive backup keep policy. Valid when the enable_backup_log is true and instance is MySQL local disk. Valid values: ByMonth, ByWeek, KeepAll.
 	ArchiveBackupKeepPolicy *string `json:"archiveBackupKeepPolicy,omitempty" tf:"archive_backup_keep_policy,omitempty"`
 
-	// Instance archive backup retention days. Valid when the enable_backup_log is true and instance is mysql local disk. Valid values: [30-1095], and archive_backup_retention_period must larger than backup_retention_period 730.
+	// Instance archive backup retention days. Valid when the enable_backup_log is true and instance is MySQL local disk. Valid values: 30-1095, and archive_backup_retention_period must larger than backup_retention_period 730.
 	ArchiveBackupRetentionPeriod *float64 `json:"archiveBackupRetentionPeriod,omitempty" tf:"archive_backup_retention_period,omitempty"`
 
 	// The frequency at which you want to perform a snapshot backup on the instance. Valid values:
@@ -33,26 +33,31 @@ type BackupPolicyInitParameters struct {
 	// Specifies whether the backup settings of a secondary instance are configured. Valid values:
 	BackupPriority *float64 `json:"backupPriority,omitempty" tf:"backup_priority,omitempty"`
 
-	// Instance backup retention days. Valid values: [7-730]. Default to 7. But mysql local disk is unlimited.
+	// Instance backup retention days. Valid values: 7-730. Defaults to 7. But MySQL local disk is unlimited.
 	BackupRetentionPeriod *float64 `json:"backupRetentionPeriod,omitempty" tf:"backup_retention_period,omitempty"`
 
-	// Whether to enable second level backup.Valid values are Flash, Standard, Note:It only takes effect when the BackupPolicyMode parameter is DataBackupPolicy.
-	// -> NOTE: You can configure a backup policy by using this parameter and the PreferredBackupPeriod parameter. For example, if you set the PreferredBackupPeriod parameter to Saturday,Sunday and the BackupInterval parameter to -1, a snapshot backup is performed on every Saturday and Sunday.If the instance runs PostgreSQL, the BackupInterval parameter is supported only when the instance is equipped with standard SSDs or enhanced SSDs (ESSDs).This parameter takes effect only when you set the BackupPolicyMode parameter to DataBackupPolicy.
+	// Whether to enable second level backup. Valid values: Flash, Standard. Note: It only takes effect when the BackupPolicyMode parameter is DataBackupPolicy.
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
-	// The compress type of instance policy. Valid values are 1, 4, 8.
+	// The compress type of instance policy. Valid values: 1, 4, 8.
 	CompressType *string `json:"compressType,omitempty" tf:"compress_type,omitempty"`
 
-	// Whether to backup instance log. Valid values are true, false, Default to true. Note: The 'Basic Edition' category Rds instance does not support setting log backup. What is Basic Edition.
+	// Whether to backup instance log. Valid values: true, false. Defaults to true. Note: The Basic Edition category RDS instance does not support setting log backup. What is Basic Edition.
 	EnableBackupLog *bool `json:"enableBackupLog,omitempty" tf:"enable_backup_log,omitempty"`
 
 	// Specifies whether to enable incremental backup. Valid values:
 	EnableIncrementDataBackup *bool `json:"enableIncrementDataBackup,omitempty" tf:"enable_increment_data_backup,omitempty"`
 
-	// Instance high space usage protection policy. Valid when the enable_backup_log is true. Valid values are Enable, Disable.
+	// Specifies whether to enable PITR (Point-in-Time Recovery) on the MySQL instance. Valid values: true, false. This parameter takes effect only when enable_backup_log is true and BackupPolicyMode is set to DataBackupPolicy.
+	EnablePitrProtection *bool `json:"enablePitrProtection,omitempty" tf:"enable_pitr_protection,omitempty"`
+
+	// Instance high space usage protection policy. Valid when the enable_backup_log is true. Valid values: Enable, Disable. Defaults to Enable.
 	HighSpaceUsageProtection *string `json:"highSpaceUsageProtection,omitempty" tf:"high_space_usage_protection,omitempty"`
 
-	// The Id of instance that can run database.
+	// The frequency at which you want to perform incremental backup on the MySQL instance. Valid when the enable_increment_data_backup is true and instance is MySQL local disk. Valid values: 60, 120, 240, 360, 720.
+	IncBackupInterval *float64 `json:"incBackupInterval,omitempty" tf:"inc_backup_interval,omitempty"`
+
+	// The ID of the instance that can run database.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/rds/v1alpha1.Instance
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.IdExtractor()
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
@@ -65,42 +70,41 @@ type BackupPolicyInitParameters struct {
 	// +kubebuilder:validation:Optional
 	InstanceIDSelector *v1.Selector `json:"instanceIdSelector,omitempty" tf:"-"`
 
-	// Instance log backup local retention hours. Valid when the enable_backup_log is true. Valid values: [0-7*24].
+	// Instance log backup local retention hours. Valid when the enable_backup_log is true. Valid values: 0-168.
 	LocalLogRetentionHours *float64 `json:"localLogRetentionHours,omitempty" tf:"local_log_retention_hours,omitempty"`
 
-	// Instance log backup local retention space. Valid when the enable_backup_log is true. Valid values: [0-50].
+	// Instance log backup local retention space. Valid when the enable_backup_log is true. Valid values: 0-50.
 	LocalLogRetentionSpace *float64 `json:"localLogRetentionSpace,omitempty" tf:"local_log_retention_space,omitempty"`
 
-	// Instance log backup frequency. Valid when the instance engine is SQLServer. Valid values are LogInterval.
+	// Instance log backup frequency. Valid when the instance engine is SQLServer. Valid values: LogInterval.
 	LogBackupFrequency *string `json:"logBackupFrequency,omitempty" tf:"log_backup_frequency,omitempty"`
 
-	// The number of binary log files that you want to retain on the instance. Default value: 60. Valid values: 6 to 100.
-	// ->NOTE: This parameter takes effect only when you set the BackupPolicyMode parameter to LogBackupPolicy. If the instance runs MySQL, you can set this parameter to -1. The value -1 specifies that an unlimited number of binary log files can be retained on the instance.
+	// The number of binary log files that you want to retain on the instance. Defaults to 60. Valid values: 6-100.
 	LogBackupLocalRetentionNumber *float64 `json:"logBackupLocalRetentionNumber,omitempty" tf:"log_backup_local_retention_number,omitempty"`
 
-	// Instance log backup retention days. Valid when the enable_backup_log is 1. Valid values: [7-730]. Default to 7. It cannot be larger than backup_retention_period.
+	// Instance log backup retention days. Valid when the enable_backup_log is true. Valid values: 7-730. Defaults to 7. It cannot be larger than backup_retention_period.
 	LogBackupRetentionPeriod *float64 `json:"logBackupRetentionPeriod,omitempty" tf:"log_backup_retention_period,omitempty"`
 
-	// DB Instance backup period. Please set at least two days to ensure backing up at least twice a week. Valid values: [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday].
+	// DB Instance backup period. Please set at least two days to ensure backing up at least twice a week. Valid values: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.
 	// +listType=set
 	PreferredBackupPeriod []*string `json:"preferredBackupPeriod,omitempty" tf:"preferred_backup_period,omitempty"`
 
-	// DB instance backup time, in the format of HH:mmZ- HH:mmZ. Time setting interval is one hour. Default to "02:00Z-03:00Z". China time is 8 hours behind it.
+	// DB instance backup time, in the format of HH:mmZ-HH:mmZ. Time setting interval is one hour. Defaults to 02:00Z-03:00Z. China time is 8 hours behind it.
 	PreferredBackupTime *string `json:"preferredBackupTime,omitempty" tf:"preferred_backup_time,omitempty"`
 
-	// The policy based on which ApsaraDB RDS retains archived backup files if the instance is released. Default value: None. Valid values:
+	// The policy based on which ApsaraDB RDS retains archived backup files if the instance is released. Defaults to None. Valid values:
 	ReleasedKeepPolicy *string `json:"releasedKeepPolicy,omitempty" tf:"released_keep_policy,omitempty"`
 }
 
 type BackupPolicyObservation struct {
 
-	// Instance archive backup keep count. Valid when the enable_backup_log is true and instance is mysql local disk. When archive_backup_keep_policy is ByMonth Valid values: [1-31]. When archive_backup_keep_policy is ByWeek Valid values: [1-7].
+	// Instance archive backup keep count. Valid when the enable_backup_log is true and instance is MySQL local disk. When archive_backup_keep_policy is ByMonth, valid values: 1-31. When archive_backup_keep_policy is ByWeek, valid values: 1-7.
 	ArchiveBackupKeepCount *float64 `json:"archiveBackupKeepCount,omitempty" tf:"archive_backup_keep_count,omitempty"`
 
-	// Instance archive backup keep policy. Valid when the enable_backup_log is true and instance is mysql local disk. Valid values are ByMonth, ByWeek, KeepAll.
+	// Instance archive backup keep policy. Valid when the enable_backup_log is true and instance is MySQL local disk. Valid values: ByMonth, ByWeek, KeepAll.
 	ArchiveBackupKeepPolicy *string `json:"archiveBackupKeepPolicy,omitempty" tf:"archive_backup_keep_policy,omitempty"`
 
-	// Instance archive backup retention days. Valid when the enable_backup_log is true and instance is mysql local disk. Valid values: [30-1095], and archive_backup_retention_period must larger than backup_retention_period 730.
+	// Instance archive backup retention days. Valid when the enable_backup_log is true and instance is MySQL local disk. Valid values: 30-1095, and archive_backup_retention_period must larger than backup_retention_period 730.
 	ArchiveBackupRetentionPeriod *float64 `json:"archiveBackupRetentionPeriod,omitempty" tf:"archive_backup_retention_period,omitempty"`
 
 	// The frequency at which you want to perform a snapshot backup on the instance. Valid values:
@@ -112,69 +116,73 @@ type BackupPolicyObservation struct {
 	// Specifies whether the backup settings of a secondary instance are configured. Valid values:
 	BackupPriority *float64 `json:"backupPriority,omitempty" tf:"backup_priority,omitempty"`
 
-	// Instance backup retention days. Valid values: [7-730]. Default to 7. But mysql local disk is unlimited.
+	// Instance backup retention days. Valid values: 7-730. Defaults to 7. But MySQL local disk is unlimited.
 	BackupRetentionPeriod *float64 `json:"backupRetentionPeriod,omitempty" tf:"backup_retention_period,omitempty"`
 
-	// Whether to enable second level backup.Valid values are Flash, Standard, Note:It only takes effect when the BackupPolicyMode parameter is DataBackupPolicy.
-	// -> NOTE: You can configure a backup policy by using this parameter and the PreferredBackupPeriod parameter. For example, if you set the PreferredBackupPeriod parameter to Saturday,Sunday and the BackupInterval parameter to -1, a snapshot backup is performed on every Saturday and Sunday.If the instance runs PostgreSQL, the BackupInterval parameter is supported only when the instance is equipped with standard SSDs or enhanced SSDs (ESSDs).This parameter takes effect only when you set the BackupPolicyMode parameter to DataBackupPolicy.
+	// Whether to enable second level backup. Valid values: Flash, Standard. Note: It only takes effect when the BackupPolicyMode parameter is DataBackupPolicy.
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
-	// The compress type of instance policy. Valid values are 1, 4, 8.
+	// The compress type of instance policy. Valid values: 1, 4, 8.
 	CompressType *string `json:"compressType,omitempty" tf:"compress_type,omitempty"`
 
-	// Whether to backup instance log. Valid values are true, false, Default to true. Note: The 'Basic Edition' category Rds instance does not support setting log backup. What is Basic Edition.
+	// Whether to backup instance log. Valid values: true, false. Defaults to true. Note: The Basic Edition category RDS instance does not support setting log backup. What is Basic Edition.
 	EnableBackupLog *bool `json:"enableBackupLog,omitempty" tf:"enable_backup_log,omitempty"`
 
 	// Specifies whether to enable incremental backup. Valid values:
 	EnableIncrementDataBackup *bool `json:"enableIncrementDataBackup,omitempty" tf:"enable_increment_data_backup,omitempty"`
 
-	// Instance high space usage protection policy. Valid when the enable_backup_log is true. Valid values are Enable, Disable.
+	// Specifies whether to enable PITR (Point-in-Time Recovery) on the MySQL instance. Valid values: true, false. This parameter takes effect only when enable_backup_log is true and BackupPolicyMode is set to DataBackupPolicy.
+	EnablePitrProtection *bool `json:"enablePitrProtection,omitempty" tf:"enable_pitr_protection,omitempty"`
+
+	// Instance high space usage protection policy. Valid when the enable_backup_log is true. Valid values: Enable, Disable. Defaults to Enable.
 	HighSpaceUsageProtection *string `json:"highSpaceUsageProtection,omitempty" tf:"high_space_usage_protection,omitempty"`
 
-	// The current backup policy resource ID. It is same as 'instance_id'.
+	// The current backup policy resource ID. It is same as instance_id.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// The Id of instance that can run database.
+	// The frequency at which you want to perform incremental backup on the MySQL instance. Valid when the enable_increment_data_backup is true and instance is MySQL local disk. Valid values: 60, 120, 240, 360, 720.
+	IncBackupInterval *float64 `json:"incBackupInterval,omitempty" tf:"inc_backup_interval,omitempty"`
+
+	// The ID of the instance that can run database.
 	InstanceID *string `json:"instanceId,omitempty" tf:"instance_id,omitempty"`
 
-	// Instance log backup local retention hours. Valid when the enable_backup_log is true. Valid values: [0-7*24].
+	// Instance log backup local retention hours. Valid when the enable_backup_log is true. Valid values: 0-168.
 	LocalLogRetentionHours *float64 `json:"localLogRetentionHours,omitempty" tf:"local_log_retention_hours,omitempty"`
 
-	// Instance log backup local retention space. Valid when the enable_backup_log is true. Valid values: [0-50].
+	// Instance log backup local retention space. Valid when the enable_backup_log is true. Valid values: 0-50.
 	LocalLogRetentionSpace *float64 `json:"localLogRetentionSpace,omitempty" tf:"local_log_retention_space,omitempty"`
 
-	// Instance log backup frequency. Valid when the instance engine is SQLServer. Valid values are LogInterval.
+	// Instance log backup frequency. Valid when the instance engine is SQLServer. Valid values: LogInterval.
 	LogBackupFrequency *string `json:"logBackupFrequency,omitempty" tf:"log_backup_frequency,omitempty"`
 
-	// The number of binary log files that you want to retain on the instance. Default value: 60. Valid values: 6 to 100.
-	// ->NOTE: This parameter takes effect only when you set the BackupPolicyMode parameter to LogBackupPolicy. If the instance runs MySQL, you can set this parameter to -1. The value -1 specifies that an unlimited number of binary log files can be retained on the instance.
+	// The number of binary log files that you want to retain on the instance. Defaults to 60. Valid values: 6-100.
 	LogBackupLocalRetentionNumber *float64 `json:"logBackupLocalRetentionNumber,omitempty" tf:"log_backup_local_retention_number,omitempty"`
 
-	// Instance log backup retention days. Valid when the enable_backup_log is 1. Valid values: [7-730]. Default to 7. It cannot be larger than backup_retention_period.
+	// Instance log backup retention days. Valid when the enable_backup_log is true. Valid values: 7-730. Defaults to 7. It cannot be larger than backup_retention_period.
 	LogBackupRetentionPeriod *float64 `json:"logBackupRetentionPeriod,omitempty" tf:"log_backup_retention_period,omitempty"`
 
-	// DB Instance backup period. Please set at least two days to ensure backing up at least twice a week. Valid values: [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday].
+	// DB Instance backup period. Please set at least two days to ensure backing up at least twice a week. Valid values: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.
 	// +listType=set
 	PreferredBackupPeriod []*string `json:"preferredBackupPeriod,omitempty" tf:"preferred_backup_period,omitempty"`
 
-	// DB instance backup time, in the format of HH:mmZ- HH:mmZ. Time setting interval is one hour. Default to "02:00Z-03:00Z". China time is 8 hours behind it.
+	// DB instance backup time, in the format of HH:mmZ-HH:mmZ. Time setting interval is one hour. Defaults to 02:00Z-03:00Z. China time is 8 hours behind it.
 	PreferredBackupTime *string `json:"preferredBackupTime,omitempty" tf:"preferred_backup_time,omitempty"`
 
-	// The policy based on which ApsaraDB RDS retains archived backup files if the instance is released. Default value: None. Valid values:
+	// The policy based on which ApsaraDB RDS retains archived backup files if the instance is released. Defaults to None. Valid values:
 	ReleasedKeepPolicy *string `json:"releasedKeepPolicy,omitempty" tf:"released_keep_policy,omitempty"`
 }
 
 type BackupPolicyParameters struct {
 
-	// Instance archive backup keep count. Valid when the enable_backup_log is true and instance is mysql local disk. When archive_backup_keep_policy is ByMonth Valid values: [1-31]. When archive_backup_keep_policy is ByWeek Valid values: [1-7].
+	// Instance archive backup keep count. Valid when the enable_backup_log is true and instance is MySQL local disk. When archive_backup_keep_policy is ByMonth, valid values: 1-31. When archive_backup_keep_policy is ByWeek, valid values: 1-7.
 	// +kubebuilder:validation:Optional
 	ArchiveBackupKeepCount *float64 `json:"archiveBackupKeepCount,omitempty" tf:"archive_backup_keep_count,omitempty"`
 
-	// Instance archive backup keep policy. Valid when the enable_backup_log is true and instance is mysql local disk. Valid values are ByMonth, ByWeek, KeepAll.
+	// Instance archive backup keep policy. Valid when the enable_backup_log is true and instance is MySQL local disk. Valid values: ByMonth, ByWeek, KeepAll.
 	// +kubebuilder:validation:Optional
 	ArchiveBackupKeepPolicy *string `json:"archiveBackupKeepPolicy,omitempty" tf:"archive_backup_keep_policy,omitempty"`
 
-	// Instance archive backup retention days. Valid when the enable_backup_log is true and instance is mysql local disk. Valid values: [30-1095], and archive_backup_retention_period must larger than backup_retention_period 730.
+	// Instance archive backup retention days. Valid when the enable_backup_log is true and instance is MySQL local disk. Valid values: 30-1095, and archive_backup_retention_period must larger than backup_retention_period 730.
 	// +kubebuilder:validation:Optional
 	ArchiveBackupRetentionPeriod *float64 `json:"archiveBackupRetentionPeriod,omitempty" tf:"archive_backup_retention_period,omitempty"`
 
@@ -190,20 +198,19 @@ type BackupPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	BackupPriority *float64 `json:"backupPriority,omitempty" tf:"backup_priority,omitempty"`
 
-	// Instance backup retention days. Valid values: [7-730]. Default to 7. But mysql local disk is unlimited.
+	// Instance backup retention days. Valid values: 7-730. Defaults to 7. But MySQL local disk is unlimited.
 	// +kubebuilder:validation:Optional
 	BackupRetentionPeriod *float64 `json:"backupRetentionPeriod,omitempty" tf:"backup_retention_period,omitempty"`
 
-	// Whether to enable second level backup.Valid values are Flash, Standard, Note:It only takes effect when the BackupPolicyMode parameter is DataBackupPolicy.
-	// -> NOTE: You can configure a backup policy by using this parameter and the PreferredBackupPeriod parameter. For example, if you set the PreferredBackupPeriod parameter to Saturday,Sunday and the BackupInterval parameter to -1, a snapshot backup is performed on every Saturday and Sunday.If the instance runs PostgreSQL, the BackupInterval parameter is supported only when the instance is equipped with standard SSDs or enhanced SSDs (ESSDs).This parameter takes effect only when you set the BackupPolicyMode parameter to DataBackupPolicy.
+	// Whether to enable second level backup. Valid values: Flash, Standard. Note: It only takes effect when the BackupPolicyMode parameter is DataBackupPolicy.
 	// +kubebuilder:validation:Optional
 	Category *string `json:"category,omitempty" tf:"category,omitempty"`
 
-	// The compress type of instance policy. Valid values are 1, 4, 8.
+	// The compress type of instance policy. Valid values: 1, 4, 8.
 	// +kubebuilder:validation:Optional
 	CompressType *string `json:"compressType,omitempty" tf:"compress_type,omitempty"`
 
-	// Whether to backup instance log. Valid values are true, false, Default to true. Note: The 'Basic Edition' category Rds instance does not support setting log backup. What is Basic Edition.
+	// Whether to backup instance log. Valid values: true, false. Defaults to true. Note: The Basic Edition category RDS instance does not support setting log backup. What is Basic Edition.
 	// +kubebuilder:validation:Optional
 	EnableBackupLog *bool `json:"enableBackupLog,omitempty" tf:"enable_backup_log,omitempty"`
 
@@ -211,11 +218,19 @@ type BackupPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	EnableIncrementDataBackup *bool `json:"enableIncrementDataBackup,omitempty" tf:"enable_increment_data_backup,omitempty"`
 
-	// Instance high space usage protection policy. Valid when the enable_backup_log is true. Valid values are Enable, Disable.
+	// Specifies whether to enable PITR (Point-in-Time Recovery) on the MySQL instance. Valid values: true, false. This parameter takes effect only when enable_backup_log is true and BackupPolicyMode is set to DataBackupPolicy.
+	// +kubebuilder:validation:Optional
+	EnablePitrProtection *bool `json:"enablePitrProtection,omitempty" tf:"enable_pitr_protection,omitempty"`
+
+	// Instance high space usage protection policy. Valid when the enable_backup_log is true. Valid values: Enable, Disable. Defaults to Enable.
 	// +kubebuilder:validation:Optional
 	HighSpaceUsageProtection *string `json:"highSpaceUsageProtection,omitempty" tf:"high_space_usage_protection,omitempty"`
 
-	// The Id of instance that can run database.
+	// The frequency at which you want to perform incremental backup on the MySQL instance. Valid when the enable_increment_data_backup is true and instance is MySQL local disk. Valid values: 60, 120, 240, 360, 720.
+	// +kubebuilder:validation:Optional
+	IncBackupInterval *float64 `json:"incBackupInterval,omitempty" tf:"inc_backup_interval,omitempty"`
+
+	// The ID of the instance that can run database.
 	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-alibabacloud/apis/rds/v1alpha1.Instance
 	// +crossplane:generate:reference:extractor=github.com/crossplane-contrib/provider-alibabacloud/config/common.IdExtractor()
 	// +kubebuilder:validation:Optional
@@ -229,33 +244,32 @@ type BackupPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	InstanceIDSelector *v1.Selector `json:"instanceIdSelector,omitempty" tf:"-"`
 
-	// Instance log backup local retention hours. Valid when the enable_backup_log is true. Valid values: [0-7*24].
+	// Instance log backup local retention hours. Valid when the enable_backup_log is true. Valid values: 0-168.
 	// +kubebuilder:validation:Optional
 	LocalLogRetentionHours *float64 `json:"localLogRetentionHours,omitempty" tf:"local_log_retention_hours,omitempty"`
 
-	// Instance log backup local retention space. Valid when the enable_backup_log is true. Valid values: [0-50].
+	// Instance log backup local retention space. Valid when the enable_backup_log is true. Valid values: 0-50.
 	// +kubebuilder:validation:Optional
 	LocalLogRetentionSpace *float64 `json:"localLogRetentionSpace,omitempty" tf:"local_log_retention_space,omitempty"`
 
-	// Instance log backup frequency. Valid when the instance engine is SQLServer. Valid values are LogInterval.
+	// Instance log backup frequency. Valid when the instance engine is SQLServer. Valid values: LogInterval.
 	// +kubebuilder:validation:Optional
 	LogBackupFrequency *string `json:"logBackupFrequency,omitempty" tf:"log_backup_frequency,omitempty"`
 
-	// The number of binary log files that you want to retain on the instance. Default value: 60. Valid values: 6 to 100.
-	// ->NOTE: This parameter takes effect only when you set the BackupPolicyMode parameter to LogBackupPolicy. If the instance runs MySQL, you can set this parameter to -1. The value -1 specifies that an unlimited number of binary log files can be retained on the instance.
+	// The number of binary log files that you want to retain on the instance. Defaults to 60. Valid values: 6-100.
 	// +kubebuilder:validation:Optional
 	LogBackupLocalRetentionNumber *float64 `json:"logBackupLocalRetentionNumber,omitempty" tf:"log_backup_local_retention_number,omitempty"`
 
-	// Instance log backup retention days. Valid when the enable_backup_log is 1. Valid values: [7-730]. Default to 7. It cannot be larger than backup_retention_period.
+	// Instance log backup retention days. Valid when the enable_backup_log is true. Valid values: 7-730. Defaults to 7. It cannot be larger than backup_retention_period.
 	// +kubebuilder:validation:Optional
 	LogBackupRetentionPeriod *float64 `json:"logBackupRetentionPeriod,omitempty" tf:"log_backup_retention_period,omitempty"`
 
-	// DB Instance backup period. Please set at least two days to ensure backing up at least twice a week. Valid values: [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday].
+	// DB Instance backup period. Please set at least two days to ensure backing up at least twice a week. Valid values: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	PreferredBackupPeriod []*string `json:"preferredBackupPeriod,omitempty" tf:"preferred_backup_period,omitempty"`
 
-	// DB instance backup time, in the format of HH:mmZ- HH:mmZ. Time setting interval is one hour. Default to "02:00Z-03:00Z". China time is 8 hours behind it.
+	// DB instance backup time, in the format of HH:mmZ-HH:mmZ. Time setting interval is one hour. Defaults to 02:00Z-03:00Z. China time is 8 hours behind it.
 	// +kubebuilder:validation:Optional
 	PreferredBackupTime *string `json:"preferredBackupTime,omitempty" tf:"preferred_backup_time,omitempty"`
 
@@ -264,7 +278,7 @@ type BackupPolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	Region *string `json:"region,omitempty" tf:"-"`
 
-	// The policy based on which ApsaraDB RDS retains archived backup files if the instance is released. Default value: None. Valid values:
+	// The policy based on which ApsaraDB RDS retains archived backup files if the instance is released. Defaults to None. Valid values:
 	// +kubebuilder:validation:Optional
 	ReleasedKeepPolicy *string `json:"releasedKeepPolicy,omitempty" tf:"released_keep_policy,omitempty"`
 }

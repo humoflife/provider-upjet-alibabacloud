@@ -53,7 +53,7 @@ type AccountInitParameters struct {
 	// Resets permissions flag of the privileged account. Default to false. Set it to true can resets permissions of the privileged account.
 	ResetPermissionFlag *bool `json:"resetPermissionFlag,omitempty" tf:"reset_permission_flag,omitempty"`
 
-	// The status of the resource
+	// The status of the resource. Valid values: Available, Unavailable.
 	Status *string `json:"status,omitempty" tf:"status,omitempty"`
 }
 
@@ -87,7 +87,7 @@ type AccountObservation struct {
 	// Resets permissions flag of the privileged account. Default to false. Set it to true can resets permissions of the privileged account.
 	ResetPermissionFlag *bool `json:"resetPermissionFlag,omitempty" tf:"reset_permission_flag,omitempty"`
 
-	// The status of the resource
+	// The status of the resource. Valid values: Available, Unavailable.
 	Status *string `json:"status,omitempty" tf:"status,omitempty"`
 }
 
@@ -145,7 +145,7 @@ type AccountParameters struct {
 	// +kubebuilder:validation:Optional
 	ResetPermissionFlag *bool `json:"resetPermissionFlag,omitempty" tf:"reset_permission_flag,omitempty"`
 
-	// The status of the resource
+	// The status of the resource. Valid values: Available, Unavailable.
 	// +kubebuilder:validation:Optional
 	Status *string `json:"status,omitempty" tf:"status,omitempty"`
 }
