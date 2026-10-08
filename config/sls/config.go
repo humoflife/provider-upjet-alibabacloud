@@ -38,6 +38,10 @@ func Configure(p *config.Provider) {
 		// "name"/"project" are deprecated aliases of "logstore_name"/"project_name".
 		delete(r.TerraformResource.Schema, "name")
 		delete(r.TerraformResource.Schema, "project")
+		// The scraped registry example still wires the deprecated "project" to
+		// alicloud_log_project's "name", which is deleted there as well. With the
+		// field gone no resolver is generated for it, so drop the dead reference.
+		delete(r.References, "project")
 		// Same reasoning as Project.project_name above: upstream documents
 		// logstore_name as "one of logstore_name, name", and the "name" alias is
 		// gone, so it is effectively mandatory.
