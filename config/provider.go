@@ -33,6 +33,7 @@ import (
 	"github.com/crossplane-contrib/provider-alibabacloud/config/privatelink"
 	"github.com/crossplane-contrib/provider-alibabacloud/config/quotas"
 	"github.com/crossplane-contrib/provider-alibabacloud/config/ram"
+	"github.com/crossplane-contrib/provider-alibabacloud/config/rds"
 	"github.com/crossplane-contrib/provider-alibabacloud/config/tair"
 	"github.com/crossplane-contrib/provider-alibabacloud/config/vpc"
 	"github.com/crossplane-contrib/provider-alibabacloud/hack"
@@ -94,6 +95,7 @@ func GetProvider() *ujconfig.Provider {
 		privatelink.Configure,
 		quotas.Configure,
 		ram.Configure,
+		rds.Configure,
 		slb.Configure,
 		sslcertificatesservice.Configure,
 		sls.Configure,

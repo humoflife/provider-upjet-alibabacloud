@@ -197,6 +197,23 @@ import (
 	user "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/ram/user"
 	usergroupattachment "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/ram/usergroupattachment"
 	userpolicyattachment "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/ram/userpolicyattachment"
+	accountrds "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/account"
+	backup "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/backup"
+	backuppolicyrds "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/backuppolicy"
+	connection "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/connection"
+	databaserds "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/database"
+	dbinstanceendpoint "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/dbinstanceendpoint"
+	dbinstanceendpointaddress "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/dbinstanceendpointaddress"
+	dbnode "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/dbnode"
+	dbproxy "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/dbproxy"
+	dbproxypublic "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/dbproxypublic"
+	instancerds "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/instance"
+	instancecrossbackuppolicy "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/instancecrossbackuppolicy"
+	parametergrouprds "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/parametergroup"
+	readonlyinstance "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/readonlyinstance"
+	readwritesplittingconnection "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/readwritesplittingconnection"
+	servicelinkedrole "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/servicelinkedrole"
+	whitelisttemplate "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/rds/whitelisttemplate"
 	aclslb "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/slb/acl"
 	listenerslb "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/slb/listener"
 	loadbalancerslb "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/slb/loadbalancer"
@@ -209,7 +226,7 @@ import (
 	certificate "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/sslcertificatesservice/certificate"
 	accounttair "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/tair/account"
 	auditlogconfig "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/tair/auditlogconfig"
-	connection "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/tair/connection"
+	connectiontair "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/tair/connection"
 	instancetair "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/tair/instance"
 	tairinstance "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/tair/tairinstance"
 	routetable "github.com/crossplane-contrib/provider-alibabacloud/internal/controller/vpc/routetable"
@@ -409,6 +426,23 @@ func Setup_monolith(mgr ctrl.Manager, o controller.Options) error {
 		user.Setup,
 		usergroupattachment.Setup,
 		userpolicyattachment.Setup,
+		accountrds.Setup,
+		backup.Setup,
+		backuppolicyrds.Setup,
+		connection.Setup,
+		databaserds.Setup,
+		dbinstanceendpoint.Setup,
+		dbinstanceendpointaddress.Setup,
+		dbnode.Setup,
+		dbproxy.Setup,
+		dbproxypublic.Setup,
+		instancerds.Setup,
+		instancecrossbackuppolicy.Setup,
+		parametergrouprds.Setup,
+		readonlyinstance.Setup,
+		readwritesplittingconnection.Setup,
+		servicelinkedrole.Setup,
+		whitelisttemplate.Setup,
 		aclslb.Setup,
 		listenerslb.Setup,
 		loadbalancerslb.Setup,
@@ -421,7 +455,7 @@ func Setup_monolith(mgr ctrl.Manager, o controller.Options) error {
 		certificate.Setup,
 		accounttair.Setup,
 		auditlogconfig.Setup,
-		connection.Setup,
+		connectiontair.Setup,
 		instancetair.Setup,
 		tairinstance.Setup,
 		routetable.Setup,
