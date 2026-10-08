@@ -791,9 +791,19 @@ func (in *BackupPolicyInitParameters) DeepCopyInto(out *BackupPolicyInitParamete
 		*out = new(bool)
 		**out = **in
 	}
+	if in.EnablePitrProtection != nil {
+		in, out := &in.EnablePitrProtection, &out.EnablePitrProtection
+		*out = new(bool)
+		**out = **in
+	}
 	if in.HighSpaceUsageProtection != nil {
 		in, out := &in.HighSpaceUsageProtection, &out.HighSpaceUsageProtection
 		*out = new(string)
+		**out = **in
+	}
+	if in.IncBackupInterval != nil {
+		in, out := &in.IncBackupInterval, &out.IncBackupInterval
+		*out = new(float64)
 		**out = **in
 	}
 	if in.InstanceID != nil {
@@ -959,6 +969,11 @@ func (in *BackupPolicyObservation) DeepCopyInto(out *BackupPolicyObservation) {
 		*out = new(bool)
 		**out = **in
 	}
+	if in.EnablePitrProtection != nil {
+		in, out := &in.EnablePitrProtection, &out.EnablePitrProtection
+		*out = new(bool)
+		**out = **in
+	}
 	if in.HighSpaceUsageProtection != nil {
 		in, out := &in.HighSpaceUsageProtection, &out.HighSpaceUsageProtection
 		*out = new(string)
@@ -967,6 +982,11 @@ func (in *BackupPolicyObservation) DeepCopyInto(out *BackupPolicyObservation) {
 	if in.ID != nil {
 		in, out := &in.ID, &out.ID
 		*out = new(string)
+		**out = **in
+	}
+	if in.IncBackupInterval != nil {
+		in, out := &in.IncBackupInterval, &out.IncBackupInterval
+		*out = new(float64)
 		**out = **in
 	}
 	if in.InstanceID != nil {
@@ -1090,9 +1110,19 @@ func (in *BackupPolicyParameters) DeepCopyInto(out *BackupPolicyParameters) {
 		*out = new(bool)
 		**out = **in
 	}
+	if in.EnablePitrProtection != nil {
+		in, out := &in.EnablePitrProtection, &out.EnablePitrProtection
+		*out = new(bool)
+		**out = **in
+	}
 	if in.HighSpaceUsageProtection != nil {
 		in, out := &in.HighSpaceUsageProtection, &out.HighSpaceUsageProtection
 		*out = new(string)
+		**out = **in
+	}
+	if in.IncBackupInterval != nil {
+		in, out := &in.IncBackupInterval, &out.IncBackupInterval
+		*out = new(float64)
 		**out = **in
 	}
 	if in.InstanceID != nil {
@@ -3829,6 +3859,11 @@ func (in *InstanceInitParameters) DeepCopyInto(out *InstanceInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ForceDelete != nil {
+		in, out := &in.ForceDelete, &out.ForceDelete
+		*out = new(bool)
+		**out = **in
+	}
 	if in.ForceEncryption != nil {
 		in, out := &in.ForceEncryption, &out.ForceEncryption
 		*out = new(float64)
@@ -4420,6 +4455,11 @@ func (in *InstanceObservation) DeepCopyInto(out *InstanceObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ForceDelete != nil {
+		in, out := &in.ForceDelete, &out.ForceDelete
+		*out = new(bool)
+		**out = **in
+	}
 	if in.ForceEncryption != nil {
 		in, out := &in.ForceEncryption, &out.ForceEncryption
 		*out = new(float64)
@@ -4927,6 +4967,11 @@ func (in *InstanceParameters) DeepCopyInto(out *InstanceParameters) {
 	if in.Force != nil {
 		in, out := &in.Force, &out.Force
 		*out = new(string)
+		**out = **in
+	}
+	if in.ForceDelete != nil {
+		in, out := &in.ForceDelete, &out.ForceDelete
+		*out = new(bool)
 		**out = **in
 	}
 	if in.ForceEncryption != nil {

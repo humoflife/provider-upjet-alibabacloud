@@ -274,10 +274,15 @@ spec:
                     description: 'Specifies whether to enable forcible switching.
                       Valid values:'
                     type: string
+                  forceDelete:
+                    description: |-
+                      Used to forcibly delete a PrePaid (Subscription) RDS instance. When set to true, the instance is converted to PostPaid before deletion, which settles the remaining subscription period. Default to false. It only takes effect when instance_charge_type is Prepaid.
+                      Used to forcibly delete a 'PrePaid' RDS instance. When set to true, the instance is converted to 'PostPaid' before deletion, which settles the remaining subscription period. Set this explicitly when you need to destroy a Subscription DB instance.
+                    type: boolean
                   forceEncryption:
                     description: 'Specifies whether to enable the forceful SSL encryption
                       feature. This parameter is supported only for ApsaraDB RDS for
-                      SQL Server instances.Valid values:'
+                      MySQL and SQL Server instances. Valid values:'
                     type: number
                   forceRestart:
                     description: Set it to true to make some parameter efficient when
@@ -1273,10 +1278,15 @@ spec:
                     description: 'Specifies whether to enable forcible switching.
                       Valid values:'
                     type: string
+                  forceDelete:
+                    description: |-
+                      Used to forcibly delete a PrePaid (Subscription) RDS instance. When set to true, the instance is converted to PostPaid before deletion, which settles the remaining subscription period. Default to false. It only takes effect when instance_charge_type is Prepaid.
+                      Used to forcibly delete a 'PrePaid' RDS instance. When set to true, the instance is converted to 'PostPaid' before deletion, which settles the remaining subscription period. Set this explicitly when you need to destroy a Subscription DB instance.
+                    type: boolean
                   forceEncryption:
                     description: 'Specifies whether to enable the forceful SSL encryption
                       feature. This parameter is supported only for ApsaraDB RDS for
-                      SQL Server instances.Valid values:'
+                      MySQL and SQL Server instances. Valid values:'
                     type: number
                   forceRestart:
                     description: Set it to true to make some parameter efficient when
@@ -2410,10 +2420,15 @@ spec:
                     description: 'Specifies whether to enable forcible switching.
                       Valid values:'
                     type: string
+                  forceDelete:
+                    description: |-
+                      Used to forcibly delete a PrePaid (Subscription) RDS instance. When set to true, the instance is converted to PostPaid before deletion, which settles the remaining subscription period. Default to false. It only takes effect when instance_charge_type is Prepaid.
+                      Used to forcibly delete a 'PrePaid' RDS instance. When set to true, the instance is converted to 'PostPaid' before deletion, which settles the remaining subscription period. Set this explicitly when you need to destroy a Subscription DB instance.
+                    type: boolean
                   forceEncryption:
                     description: 'Specifies whether to enable the forceful SSL encryption
                       feature. This parameter is supported only for ApsaraDB RDS for
-                      SQL Server instances.Valid values:'
+                      MySQL and SQL Server instances. Valid values:'
                     type: number
                   forceRestart:
                     description: Set it to true to make some parameter efficient when

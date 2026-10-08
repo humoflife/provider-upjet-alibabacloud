@@ -23,6 +23,23 @@ func Configure(p *config.Provider) {
 			TerraformName: "alicloud_privatelink_vpc_endpoint_service",
 		}
 	})
+	p.AddResourceConfigurator("alicloud_privatelink_vpc_endpoint_service", func(r *config.Resource) {
+		// Group and Kind are left to upjet's defaults, which already give
+		// privatelink/VPCEndpointService.
+		//
+		// Terraform provider 1.293.0 added an Optional+Computed "resource"
+		// block that Read fills from ListVpcEndpointServiceResources and
+		// Update reconciles against spec. Attachments owned by separate
+		// VpcEndpointServiceResource managed resources would be late-inited
+		// into this resource's spec, leaving two controllers writing the same
+		// association. Keep it observation-only.
+		r.LateInitializer = config.LateInitializer{
+			IgnoredFields: []string{
+				"resource",
+			},
+		}
+	})
+
 	p.AddResourceConfigurator("alicloud_privatelink_vpc_endpoint_connection", func(r *config.Resource) {
 		r.ShortGroup = string(common.PRIVATELINK)
 		r.Kind = "VpcEndpointConnection"

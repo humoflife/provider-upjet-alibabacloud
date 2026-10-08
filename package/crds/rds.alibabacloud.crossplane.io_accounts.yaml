@@ -205,7 +205,8 @@ spec:
                       privileged account.
                     type: boolean
                   status:
-                    description: The status of the resource
+                    description: 'The status of the resource. Valid values: Available,
+                      Unavailable.'
                     type: string
                 type: object
               initProvider:
@@ -349,7 +350,8 @@ spec:
                       privileged account.
                     type: boolean
                   status:
-                    description: The status of the resource
+                    description: 'The status of the resource. Valid values: Available,
+                      Unavailable.'
                     type: string
                 type: object
               managementPolicies:
@@ -570,7 +572,8 @@ spec:
                       privileged account.
                     type: boolean
                   status:
-                    description: The status of the resource
+                    description: 'The status of the resource. Valid values: Available,
+                      Unavailable.'
                     type: string
                 type: object
               conditions:

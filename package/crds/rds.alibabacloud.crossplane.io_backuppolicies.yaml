@@ -75,20 +75,20 @@ spec:
                 properties:
                   archiveBackupKeepCount:
                     description: 'Instance archive backup keep count. Valid when the
-                      enable_backup_log is true and instance is mysql local disk.
-                      When archive_backup_keep_policy is ByMonth Valid values: [1-31].
-                      When archive_backup_keep_policy is ByWeek Valid values: [1-7].'
+                      enable_backup_log is true and instance is MySQL local disk.
+                      When archive_backup_keep_policy is ByMonth, valid values: 1-31.
+                      When archive_backup_keep_policy is ByWeek, valid values: 1-7.'
                     type: number
                   archiveBackupKeepPolicy:
-                    description: Instance archive backup keep policy. Valid when the
-                      enable_backup_log is true and instance is mysql local disk.
-                      Valid values are ByMonth, ByWeek, KeepAll.
+                    description: 'Instance archive backup keep policy. Valid when
+                      the enable_backup_log is true and instance is MySQL local disk.
+                      Valid values: ByMonth, ByWeek, KeepAll.'
                     type: string
                   archiveBackupRetentionPeriod:
                     description: 'Instance archive backup retention days. Valid when
-                      the enable_backup_log is true and instance is mysql local disk.
-                      Valid values: [30-1095], and archive_backup_retention_period
-                      must larger than backup_retention_period 730.'
+                      the enable_backup_log is true and instance is MySQL local disk.
+                      Valid values: 30-1095, and archive_backup_retention_period must
+                      larger than backup_retention_period 730.'
                     type: number
                   backupInterval:
                     description: 'The frequency at which you want to perform a snapshot
@@ -102,35 +102,47 @@ spec:
                       instance are configured. Valid values:'
                     type: number
                   backupRetentionPeriod:
-                    description: 'Instance backup retention days. Valid values: [7-730].
-                      Default to 7. But mysql local disk is unlimited.'
+                    description: 'Instance backup retention days. Valid values: 7-730.
+                      Defaults to 7. But MySQL local disk is unlimited.'
                     type: number
                   category:
-                    description: |-
-                      Whether to enable second level backup.Valid values are Flash, Standard, Note:It only takes effect when the BackupPolicyMode parameter is DataBackupPolicy.
-                      -> NOTE: You can configure a backup policy by using this parameter and the PreferredBackupPeriod parameter. For example, if you set the PreferredBackupPeriod parameter to Saturday,Sunday and the BackupInterval parameter to -1, a snapshot backup is performed on every Saturday and Sunday.If the instance runs PostgreSQL, the BackupInterval parameter is supported only when the instance is equipped with standard SSDs or enhanced SSDs (ESSDs).This parameter takes effect only when you set the BackupPolicyMode parameter to DataBackupPolicy.
+                    description: 'Whether to enable second level backup. Valid values:
+                      Flash, Standard. Note: It only takes effect when the BackupPolicyMode
+                      parameter is DataBackupPolicy.'
                     type: string
                   compressType:
-                    description: The compress type of instance policy. Valid values
-                      are 1, 4, 8.
+                    description: 'The compress type of instance policy. Valid values:
+                      1, 4, 8.'
                     type: string
                   enableBackupLog:
-                    description: 'Whether to backup instance log. Valid values are
-                      true, false, Default to true. Note: The ''Basic Edition'' category
-                      Rds instance does not support setting log backup. What is Basic
+                    description: 'Whether to backup instance log. Valid values: true,
+                      false. Defaults to true. Note: The Basic Edition category RDS
+                      instance does not support setting log backup. What is Basic
                       Edition.'
                     type: boolean
                   enableIncrementDataBackup:
                     description: 'Specifies whether to enable incremental backup.
                       Valid values:'
                     type: boolean
+                  enablePitrProtection:
+                    description: 'Specifies whether to enable PITR (Point-in-Time
+                      Recovery) on the MySQL instance. Valid values: true, false.
+                      This parameter takes effect only when enable_backup_log is true
+                      and BackupPolicyMode is set to DataBackupPolicy.'
+                    type: boolean
                   highSpaceUsageProtection:
-                    description: Instance high space usage protection policy. Valid
-                      when the enable_backup_log is true. Valid values are Enable,
-                      Disable.
+                    description: 'Instance high space usage protection policy. Valid
+                      when the enable_backup_log is true. Valid values: Enable, Disable.
+                      Defaults to Enable.'
                     type: string
+                  incBackupInterval:
+                    description: 'The frequency at which you want to perform incremental
+                      backup on the MySQL instance. Valid when the enable_increment_data_backup
+                      is true and instance is MySQL local disk. Valid values: 60,
+                      120, 240, 360, 720.'
+                    type: number
                   instanceId:
-                    description: The Id of instance that can run database.
+                    description: The ID of the instance that can run database.
                     type: string
                   instanceIdRef:
                     description: Reference to a Instance in rds to populate instanceId.
@@ -208,37 +220,36 @@ spec:
                     type: object
                   localLogRetentionHours:
                     description: 'Instance log backup local retention hours. Valid
-                      when the enable_backup_log is true. Valid values: [0-7*24].'
+                      when the enable_backup_log is true. Valid values: 0-168.'
                     type: number
                   localLogRetentionSpace:
                     description: 'Instance log backup local retention space. Valid
-                      when the enable_backup_log is true. Valid values: [0-50].'
+                      when the enable_backup_log is true. Valid values: 0-50.'
                     type: number
                   logBackupFrequency:
-                    description: Instance log backup frequency. Valid when the instance
-                      engine is SQLServer. Valid values are LogInterval.
+                    description: 'Instance log backup frequency. Valid when the instance
+                      engine is SQLServer. Valid values: LogInterval.'
                     type: string
                   logBackupLocalRetentionNumber:
-                    description: |-
-                      The number of binary log files that you want to retain on the instance. Default value: 60. Valid values: 6 to 100.
-                      ->NOTE: This parameter takes effect only when you set the BackupPolicyMode parameter to LogBackupPolicy. If the instance runs MySQL, you can set this parameter to -1. The value -1 specifies that an unlimited number of binary log files can be retained on the instance.
+                    description: 'The number of binary log files that you want to
+                      retain on the instance. Defaults to 60. Valid values: 6-100.'
                     type: number
                   logBackupRetentionPeriod:
                     description: 'Instance log backup retention days. Valid when the
-                      enable_backup_log is 1. Valid values: [7-730]. Default to 7.
-                      It cannot be larger than backup_retention_period.'
+                      enable_backup_log is true. Valid values: 7-730. Defaults to
+                      7. It cannot be larger than backup_retention_period.'
                     type: number
                   preferredBackupPeriod:
                     description: 'DB Instance backup period. Please set at least two
                       days to ensure backing up at least twice a week. Valid values:
-                      [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday].'
+                      Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.'
                     items:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
                   preferredBackupTime:
-                    description: DB instance backup time, in the format of HH:mmZ-
-                      HH:mmZ. Time setting interval is one hour. Default to "02:00Z-03:00Z".
+                    description: DB instance backup time, in the format of HH:mmZ-HH:mmZ.
+                      Time setting interval is one hour. Defaults to 02:00Z-03:00Z.
                       China time is 8 hours behind it.
                     type: string
                   region:
@@ -247,7 +258,7 @@ spec:
                     type: string
                   releasedKeepPolicy:
                     description: 'The policy based on which ApsaraDB RDS retains archived
-                      backup files if the instance is released. Default value: None.
+                      backup files if the instance is released. Defaults to None.
                       Valid values:'
                     type: string
                 type: object
@@ -266,20 +277,20 @@ spec:
                 properties:
                   archiveBackupKeepCount:
                     description: 'Instance archive backup keep count. Valid when the
-                      enable_backup_log is true and instance is mysql local disk.
-                      When archive_backup_keep_policy is ByMonth Valid values: [1-31].
-                      When archive_backup_keep_policy is ByWeek Valid values: [1-7].'
+                      enable_backup_log is true and instance is MySQL local disk.
+                      When archive_backup_keep_policy is ByMonth, valid values: 1-31.
+                      When archive_backup_keep_policy is ByWeek, valid values: 1-7.'
                     type: number
                   archiveBackupKeepPolicy:
-                    description: Instance archive backup keep policy. Valid when the
-                      enable_backup_log is true and instance is mysql local disk.
-                      Valid values are ByMonth, ByWeek, KeepAll.
+                    description: 'Instance archive backup keep policy. Valid when
+                      the enable_backup_log is true and instance is MySQL local disk.
+                      Valid values: ByMonth, ByWeek, KeepAll.'
                     type: string
                   archiveBackupRetentionPeriod:
                     description: 'Instance archive backup retention days. Valid when
-                      the enable_backup_log is true and instance is mysql local disk.
-                      Valid values: [30-1095], and archive_backup_retention_period
-                      must larger than backup_retention_period 730.'
+                      the enable_backup_log is true and instance is MySQL local disk.
+                      Valid values: 30-1095, and archive_backup_retention_period must
+                      larger than backup_retention_period 730.'
                     type: number
                   backupInterval:
                     description: 'The frequency at which you want to perform a snapshot
@@ -293,35 +304,47 @@ spec:
                       instance are configured. Valid values:'
                     type: number
                   backupRetentionPeriod:
-                    description: 'Instance backup retention days. Valid values: [7-730].
-                      Default to 7. But mysql local disk is unlimited.'
+                    description: 'Instance backup retention days. Valid values: 7-730.
+                      Defaults to 7. But MySQL local disk is unlimited.'
                     type: number
                   category:
-                    description: |-
-                      Whether to enable second level backup.Valid values are Flash, Standard, Note:It only takes effect when the BackupPolicyMode parameter is DataBackupPolicy.
-                      -> NOTE: You can configure a backup policy by using this parameter and the PreferredBackupPeriod parameter. For example, if you set the PreferredBackupPeriod parameter to Saturday,Sunday and the BackupInterval parameter to -1, a snapshot backup is performed on every Saturday and Sunday.If the instance runs PostgreSQL, the BackupInterval parameter is supported only when the instance is equipped with standard SSDs or enhanced SSDs (ESSDs).This parameter takes effect only when you set the BackupPolicyMode parameter to DataBackupPolicy.
+                    description: 'Whether to enable second level backup. Valid values:
+                      Flash, Standard. Note: It only takes effect when the BackupPolicyMode
+                      parameter is DataBackupPolicy.'
                     type: string
                   compressType:
-                    description: The compress type of instance policy. Valid values
-                      are 1, 4, 8.
+                    description: 'The compress type of instance policy. Valid values:
+                      1, 4, 8.'
                     type: string
                   enableBackupLog:
-                    description: 'Whether to backup instance log. Valid values are
-                      true, false, Default to true. Note: The ''Basic Edition'' category
-                      Rds instance does not support setting log backup. What is Basic
+                    description: 'Whether to backup instance log. Valid values: true,
+                      false. Defaults to true. Note: The Basic Edition category RDS
+                      instance does not support setting log backup. What is Basic
                       Edition.'
                     type: boolean
                   enableIncrementDataBackup:
                     description: 'Specifies whether to enable incremental backup.
                       Valid values:'
                     type: boolean
+                  enablePitrProtection:
+                    description: 'Specifies whether to enable PITR (Point-in-Time
+                      Recovery) on the MySQL instance. Valid values: true, false.
+                      This parameter takes effect only when enable_backup_log is true
+                      and BackupPolicyMode is set to DataBackupPolicy.'
+                    type: boolean
                   highSpaceUsageProtection:
-                    description: Instance high space usage protection policy. Valid
-                      when the enable_backup_log is true. Valid values are Enable,
-                      Disable.
+                    description: 'Instance high space usage protection policy. Valid
+                      when the enable_backup_log is true. Valid values: Enable, Disable.
+                      Defaults to Enable.'
                     type: string
+                  incBackupInterval:
+                    description: 'The frequency at which you want to perform incremental
+                      backup on the MySQL instance. Valid when the enable_increment_data_backup
+                      is true and instance is MySQL local disk. Valid values: 60,
+                      120, 240, 360, 720.'
+                    type: number
                   instanceId:
-                    description: The Id of instance that can run database.
+                    description: The ID of the instance that can run database.
                     type: string
                   instanceIdRef:
                     description: Reference to a Instance in rds to populate instanceId.
@@ -399,42 +422,41 @@ spec:
                     type: object
                   localLogRetentionHours:
                     description: 'Instance log backup local retention hours. Valid
-                      when the enable_backup_log is true. Valid values: [0-7*24].'
+                      when the enable_backup_log is true. Valid values: 0-168.'
                     type: number
                   localLogRetentionSpace:
                     description: 'Instance log backup local retention space. Valid
-                      when the enable_backup_log is true. Valid values: [0-50].'
+                      when the enable_backup_log is true. Valid values: 0-50.'
                     type: number
                   logBackupFrequency:
-                    description: Instance log backup frequency. Valid when the instance
-                      engine is SQLServer. Valid values are LogInterval.
+                    description: 'Instance log backup frequency. Valid when the instance
+                      engine is SQLServer. Valid values: LogInterval.'
                     type: string
                   logBackupLocalRetentionNumber:
-                    description: |-
-                      The number of binary log files that you want to retain on the instance. Default value: 60. Valid values: 6 to 100.
-                      ->NOTE: This parameter takes effect only when you set the BackupPolicyMode parameter to LogBackupPolicy. If the instance runs MySQL, you can set this parameter to -1. The value -1 specifies that an unlimited number of binary log files can be retained on the instance.
+                    description: 'The number of binary log files that you want to
+                      retain on the instance. Defaults to 60. Valid values: 6-100.'
                     type: number
                   logBackupRetentionPeriod:
                     description: 'Instance log backup retention days. Valid when the
-                      enable_backup_log is 1. Valid values: [7-730]. Default to 7.
-                      It cannot be larger than backup_retention_period.'
+                      enable_backup_log is true. Valid values: 7-730. Defaults to
+                      7. It cannot be larger than backup_retention_period.'
                     type: number
                   preferredBackupPeriod:
                     description: 'DB Instance backup period. Please set at least two
                       days to ensure backing up at least twice a week. Valid values:
-                      [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday].'
+                      Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.'
                     items:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
                   preferredBackupTime:
-                    description: DB instance backup time, in the format of HH:mmZ-
-                      HH:mmZ. Time setting interval is one hour. Default to "02:00Z-03:00Z".
+                    description: DB instance backup time, in the format of HH:mmZ-HH:mmZ.
+                      Time setting interval is one hour. Defaults to 02:00Z-03:00Z.
                       China time is 8 hours behind it.
                     type: string
                   releasedKeepPolicy:
                     description: 'The policy based on which ApsaraDB RDS retains archived
-                      backup files if the instance is released. Default value: None.
+                      backup files if the instance is released. Defaults to None.
                       Valid values:'
                     type: string
                 type: object
@@ -612,20 +634,20 @@ spec:
                 properties:
                   archiveBackupKeepCount:
                     description: 'Instance archive backup keep count. Valid when the
-                      enable_backup_log is true and instance is mysql local disk.
-                      When archive_backup_keep_policy is ByMonth Valid values: [1-31].
-                      When archive_backup_keep_policy is ByWeek Valid values: [1-7].'
+                      enable_backup_log is true and instance is MySQL local disk.
+                      When archive_backup_keep_policy is ByMonth, valid values: 1-31.
+                      When archive_backup_keep_policy is ByWeek, valid values: 1-7.'
                     type: number
                   archiveBackupKeepPolicy:
-                    description: Instance archive backup keep policy. Valid when the
-                      enable_backup_log is true and instance is mysql local disk.
-                      Valid values are ByMonth, ByWeek, KeepAll.
+                    description: 'Instance archive backup keep policy. Valid when
+                      the enable_backup_log is true and instance is MySQL local disk.
+                      Valid values: ByMonth, ByWeek, KeepAll.'
                     type: string
                   archiveBackupRetentionPeriod:
                     description: 'Instance archive backup retention days. Valid when
-                      the enable_backup_log is true and instance is mysql local disk.
-                      Valid values: [30-1095], and archive_backup_retention_period
-                      must larger than backup_retention_period 730.'
+                      the enable_backup_log is true and instance is MySQL local disk.
+                      Valid values: 30-1095, and archive_backup_retention_period must
+                      larger than backup_retention_period 730.'
                     type: number
                   backupInterval:
                     description: 'The frequency at which you want to perform a snapshot
@@ -639,78 +661,89 @@ spec:
                       instance are configured. Valid values:'
                     type: number
                   backupRetentionPeriod:
-                    description: 'Instance backup retention days. Valid values: [7-730].
-                      Default to 7. But mysql local disk is unlimited.'
+                    description: 'Instance backup retention days. Valid values: 7-730.
+                      Defaults to 7. But MySQL local disk is unlimited.'
                     type: number
                   category:
-                    description: |-
-                      Whether to enable second level backup.Valid values are Flash, Standard, Note:It only takes effect when the BackupPolicyMode parameter is DataBackupPolicy.
-                      -> NOTE: You can configure a backup policy by using this parameter and the PreferredBackupPeriod parameter. For example, if you set the PreferredBackupPeriod parameter to Saturday,Sunday and the BackupInterval parameter to -1, a snapshot backup is performed on every Saturday and Sunday.If the instance runs PostgreSQL, the BackupInterval parameter is supported only when the instance is equipped with standard SSDs or enhanced SSDs (ESSDs).This parameter takes effect only when you set the BackupPolicyMode parameter to DataBackupPolicy.
+                    description: 'Whether to enable second level backup. Valid values:
+                      Flash, Standard. Note: It only takes effect when the BackupPolicyMode
+                      parameter is DataBackupPolicy.'
                     type: string
                   compressType:
-                    description: The compress type of instance policy. Valid values
-                      are 1, 4, 8.
+                    description: 'The compress type of instance policy. Valid values:
+                      1, 4, 8.'
                     type: string
                   enableBackupLog:
-                    description: 'Whether to backup instance log. Valid values are
-                      true, false, Default to true. Note: The ''Basic Edition'' category
-                      Rds instance does not support setting log backup. What is Basic
+                    description: 'Whether to backup instance log. Valid values: true,
+                      false. Defaults to true. Note: The Basic Edition category RDS
+                      instance does not support setting log backup. What is Basic
                       Edition.'
                     type: boolean
                   enableIncrementDataBackup:
                     description: 'Specifies whether to enable incremental backup.
                       Valid values:'
                     type: boolean
+                  enablePitrProtection:
+                    description: 'Specifies whether to enable PITR (Point-in-Time
+                      Recovery) on the MySQL instance. Valid values: true, false.
+                      This parameter takes effect only when enable_backup_log is true
+                      and BackupPolicyMode is set to DataBackupPolicy.'
+                    type: boolean
                   highSpaceUsageProtection:
-                    description: Instance high space usage protection policy. Valid
-                      when the enable_backup_log is true. Valid values are Enable,
-                      Disable.
+                    description: 'Instance high space usage protection policy. Valid
+                      when the enable_backup_log is true. Valid values: Enable, Disable.
+                      Defaults to Enable.'
                     type: string
                   id:
                     description: The current backup policy resource ID. It is same
-                      as 'instance_id'.
+                      as instance_id.
                     type: string
+                  incBackupInterval:
+                    description: 'The frequency at which you want to perform incremental
+                      backup on the MySQL instance. Valid when the enable_increment_data_backup
+                      is true and instance is MySQL local disk. Valid values: 60,
+                      120, 240, 360, 720.'
+                    type: number
                   instanceId:
-                    description: The Id of instance that can run database.
+                    description: The ID of the instance that can run database.
                     type: string
                   localLogRetentionHours:
                     description: 'Instance log backup local retention hours. Valid
-                      when the enable_backup_log is true. Valid values: [0-7*24].'
+                      when the enable_backup_log is true. Valid values: 0-168.'
                     type: number
                   localLogRetentionSpace:
                     description: 'Instance log backup local retention space. Valid
-                      when the enable_backup_log is true. Valid values: [0-50].'
+                      when the enable_backup_log is true. Valid values: 0-50.'
                     type: number
                   logBackupFrequency:
-                    description: Instance log backup frequency. Valid when the instance
-                      engine is SQLServer. Valid values are LogInterval.
+                    description: 'Instance log backup frequency. Valid when the instance
+                      engine is SQLServer. Valid values: LogInterval.'
                     type: string
                   logBackupLocalRetentionNumber:
-                    description: |-
-                      The number of binary log files that you want to retain on the instance. Default value: 60. Valid values: 6 to 100.
-                      ->NOTE: This parameter takes effect only when you set the BackupPolicyMode parameter to LogBackupPolicy. If the instance runs MySQL, you can set this parameter to -1. The value -1 specifies that an unlimited number of binary log files can be retained on the instance.
+                    description: 'The number of binary log files that you want to
+                      retain on the instance. Defaults to 60. Valid values: 6-100.'
                     type: number
                   logBackupRetentionPeriod:
                     description: 'Instance log backup retention days. Valid when the
-                      enable_backup_log is 1. Valid values: [7-730]. Default to 7.
-                      It cannot be larger than backup_retention_period.'
+                      enable_backup_log is true. Valid values: 7-730. Defaults to
+                      7. It cannot be larger than backup_retention_period.'
                     type: number
                   preferredBackupPeriod:
                     description: 'DB Instance backup period. Please set at least two
                       days to ensure backing up at least twice a week. Valid values:
-                      [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday].'
+                      Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.'
                     items:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
                   preferredBackupTime:
-                    description: DB instance backup time, in the format of HH:mmZ-
-                      HH:mmZ. Time setting interval is one hour. Default to "02:00Z-03:00Z".
+                    description: DB instance backup time, in the format of HH:mmZ-HH:mmZ.
+                      Time setting interval is one hour. Defaults to 02:00Z-03:00Z.
                       China time is 8 hours behind it.
                     type: string
                   releasedKeepPolicy:
                     description: 'The policy based on which ApsaraDB RDS retains archived
-                      backup files if the instance is released. Default value: None.
+                      backup files if the instance is released. Defaults to None.
                       Valid values:'
                     type: string
                 type: object

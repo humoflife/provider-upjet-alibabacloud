@@ -222,6 +222,15 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("alicloud_instance", func(r *config.Resource) {
 		r.ShortGroup = string(common.ECS)
 		r.Kind = "Instance"
+		// network_interface_id became Optional+Computed in 1.293.0, so
+		// late-initialization would copy the primary ENI id into spec for
+		// every existing Instance. It causes no diff, but it is noise in a
+		// field the user never set.
+		r.LateInitializer = config.LateInitializer{
+			IgnoredFields: []string{
+				"network_interface_id",
+			},
+		}
 		r.References["security_groups"] = config.Reference{
 			TerraformName:     "alicloud_security_group",
 			RefFieldName:      "SecurityGroupRefs",
