@@ -19,11 +19,17 @@
     {
       // We want a PR to bump Go versions used through env variables in any Github
       // Actions, taking it from the official Github repository.
+      //
+      // The second matchString covers workflow_dispatch "go-version" input
+      // defaults (e.g. publish-provider-packages.yaml), which are a separate
+      // YAML key from the GO_VERSION env var and were missing a manager
+      // entirely, so a go.mod bump like #153 left this default behind.
       "customType": "regex",
       "description": "Bump Go version in GH Action workflows",
       "managerFilePatterns": ["/^\\.github\\/workflows\\/[^/]+\\.ya?ml$/"],
       "matchStrings": [
-        "GO_VERSION: ['\"]?(?<currentValue>.*?)['\"]?\\n"
+        "GO_VERSION: ['\"]?(?<currentValue>.*?)['\"]?\\n",
+        "go-version:\\n\\s*description:.*\\n\\s*default: ['\"]?(?<currentValue>.*?)['\"]?\\n"
       ],
       "datasourceTemplate": "golang-version",
       "depNameTemplate": "go",
