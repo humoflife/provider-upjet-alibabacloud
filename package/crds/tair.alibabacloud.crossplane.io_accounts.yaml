@@ -82,8 +82,7 @@ spec:
                       8 to 32 characters in length. It must contain at least three
                       of the following character types: uppercase letters, lowercase
                       letters, digits, and special characters. Special characters
-                      include !@ # $ % ^ & * ( ) _ + - =. You have to specify one
-                      of account_password and kms_encrypted_password fields.'
+                      include !@ # $ % ^ & * ( ) _ + - =. It conflicts with account_password_wo.'
                     properties:
                       key:
                         description: The key to select.
@@ -99,6 +98,18 @@ spec:
                     - name
                     - namespace
                     type: object
+                  accountPasswordWo:
+                    description: The write-only password of the account. It is only
+                      sent to the server when the resource is created or the account_password_wo_version
+                      changes and is never stored in the state or plan.11.0 or later
+                      and must be used together with account_password_wo_version.
+                      It conflicts with account_password and kms_encrypted_password.
+                    type: string
+                  accountPasswordWoVersion:
+                    description: The version of the write-only password. The write-only
+                      password is re-sent to the server only when this argument changes,
+                      so it must be changed whenever account_password_wo changes.
+                    type: number
                   accountPrivilege:
                     description: 'The privilege of account access database. Default
                       value: RoleReadWrite'
@@ -193,7 +204,7 @@ spec:
                   kmsEncryptedPassword:
                     description: An KMS encrypts password used to a Tair (Redis OSS-Compatible)
                       And Memcache (KVStore) account. If the account_password is filled
-                      in, this field will be ignored.
+                      in, this field will be ignored. It conflicts with account_password_wo.
                     type: string
                   kmsEncryptionContext:
                     additionalProperties:
@@ -232,8 +243,7 @@ spec:
                       8 to 32 characters in length. It must contain at least three
                       of the following character types: uppercase letters, lowercase
                       letters, digits, and special characters. Special characters
-                      include !@ # $ % ^ & * ( ) _ + - =. You have to specify one
-                      of account_password and kms_encrypted_password fields.'
+                      include !@ # $ % ^ & * ( ) _ + - =. It conflicts with account_password_wo.'
                     properties:
                       key:
                         description: The key to select.
@@ -249,6 +259,18 @@ spec:
                     - name
                     - namespace
                     type: object
+                  accountPasswordWo:
+                    description: The write-only password of the account. It is only
+                      sent to the server when the resource is created or the account_password_wo_version
+                      changes and is never stored in the state or plan.11.0 or later
+                      and must be used together with account_password_wo_version.
+                      It conflicts with account_password and kms_encrypted_password.
+                    type: string
+                  accountPasswordWoVersion:
+                    description: The version of the write-only password. The write-only
+                      password is re-sent to the server only when this argument changes,
+                      so it must be changed whenever account_password_wo changes.
+                    type: number
                   accountPrivilege:
                     description: 'The privilege of account access database. Default
                       value: RoleReadWrite'
@@ -343,7 +365,7 @@ spec:
                   kmsEncryptedPassword:
                     description: An KMS encrypts password used to a Tair (Redis OSS-Compatible)
                       And Memcache (KVStore) account. If the account_password is filled
-                      in, this field will be ignored.
+                      in, this field will be ignored. It conflicts with account_password_wo.
                     type: string
                   kmsEncryptionContext:
                     additionalProperties:
@@ -537,6 +559,18 @@ spec:
                     description: 'The name of the account. The name must meet the
                       following requirements:'
                     type: string
+                  accountPasswordWo:
+                    description: The write-only password of the account. It is only
+                      sent to the server when the resource is created or the account_password_wo_version
+                      changes and is never stored in the state or plan.11.0 or later
+                      and must be used together with account_password_wo_version.
+                      It conflicts with account_password and kms_encrypted_password.
+                    type: string
+                  accountPasswordWoVersion:
+                    description: The version of the write-only password. The write-only
+                      password is re-sent to the server only when this argument changes,
+                      so it must be changed whenever account_password_wo changes.
+                    type: number
                   accountPrivilege:
                     description: 'The privilege of account access database. Default
                       value: RoleReadWrite'
@@ -561,7 +595,7 @@ spec:
                   kmsEncryptedPassword:
                     description: An KMS encrypts password used to a Tair (Redis OSS-Compatible)
                       And Memcache (KVStore) account. If the account_password is filled
-                      in, this field will be ignored.
+                      in, this field will be ignored. It conflicts with account_password_wo.
                     type: string
                   kmsEncryptionContext:
                     additionalProperties:

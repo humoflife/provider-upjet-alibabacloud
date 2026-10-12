@@ -27,8 +27,14 @@ type CertificateInitParameters struct {
 	// The private key of an SM encryption certificate in PEM format.
 	EncryptPrivateKeySecretRef *v1.SecretKeySelector `json:"encryptPrivateKeySecretRef,omitempty" tf:"-"`
 
-	// The private key of a non-SM certificate in PEM format.
+	// The private key of a non-SM certificate in PEM format. It conflicts with key_wo.
 	KeySecretRef *v1.SecretKeySelector `json:"keySecretRef,omitempty" tf:"-"`
+
+	// The write-only private key of a non-SM certificate in PEM format. It is only sent to the server when the resource is created and is never stored in the state or plan.11.0 or later and must be used together with key_wo_version. It conflicts with key.
+	KeyWo *string `json:"keyWo,omitempty" tf:"key_wo,omitempty"`
+
+	// The version of the write-only private key. The write-only private key is re-sent to the server only when this argument changes, so changing it recreates the resource with the new key_wo value.
+	KeyWoVersion *float64 `json:"keyWoVersion,omitempty" tf:"key_wo_version,omitempty"`
 
 	// The ID of the resource group.
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
@@ -54,6 +60,12 @@ type CertificateObservation struct {
 
 	// The ID of the resource supplied above.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// The write-only private key of a non-SM certificate in PEM format. It is only sent to the server when the resource is created and is never stored in the state or plan.11.0 or later and must be used together with key_wo_version. It conflicts with key.
+	KeyWo *string `json:"keyWo,omitempty" tf:"key_wo,omitempty"`
+
+	// The version of the write-only private key. The write-only private key is re-sent to the server only when this argument changes, so changing it recreates the resource with the new key_wo value.
+	KeyWoVersion *float64 `json:"keyWoVersion,omitempty" tf:"key_wo_version,omitempty"`
 
 	// The ID of the resource group.
 	ResourceGroupID *string `json:"resourceGroupId,omitempty" tf:"resource_group_id,omitempty"`
@@ -84,9 +96,17 @@ type CertificateParameters struct {
 	// +kubebuilder:validation:Optional
 	EncryptPrivateKeySecretRef *v1.SecretKeySelector `json:"encryptPrivateKeySecretRef,omitempty" tf:"-"`
 
-	// The private key of a non-SM certificate in PEM format.
+	// The private key of a non-SM certificate in PEM format. It conflicts with key_wo.
 	// +kubebuilder:validation:Optional
 	KeySecretRef *v1.SecretKeySelector `json:"keySecretRef,omitempty" tf:"-"`
+
+	// The write-only private key of a non-SM certificate in PEM format. It is only sent to the server when the resource is created and is never stored in the state or plan.11.0 or later and must be used together with key_wo_version. It conflicts with key.
+	// +kubebuilder:validation:Optional
+	KeyWo *string `json:"keyWo,omitempty" tf:"key_wo,omitempty"`
+
+	// The version of the write-only private key. The write-only private key is re-sent to the server only when this argument changes, so changing it recreates the resource with the new key_wo value.
+	// +kubebuilder:validation:Optional
+	KeyWoVersion *float64 `json:"keyWoVersion,omitempty" tf:"key_wo_version,omitempty"`
 
 	// Region is the region you'd like your resource to be created in.
 	// +upjet:crd:field:TFTag=-

@@ -1793,7 +1793,7 @@ type LabelsParameters struct {
 
 type ManagementInitParameters struct {
 
-	// Whether to enable automatic repair. Valid values: true: Automatic repair. false: not automatically repaired.
+	// Whether to enable automatic repair. Valid values: true: Automatic repair. false: not automatically repaired. When auto_repair is true, this feature requires the node-lifecycle-controller and ack-node-problem-detector addons to be installed; see cs_kubernetes_addon for installation.
 	AutoRepair *bool `json:"autoRepair,omitempty" tf:"auto_repair,omitempty"`
 
 	// Automatic repair node policy. See auto_repair_policy below.
@@ -1826,7 +1826,7 @@ type ManagementInitParameters struct {
 
 type ManagementObservation struct {
 
-	// Whether to enable automatic repair. Valid values: true: Automatic repair. false: not automatically repaired.
+	// Whether to enable automatic repair. Valid values: true: Automatic repair. false: not automatically repaired. When auto_repair is true, this feature requires the node-lifecycle-controller and ack-node-problem-detector addons to be installed; see cs_kubernetes_addon for installation.
 	AutoRepair *bool `json:"autoRepair,omitempty" tf:"auto_repair,omitempty"`
 
 	// Automatic repair node policy. See auto_repair_policy below.
@@ -1859,7 +1859,7 @@ type ManagementObservation struct {
 
 type ManagementParameters struct {
 
-	// Whether to enable automatic repair. Valid values: true: Automatic repair. false: not automatically repaired.
+	// Whether to enable automatic repair. Valid values: true: Automatic repair. false: not automatically repaired. When auto_repair is true, this feature requires the node-lifecycle-controller and ack-node-problem-detector addons to be installed; see cs_kubernetes_addon for installation.
 	// +kubebuilder:validation:Optional
 	AutoRepair *bool `json:"autoRepair,omitempty" tf:"auto_repair,omitempty"`
 

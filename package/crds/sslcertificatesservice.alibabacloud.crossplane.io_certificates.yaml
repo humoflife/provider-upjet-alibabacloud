@@ -120,6 +120,7 @@ spec:
                     type: object
                   keySecretRef:
                     description: The private key of a non-SM certificate in PEM format.
+                      It conflicts with key_wo.
                     properties:
                       key:
                         description: The key to select.
@@ -135,6 +136,19 @@ spec:
                     - name
                     - namespace
                     type: object
+                  keyWo:
+                    description: The write-only private key of a non-SM certificate
+                      in PEM format. It is only sent to the server when the resource
+                      is created and is never stored in the state or plan.11.0 or
+                      later and must be used together with key_wo_version. It conflicts
+                      with key.
+                    type: string
+                  keyWoVersion:
+                    description: The version of the write-only private key. The write-only
+                      private key is re-sent to the server only when this argument
+                      changes, so changing it recreates the resource with the new
+                      key_wo value.
+                    type: number
                   region:
                     description: Region is the region you'd like your resource to
                       be created in.
@@ -230,6 +244,7 @@ spec:
                     type: object
                   keySecretRef:
                     description: The private key of a non-SM certificate in PEM format.
+                      It conflicts with key_wo.
                     properties:
                       key:
                         description: The key to select.
@@ -245,6 +260,19 @@ spec:
                     - name
                     - namespace
                     type: object
+                  keyWo:
+                    description: The write-only private key of a non-SM certificate
+                      in PEM format. It is only sent to the server when the resource
+                      is created and is never stored in the state or plan.11.0 or
+                      later and must be used together with key_wo_version. It conflicts
+                      with key.
+                    type: string
+                  keyWoVersion:
+                    description: The version of the write-only private key. The write-only
+                      private key is re-sent to the server only when this argument
+                      changes, so changing it recreates the resource with the new
+                      key_wo value.
+                    type: number
                   resourceGroupId:
                     description: The ID of the resource group.
                     type: string
@@ -466,6 +494,19 @@ spec:
                   id:
                     description: The ID of the resource supplied above.
                     type: string
+                  keyWo:
+                    description: The write-only private key of a non-SM certificate
+                      in PEM format. It is only sent to the server when the resource
+                      is created and is never stored in the state or plan.11.0 or
+                      later and must be used together with key_wo_version. It conflicts
+                      with key.
+                    type: string
+                  keyWoVersion:
+                    description: The version of the write-only private key. The write-only
+                      private key is re-sent to the server only when this argument
+                      changes, so changing it recreates the resource with the new
+                      key_wo value.
+                    type: number
                   resourceGroupId:
                     description: The ID of the resource group.
                     type: string

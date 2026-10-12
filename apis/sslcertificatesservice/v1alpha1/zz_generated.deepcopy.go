@@ -68,6 +68,16 @@ func (in *CertificateInitParameters) DeepCopyInto(out *CertificateInitParameters
 		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
+	if in.KeyWo != nil {
+		in, out := &in.KeyWo, &out.KeyWo
+		*out = new(string)
+		**out = **in
+	}
+	if in.KeyWoVersion != nil {
+		in, out := &in.KeyWoVersion, &out.KeyWoVersion
+		*out = new(float64)
+		**out = **in
+	}
 	if in.ResourceGroupID != nil {
 		in, out := &in.ResourceGroupID, &out.ResourceGroupID
 		*out = new(string)
@@ -161,6 +171,16 @@ func (in *CertificateObservation) DeepCopyInto(out *CertificateObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.KeyWo != nil {
+		in, out := &in.KeyWo, &out.KeyWo
+		*out = new(string)
+		**out = **in
+	}
+	if in.KeyWoVersion != nil {
+		in, out := &in.KeyWoVersion, &out.KeyWoVersion
+		*out = new(float64)
+		**out = **in
+	}
 	if in.ResourceGroupID != nil {
 		in, out := &in.ResourceGroupID, &out.ResourceGroupID
 		*out = new(string)
@@ -225,6 +245,16 @@ func (in *CertificateParameters) DeepCopyInto(out *CertificateParameters) {
 	if in.KeySecretRef != nil {
 		in, out := &in.KeySecretRef, &out.KeySecretRef
 		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.KeyWo != nil {
+		in, out := &in.KeyWo, &out.KeyWo
+		*out = new(string)
+		**out = **in
+	}
+	if in.KeyWoVersion != nil {
+		in, out := &in.KeyWoVersion, &out.KeyWoVersion
+		*out = new(float64)
 		**out = **in
 	}
 	if in.Region != nil {

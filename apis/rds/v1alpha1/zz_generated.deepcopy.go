@@ -58,6 +58,16 @@ func (in *AccountInitParameters) DeepCopyInto(out *AccountInitParameters) {
 		*out = new(v1.SecretKeySelector)
 		**out = **in
 	}
+	if in.AccountPasswordWo != nil {
+		in, out := &in.AccountPasswordWo, &out.AccountPasswordWo
+		*out = new(string)
+		**out = **in
+	}
+	if in.AccountPasswordWoVersion != nil {
+		in, out := &in.AccountPasswordWoVersion, &out.AccountPasswordWoVersion
+		*out = new(float64)
+		**out = **in
+	}
 	if in.AccountType != nil {
 		in, out := &in.AccountType, &out.AccountType
 		*out = new(string)
@@ -171,6 +181,16 @@ func (in *AccountObservation) DeepCopyInto(out *AccountObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.AccountPasswordWo != nil {
+		in, out := &in.AccountPasswordWo, &out.AccountPasswordWo
+		*out = new(string)
+		**out = **in
+	}
+	if in.AccountPasswordWoVersion != nil {
+		in, out := &in.AccountPasswordWoVersion, &out.AccountPasswordWoVersion
+		*out = new(float64)
+		**out = **in
+	}
 	if in.AccountType != nil {
 		in, out := &in.AccountType, &out.AccountType
 		*out = new(string)
@@ -250,6 +270,16 @@ func (in *AccountParameters) DeepCopyInto(out *AccountParameters) {
 	if in.AccountPasswordSecretRef != nil {
 		in, out := &in.AccountPasswordSecretRef, &out.AccountPasswordSecretRef
 		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
+	if in.AccountPasswordWo != nil {
+		in, out := &in.AccountPasswordWo, &out.AccountPasswordWo
+		*out = new(string)
+		**out = **in
+	}
+	if in.AccountPasswordWoVersion != nil {
+		in, out := &in.AccountPasswordWoVersion, &out.AccountPasswordWoVersion
+		*out = new(float64)
 		**out = **in
 	}
 	if in.AccountType != nil {

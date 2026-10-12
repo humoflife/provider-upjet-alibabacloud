@@ -24,11 +24,17 @@ type AccountInitParameters struct {
 	// The account name. Must meet the following requirements:
 	AccountName *string `json:"accountName,omitempty" tf:"account_name,omitempty"`
 
-	// The account password. You have to specify one of account_password and kms_encrypted_password fields. Must  meet the following requirements:
+	// The account password. It conflicts with kms_encrypted_password and account_password_wo, and one of account_password, kms_encrypted_password and account_password_wo must be set. Must  meet the following requirements:
 	AccountPasswordSecretRef *v1.SecretKeySelector `json:"accountPasswordSecretRef,omitempty" tf:"-"`
 
 	// The time when the password for the database account expires.
 	AccountPasswordValidTime *string `json:"accountPasswordValidTime,omitempty" tf:"account_password_valid_time,omitempty"`
+
+	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password and kms_encrypted_password, and one of account_password, kms_encrypted_password and account_password_wo must be set.
+	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
+
+	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
+	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
 
 	// The account type. Default value:Normal. Valid values: Normal, Super.
 	AccountType *string `json:"accountType,omitempty" tf:"account_type,omitempty"`
@@ -46,7 +52,7 @@ type AccountInitParameters struct {
 	// +kubebuilder:validation:Optional
 	DBClusterIDSelector *v1.Selector `json:"dbClusterIdSelector,omitempty" tf:"-"`
 
-	// An KMS encrypts password used to a db account. If the account_password is filled in, this field will be ignored.
+	// An KMS encrypts password used to a db account. It conflicts with account_password and account_password_wo, and one of account_password, kms_encrypted_password and account_password_wo must be set.
 	KMSEncryptedPassword *string `json:"kmsEncryptedPassword,omitempty" tf:"kms_encrypted_password,omitempty"`
 
 	// An KMS encryption context used to decrypt kms_encrypted_password before creating or updating a db account with kms_encrypted_password. See Encryption Context. It is valid when kms_encrypted_password is set.
@@ -68,6 +74,12 @@ type AccountObservation struct {
 	// The time when the password for the database account expires.
 	AccountPasswordValidTime *string `json:"accountPasswordValidTime,omitempty" tf:"account_password_valid_time,omitempty"`
 
+	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password and kms_encrypted_password, and one of account_password, kms_encrypted_password and account_password_wo must be set.
+	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
+
+	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
+	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
+
 	// The account type. Default value:Normal. Valid values: Normal, Super.
 	AccountType *string `json:"accountType,omitempty" tf:"account_type,omitempty"`
 
@@ -77,7 +89,7 @@ type AccountObservation struct {
 	// The ID of the resource supplied above.The value is formulated as <db_cluster_id>:<account_name>.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// An KMS encrypts password used to a db account. If the account_password is filled in, this field will be ignored.
+	// An KMS encrypts password used to a db account. It conflicts with account_password and account_password_wo, and one of account_password, kms_encrypted_password and account_password_wo must be set.
 	KMSEncryptedPassword *string `json:"kmsEncryptedPassword,omitempty" tf:"kms_encrypted_password,omitempty"`
 
 	// An KMS encryption context used to decrypt kms_encrypted_password before creating or updating a db account with kms_encrypted_password. See Encryption Context. It is valid when kms_encrypted_password is set.
@@ -102,13 +114,21 @@ type AccountParameters struct {
 	// +kubebuilder:validation:Optional
 	AccountName *string `json:"accountName,omitempty" tf:"account_name,omitempty"`
 
-	// The account password. You have to specify one of account_password and kms_encrypted_password fields. Must  meet the following requirements:
+	// The account password. It conflicts with kms_encrypted_password and account_password_wo, and one of account_password, kms_encrypted_password and account_password_wo must be set. Must  meet the following requirements:
 	// +kubebuilder:validation:Optional
 	AccountPasswordSecretRef *v1.SecretKeySelector `json:"accountPasswordSecretRef,omitempty" tf:"-"`
 
 	// The time when the password for the database account expires.
 	// +kubebuilder:validation:Optional
 	AccountPasswordValidTime *string `json:"accountPasswordValidTime,omitempty" tf:"account_password_valid_time,omitempty"`
+
+	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password and kms_encrypted_password, and one of account_password, kms_encrypted_password and account_password_wo must be set.
+	// +kubebuilder:validation:Optional
+	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
+
+	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
+	// +kubebuilder:validation:Optional
+	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
 
 	// The account type. Default value:Normal. Valid values: Normal, Super.
 	// +kubebuilder:validation:Optional
@@ -128,7 +148,7 @@ type AccountParameters struct {
 	// +kubebuilder:validation:Optional
 	DBClusterIDSelector *v1.Selector `json:"dbClusterIdSelector,omitempty" tf:"-"`
 
-	// An KMS encrypts password used to a db account. If the account_password is filled in, this field will be ignored.
+	// An KMS encrypts password used to a db account. It conflicts with account_password and account_password_wo, and one of account_password, kms_encrypted_password and account_password_wo must be set.
 	// +kubebuilder:validation:Optional
 	KMSEncryptedPassword *string `json:"kmsEncryptedPassword,omitempty" tf:"kms_encrypted_password,omitempty"`
 

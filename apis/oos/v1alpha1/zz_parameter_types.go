@@ -34,8 +34,14 @@ type ParameterInitParameters struct {
 	// The data type of the common parameter. Valid values: String and StringList.
 	Type *string `json:"type,omitempty" tf:"type,omitempty"`
 
-	// The value of the common parameter. The value must be 1 to 4096 characters in length.
+	// The value of the common parameter. The value must be 1 to 4096 characters in length. Exactly one of value and value_wo can be set.
 	Value *string `json:"value,omitempty" tf:"value,omitempty"`
+
+	// The write-only value of the common parameter. It is only sent to the server when the resource is created or updated and is never stored in the state or plan. The value must be 1 to 4096 characters in length.11.0 or later and must be used together with value_wo_version. Exactly one of value and value_wo can be set.
+	ValueWo *string `json:"valueWo,omitempty" tf:"value_wo,omitempty"`
+
+	// The version of the write-only value. The write-only value is re-sent to the server only when this argument changes, so it must be changed whenever value_wo changes.
+	ValueWoVersion *float64 `json:"valueWoVersion,omitempty" tf:"value_wo_version,omitempty"`
 }
 
 type ParameterObservation struct {
@@ -62,8 +68,14 @@ type ParameterObservation struct {
 	// The data type of the common parameter. Valid values: String and StringList.
 	Type *string `json:"type,omitempty" tf:"type,omitempty"`
 
-	// The value of the common parameter. The value must be 1 to 4096 characters in length.
+	// The value of the common parameter. The value must be 1 to 4096 characters in length. Exactly one of value and value_wo can be set.
 	Value *string `json:"value,omitempty" tf:"value,omitempty"`
+
+	// The write-only value of the common parameter. It is only sent to the server when the resource is created or updated and is never stored in the state or plan. The value must be 1 to 4096 characters in length.11.0 or later and must be used together with value_wo_version. Exactly one of value and value_wo can be set.
+	ValueWo *string `json:"valueWo,omitempty" tf:"value_wo,omitempty"`
+
+	// The version of the write-only value. The write-only value is re-sent to the server only when this argument changes, so it must be changed whenever value_wo changes.
+	ValueWoVersion *float64 `json:"valueWoVersion,omitempty" tf:"value_wo_version,omitempty"`
 }
 
 type ParameterParameters struct {
@@ -98,9 +110,17 @@ type ParameterParameters struct {
 	// +kubebuilder:validation:Optional
 	Type *string `json:"type,omitempty" tf:"type,omitempty"`
 
-	// The value of the common parameter. The value must be 1 to 4096 characters in length.
+	// The value of the common parameter. The value must be 1 to 4096 characters in length. Exactly one of value and value_wo can be set.
 	// +kubebuilder:validation:Optional
 	Value *string `json:"value,omitempty" tf:"value,omitempty"`
+
+	// The write-only value of the common parameter. It is only sent to the server when the resource is created or updated and is never stored in the state or plan. The value must be 1 to 4096 characters in length.11.0 or later and must be used together with value_wo_version. Exactly one of value and value_wo can be set.
+	// +kubebuilder:validation:Optional
+	ValueWo *string `json:"valueWo,omitempty" tf:"value_wo,omitempty"`
+
+	// The version of the write-only value. The write-only value is re-sent to the server only when this argument changes, so it must be changed whenever value_wo changes.
+	// +kubebuilder:validation:Optional
+	ValueWoVersion *float64 `json:"valueWoVersion,omitempty" tf:"value_wo_version,omitempty"`
 }
 
 // ParameterSpec defines the desired state of Parameter
@@ -141,7 +161,6 @@ type Parameter struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.parameterName) || (has(self.initProvider) && has(self.initProvider.parameterName))",message="spec.forProvider.parameterName is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.type) || (has(self.initProvider) && has(self.initProvider.type))",message="spec.forProvider.type is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.value) || (has(self.initProvider) && has(self.initProvider.value))",message="spec.forProvider.value is a required parameter"
 	Spec   ParameterSpec   `json:"spec"`
 	Status ParameterStatus `json:"status,omitempty"`
 }

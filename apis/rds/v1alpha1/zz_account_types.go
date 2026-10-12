@@ -21,8 +21,14 @@ type AccountInitParameters struct {
 	// The name of the database account.
 	AccountName *string `json:"accountName,omitempty" tf:"account_name,omitempty"`
 
-	// The password of the account.
+	// The password of the account. It conflicts with password, kms_encrypted_password and account_password_wo, and one of the four password sources must be set.
 	AccountPasswordSecretRef *v1.SecretKeySelector `json:"accountPasswordSecretRef,omitempty" tf:"-"`
+
+	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password, password and kms_encrypted_password, and one of the four password sources must be set.
+	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
+
+	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
+	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
 
 	// The account type. Valid values:
 	AccountType *string `json:"accountType,omitempty" tf:"account_type,omitempty"`
@@ -43,7 +49,7 @@ type AccountInitParameters struct {
 	// +kubebuilder:validation:Optional
 	DBInstanceIDSelector *v1.Selector `json:"dbInstanceIdSelector,omitempty" tf:"-"`
 
-	// An KMS encrypts password used to a db account. If the account_password is filled in, this field will be ignored.
+	// An KMS encrypts password used to a db account. It conflicts with account_password, password and account_password_wo, and one of the four password sources must be set.
 	KMSEncryptedPassword *string `json:"kmsEncryptedPassword,omitempty" tf:"kms_encrypted_password,omitempty"`
 
 	// An KMS encryption context used to decrypt kms_encrypted_password before creating or updating a db account with kms_encrypted_password. See Encryption Context. It is valid when kms_encrypted_password is set.
@@ -65,6 +71,12 @@ type AccountObservation struct {
 	// The name of the database account.
 	AccountName *string `json:"accountName,omitempty" tf:"account_name,omitempty"`
 
+	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password, password and kms_encrypted_password, and one of the four password sources must be set.
+	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
+
+	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
+	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
+
 	// The account type. Valid values:
 	AccountType *string `json:"accountType,omitempty" tf:"account_type,omitempty"`
 
@@ -77,7 +89,7 @@ type AccountObservation struct {
 	// The resource ID of Account. The value is formatted <db_instance_id>:<account_name>.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// An KMS encrypts password used to a db account. If the account_password is filled in, this field will be ignored.
+	// An KMS encrypts password used to a db account. It conflicts with account_password, password and account_password_wo, and one of the four password sources must be set.
 	KMSEncryptedPassword *string `json:"kmsEncryptedPassword,omitempty" tf:"kms_encrypted_password,omitempty"`
 
 	// An KMS encryption context used to decrypt kms_encrypted_password before creating or updating a db account with kms_encrypted_password. See Encryption Context. It is valid when kms_encrypted_password is set.
@@ -101,9 +113,17 @@ type AccountParameters struct {
 	// +kubebuilder:validation:Optional
 	AccountName *string `json:"accountName,omitempty" tf:"account_name,omitempty"`
 
-	// The password of the account.
+	// The password of the account. It conflicts with password, kms_encrypted_password and account_password_wo, and one of the four password sources must be set.
 	// +kubebuilder:validation:Optional
 	AccountPasswordSecretRef *v1.SecretKeySelector `json:"accountPasswordSecretRef,omitempty" tf:"-"`
+
+	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password, password and kms_encrypted_password, and one of the four password sources must be set.
+	// +kubebuilder:validation:Optional
+	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
+
+	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
+	// +kubebuilder:validation:Optional
+	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
 
 	// The account type. Valid values:
 	// +kubebuilder:validation:Optional
@@ -127,7 +147,7 @@ type AccountParameters struct {
 	// +kubebuilder:validation:Optional
 	DBInstanceIDSelector *v1.Selector `json:"dbInstanceIdSelector,omitempty" tf:"-"`
 
-	// An KMS encrypts password used to a db account. If the account_password is filled in, this field will be ignored.
+	// An KMS encrypts password used to a db account. It conflicts with account_password, password and account_password_wo, and one of the four password sources must be set.
 	// +kubebuilder:validation:Optional
 	KMSEncryptedPassword *string `json:"kmsEncryptedPassword,omitempty" tf:"kms_encrypted_password,omitempty"`
 
