@@ -19,7 +19,16 @@ import re
 import sys
 from collections import defaultdict
 
-import yaml
+try:
+    import yaml
+except ImportError:
+    print(
+        "fix-example-numeric-types: this script needs PyYAML, which isn't "
+        "installed for this python3. Run `pip install pyyaml` (or "
+        "`pip install --user pyyaml`) and re-run `make generate`.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
 
 
 def extract_number_paths(node, prefix=""):

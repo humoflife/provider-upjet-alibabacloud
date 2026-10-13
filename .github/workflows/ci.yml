@@ -54,13 +54,16 @@ jobs:
           files: |
             package/crds/**
       - name: Report breaking CRD OpenAPI v3 schema changes
-        if: steps.modified-crds.outputs.any_changed == 'true'
+        # Both targets compare the working tree against $GITHUB_BASE_REF,
+        # which is only set on pull_request events; on push it's empty, so
+        # the diff is against the tree itself and always passes trivially.
+        if: github.event_name == 'pull_request' && steps.modified-crds.outputs.any_changed == 'true'
         env:
           MODIFIED_CRD_LIST: ${{ steps.modified-crds.outputs.all_changed_files }}
         run: |
           make crddiff
       - name: Report native schema version changes
-        if: steps.modified-crds.outputs.any_changed == 'true'
+        if: github.event_name == 'pull_request' && steps.modified-crds.outputs.any_changed == 'true'
         run: |
           make schema-version-diff
 
@@ -150,6 +153,12 @@ jobs:
 
       - name: Install scraper
         run: go get github.com/crossplane/upjet/cmd/scraper@v1.9.0
+
+      - name: Install PyYAML
+        # make generate runs scripts/fix-example-numeric-types.py, which
+        # needs this. Installed explicitly rather than relying on the runner
+        # image happening to have it already.
+        run: pip install --user pyyaml
 
       - name: Check Diff
         run: make check-diff

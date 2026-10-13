@@ -22,6 +22,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/crossplane/upjet/pkg/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	tfsdk "github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 
@@ -94,14 +95,29 @@ func TerraformSetupBuilder(tfProvider *schema.Provider) terraform.SetupFn {
 // would cause race conditions between resources referring to different
 // ProviderConfigs.
 func configureNoForkAlibabaCloudClient(ctx context.Context, ps *terraform.Setup, p schema.Provider) error {
-	diag := p.Configure(context.WithoutCancel(ctx), &tfsdk.ResourceConfig{
+	diags := p.Configure(context.WithoutCancel(ctx), &tfsdk.ResourceConfig{
 		Config: ps.Configuration,
 	})
-	if diag != nil && diag.HasError() {
-		return errors.Errorf("failed to configure the provider: %v", diag)
+	if diags != nil && diags.HasError() {
+		return errors.Errorf("failed to configure the provider: %s", formatDiagnostics(diags))
 	}
 	ps.Meta = p.Meta()
 	return nil
+}
+
+// formatDiagnostics renders diag.Diagnostics as Summary (: Detail) pairs, one
+// per line, instead of Go's default struct formatting for the slice, which
+// buries the actual message under every other field of each diag.Diagnostic.
+func formatDiagnostics(diags diag.Diagnostics) string {
+	msgs := make([]string, 0, len(diags))
+	for _, d := range diags {
+		msg := d.Summary
+		if d.Detail != "" {
+			msg = fmt.Sprintf("%s: %s", msg, d.Detail)
+		}
+		msgs = append(msgs, msg)
+	}
+	return strings.Join(msgs, "; ")
 }
 
 func buildProviderConfiguration(region string, creds map[string]any, pc *v1beta1.ProviderConfig) terraform.ProviderConfiguration {

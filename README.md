@@ -9,6 +9,13 @@ make submodules
 make generate
 ```
 
+`make generate` runs `scripts/fix-example-numeric-types.py`, which needs
+PyYAML:
+
+```
+pip install pyyaml
+```
+
 ## Authentication
 
 Provider credentials are configured with a `ProviderConfig`. Static credentials

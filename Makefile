@@ -384,7 +384,8 @@ e2e-provider.%:
 
 crddiff:
 	@$(INFO) Checking breaking CRD schema changes
-	@for crd in $${MODIFIED_CRD_LIST}; do \
+	@breaking=0 ; \
+	for crd in $${MODIFIED_CRD_LIST}; do \
 		if ! git cat-file -e "$${GITHUB_BASE_REF}:$${crd}" 2>/dev/null; then \
 			echo "CRD $${crd} does not exist in the $${GITHUB_BASE_REF} branch. Skipping..." ; \
 			continue ; \
@@ -395,8 +396,10 @@ crddiff:
 			printf "\033[31m"; echo "Breaking change detected!"; printf "\033[0m" ; \
 			echo "$${changes_detected}" ; \
 			echo ; \
+			breaking=1 ; \
 		fi ; \
-	done
+	done ; \
+	if [[ $$breaking != 0 ]] ; then $(FAIL) ; fi
 	@$(OK) Checking breaking CRD schema changes
 
 schema-version-diff:
