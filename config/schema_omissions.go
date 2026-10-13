@@ -95,3 +95,38 @@ func addGenerationOnlySchemaOmissions(pc *config.Provider) {
 		})
 	}
 }
+
+// generationOnlySensitiveFields lists, per Terraform resource, the fields
+// (dotted paths for nested blocks, e.g. "block.field") that upstream does not
+// flag Sensitive but that this provider wants backed by a Secret reference in
+// the generated CRD rather than exposed as a plain string.
+//
+// Unlike generationOnlySchemaOmissions this is not a workaround for a
+// runtime-mutation bug: setting Schema.Sensitive only ever changes the output
+// masking in a diff (helper/schema's schema.go, "so output is hidden in the
+// UI") and upjet's own code generator reads it to decide whether to emit a
+// SecretRef field (pkg/types/field.go's NewSensitiveField); it has no effect
+// on CRUD behaviour at all, so it would be safe to set at runtime too. It
+// lives here anyway, alongside the other generation-only configuration, so
+// the full set of fields this provider reshapes for CRD generation stays in
+// one place.
+var generationOnlySensitiveFields = map[string][]string{
+	"alicloud_db_instance":                          {"server_key", "babelfish_config.master_user_password"},
+	"alicloud_db_readonly_instance":                 {"server_key"},
+	"alicloud_ssl_certificates_service_certificate": {"cert"},
+}
+
+// addGenerationOnlySensitiveFields registers the sensitive-field overrides
+// above. It is called only when building the provider configuration for code
+// generation; see GetProvider.
+func addGenerationOnlySensitiveFields(pc *config.Provider) {
+	for name, fields := range generationOnlySensitiveFields {
+		pc.AddResourceConfigurator(name, func(r *config.Resource) {
+			for _, f := range fields {
+				if s := config.GetSchema(r.TerraformResource, f); s != nil {
+					s.Sensitive = true
+				}
+			}
+		})
+	}
+}

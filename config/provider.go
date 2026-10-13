@@ -141,6 +141,7 @@ func GetProvider(_ context.Context, generationProvider bool) (*ujconfig.Provider
 	// runtime schema, which the upstream CRUD functions execute against.
 	if generationProvider {
 		addGenerationOnlySchemaOmissions(pc)
+		addGenerationOnlySensitiveFields(pc)
 	}
 
 	for _, configure := range []func(provider *ujconfig.Provider){

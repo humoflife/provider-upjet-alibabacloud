@@ -6,7 +6,6 @@ package rds
 
 import (
 	"github.com/crossplane/upjet/pkg/config"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/crossplane-contrib/provider-alibabacloud/config/common"
 )
@@ -27,14 +26,10 @@ func Configure(p *config.Provider) {
 		// Optional+Computed, so late-init would populate the pair and every
 		// plan would then error.
 		// Neither secret is flagged Sensitive upstream, so upjet would emit
-		// both as plain strings in spec and status.atProvider. Mark them so
-		// they become secret references instead.
-		r.TerraformResource.Schema["server_key"].Sensitive = true
-		if bc := r.TerraformResource.Schema["babelfish_config"]; bc != nil {
-			if res, ok := bc.Elem.(*schema.Resource); ok {
-				res.Schema["master_user_password"].Sensitive = true
-			}
-		}
+		// both as plain strings in spec and status.atProvider. Marked
+		// sensitive during code generation instead; see
+		// generationOnlySensitiveFields in config/schema_omissions.go, so
+		// they become secret references.
 	})
 	p.AddResourceConfigurator("alicloud_db_readonly_instance", func(r *config.Resource) {
 		r.ShortGroup = string(common.RDS)
@@ -59,8 +54,8 @@ func Configure(p *config.Provider) {
 		// InvalidSaleComponentFault, so the reference can only ever produce an
 		// invalid value. Supply the class literally instead.
 		delete(r.References, "instance_type")
-		// Also not Sensitive upstream; same reasoning as alicloud_db_instance.
-		r.TerraformResource.Schema["server_key"].Sensitive = true
+		// Also not Sensitive upstream; same reasoning as alicloud_db_instance,
+		// handled the same way in generationOnlySensitiveFields.
 	})
 	// NOTE: alicloud_db_account and alicloud_db_account_privilege (the
 	// legacy account resources, superseded by alicloud_rds_account) are
