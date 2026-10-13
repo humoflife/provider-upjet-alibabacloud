@@ -13,7 +13,8 @@ func Configure(p *config.Provider) {
 		// this resource, which would be "vpc"
 		r.ShortGroup = string(common.VPC)
 		r.Kind = "RouteTable"
-		// Delete deprecated fields
+		// Deprecated fields are omitted during code generation; see
+		// generationOnlySchemaOmissions in config/schema_omissions.go.
 	})
 	p.AddResourceConfigurator("alicloud_vpc", func(r *config.Resource) {
 		// We need to override the default group that upjet generated for
@@ -29,6 +30,7 @@ func Configure(p *config.Provider) {
 		// We need to override the default group that upjet generated for
 		// this resource, which would be "vpc"
 		r.ShortGroup = string(common.VPC)
-		// Delete deprecated fields
+		// Deprecated fields are omitted during code generation; see
+		// generationOnlySchemaOmissions in config/schema_omissions.go.
 	})
 }

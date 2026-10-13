@@ -21,7 +21,9 @@ func Configure(p *config.Provider) {
 		// this resource, which would be "ram"
 		r.ShortGroup = "ram"
 
-		// Name has been deprecated in favor of groupName
+		// "name" has been deprecated in favor of "group_name" and is dropped
+		// during code generation; see generationOnlySchemaOmissions in
+		// config/schema_omissions.go.
 	})
 
 	p.AddResourceConfigurator("alicloud_ram_policy", func(r *config.Resource) {
@@ -29,10 +31,10 @@ func Configure(p *config.Provider) {
 		// this resource, which would be "ram"
 		r.ShortGroup = "ram"
 
-		// Document has been deprecated in favor of policyDocument
-		// Name has been deprecated in favor of policyName
-		// Statement has been deprecated
-		// Version has been deprecated
+		// "document", "name", "statement" and "version" are all deprecated
+		// aliases of "policy_document"/"policy_name" and dropped during code
+		// generation; see generationOnlySchemaOmissions in
+		// config/schema_omissions.go.
 	})
 
 	// alicloud_ram_group drops the deprecated "name" above, so references that

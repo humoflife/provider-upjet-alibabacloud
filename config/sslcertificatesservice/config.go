@@ -15,8 +15,9 @@ func Configure(p *config.Provider) {
 		r.Kind = "Certificate"
 
 		// "name" is deprecated in favour of "certificate_name" and "lang" is
-		// deprecated upstream; drop them so the CRD only exposes the current
-		// fields.
+		// deprecated upstream; both are dropped during code generation, see
+		// generationOnlySchemaOmissions in config/schema_omissions.go, so the
+		// CRD only exposes the current fields.
 
 		// The certificate body is not flagged sensitive upstream, so upjet
 		// generates it as a plain string. Mark it sensitive so it is supplied

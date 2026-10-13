@@ -27,13 +27,14 @@ export TERRAFORM_PROVIDER_SOURCE ?= aliyun/alicloud
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/aliyun/terraform-provider-alicloud
 # NOTE: This pins the registry release used to generate config/schema.json.
 # The Go code the provider actually runs is pinned separately, in go.mod, and
-# for a prerelease it appears there only as an opaque pseudo-version
-# (v1.290.1-0.<timestamp>-<commit>) plus a replace directive. The two must refer
-# to the same upstream commit. Nothing enforces it mechanically, but
-# TestSchemaSourcesAgree in config/ fails if they drift far enough apart that a
-# configured resource is missing from either source.
+# since the tag declares no /v2 module path it appears there only as an
+# opaque pseudo-version (v1.294.1-0.<timestamp>-<commit>) plus a replace
+# directive. The two must refer to the same upstream commit.
+# TestSchemaVersionsMatch in config/ enforces this directly, by resolving
+# this tag's commit and comparing it against the pseudo-version's commit
+# suffix; TestSchemaSourcesAgree separately fails if the two sources drift
+# far enough apart that a configured resource is missing from either.
 export TERRAFORM_PROVIDER_VERSION ?= 2.0.0
-export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-alicloud
 export TERRAFORM_DOCS_PATH ?= website/docs/r
 
 
