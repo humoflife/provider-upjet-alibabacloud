@@ -30,12 +30,6 @@ type AccountInitParameters struct {
 	// The time when the password for the database account expires.
 	AccountPasswordValidTime *string `json:"accountPasswordValidTime,omitempty" tf:"account_password_valid_time,omitempty"`
 
-	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password and kms_encrypted_password, and one of account_password, kms_encrypted_password and account_password_wo must be set.
-	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
-
-	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
-	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
-
 	// The account type. Default value:Normal. Valid values: Normal, Super.
 	AccountType *string `json:"accountType,omitempty" tf:"account_type,omitempty"`
 
@@ -73,12 +67,6 @@ type AccountObservation struct {
 
 	// The time when the password for the database account expires.
 	AccountPasswordValidTime *string `json:"accountPasswordValidTime,omitempty" tf:"account_password_valid_time,omitempty"`
-
-	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password and kms_encrypted_password, and one of account_password, kms_encrypted_password and account_password_wo must be set.
-	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
-
-	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
-	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
 
 	// The account type. Default value:Normal. Valid values: Normal, Super.
 	AccountType *string `json:"accountType,omitempty" tf:"account_type,omitempty"`
@@ -121,14 +109,6 @@ type AccountParameters struct {
 	// The time when the password for the database account expires.
 	// +kubebuilder:validation:Optional
 	AccountPasswordValidTime *string `json:"accountPasswordValidTime,omitempty" tf:"account_password_valid_time,omitempty"`
-
-	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password and kms_encrypted_password, and one of account_password, kms_encrypted_password and account_password_wo must be set.
-	// +kubebuilder:validation:Optional
-	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
-
-	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
-	// +kubebuilder:validation:Optional
-	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
 
 	// The account type. Default value:Normal. Valid values: Normal, Super.
 	// +kubebuilder:validation:Optional

@@ -24,12 +24,6 @@ type AccountInitParameters struct {
 	// The password of the account. It conflicts with password, kms_encrypted_password and account_password_wo, and one of the four password sources must be set.
 	AccountPasswordSecretRef *v1.SecretKeySelector `json:"accountPasswordSecretRef,omitempty" tf:"-"`
 
-	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password, password and kms_encrypted_password, and one of the four password sources must be set.
-	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
-
-	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
-	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
-
 	// The account type. Valid values:
 	AccountType *string `json:"accountType,omitempty" tf:"account_type,omitempty"`
 
@@ -71,12 +65,6 @@ type AccountObservation struct {
 	// The name of the database account.
 	AccountName *string `json:"accountName,omitempty" tf:"account_name,omitempty"`
 
-	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password, password and kms_encrypted_password, and one of the four password sources must be set.
-	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
-
-	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
-	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
-
 	// The account type. Valid values:
 	AccountType *string `json:"accountType,omitempty" tf:"account_type,omitempty"`
 
@@ -116,14 +104,6 @@ type AccountParameters struct {
 	// The password of the account. It conflicts with password, kms_encrypted_password and account_password_wo, and one of the four password sources must be set.
 	// +kubebuilder:validation:Optional
 	AccountPasswordSecretRef *v1.SecretKeySelector `json:"accountPasswordSecretRef,omitempty" tf:"-"`
-
-	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password, password and kms_encrypted_password, and one of the four password sources must be set.
-	// +kubebuilder:validation:Optional
-	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
-
-	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
-	// +kubebuilder:validation:Optional
-	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
 
 	// The account type. Valid values:
 	// +kubebuilder:validation:Optional

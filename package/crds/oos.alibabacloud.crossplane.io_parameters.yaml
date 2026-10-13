@@ -110,19 +110,6 @@ spec:
                       be 1 to 4096 characters in length. Exactly one of value and
                       value_wo can be set.
                     type: string
-                  valueWo:
-                    description: The write-only value of the common parameter. It
-                      is only sent to the server when the resource is created or updated
-                      and is never stored in the state or plan. The value must be
-                      1 to 4096 characters in length.11.0 or later and must be used
-                      together with value_wo_version. Exactly one of value and value_wo
-                      can be set.
-                    type: string
-                  valueWoVersion:
-                    description: The version of the write-only value. The write-only
-                      value is re-sent to the server only when this argument changes,
-                      so it must be changed whenever value_wo changes.
-                    type: number
                 type: object
               initProvider:
                 description: |-
@@ -170,19 +157,6 @@ spec:
                       be 1 to 4096 characters in length. Exactly one of value and
                       value_wo can be set.
                     type: string
-                  valueWo:
-                    description: The write-only value of the common parameter. It
-                      is only sent to the server when the resource is created or updated
-                      and is never stored in the state or plan. The value must be
-                      1 to 4096 characters in length.11.0 or later and must be used
-                      together with value_wo_version. Exactly one of value and value_wo
-                      can be set.
-                    type: string
-                  valueWoVersion:
-                    description: The version of the write-only value. The write-only
-                      value is re-sent to the server only when this argument changes,
-                      so it must be changed whenever value_wo changes.
-                    type: number
                 type: object
               managementPolicies:
                 default:
@@ -401,19 +375,6 @@ spec:
                       be 1 to 4096 characters in length. Exactly one of value and
                       value_wo can be set.
                     type: string
-                  valueWo:
-                    description: The write-only value of the common parameter. It
-                      is only sent to the server when the resource is created or updated
-                      and is never stored in the state or plan. The value must be
-                      1 to 4096 characters in length.11.0 or later and must be used
-                      together with value_wo_version. Exactly one of value and value_wo
-                      can be set.
-                    type: string
-                  valueWoVersion:
-                    description: The version of the write-only value. The write-only
-                      value is re-sent to the server only when this argument changes,
-                      so it must be changed whenever value_wo changes.
-                    type: number
                 type: object
               conditions:
                 description: Conditions of the resource.

@@ -98,18 +98,6 @@ spec:
                     - name
                     - namespace
                     type: object
-                  accountPasswordWo:
-                    description: The write-only password of the account. It is only
-                      sent to the server when the resource is created or the account_password_wo_version
-                      changes and is never stored in the state or plan.11.0 or later
-                      and must be used together with account_password_wo_version.
-                      It conflicts with account_password and kms_encrypted_password.
-                    type: string
-                  accountPasswordWoVersion:
-                    description: The version of the write-only password. The write-only
-                      password is re-sent to the server only when this argument changes,
-                      so it must be changed whenever account_password_wo changes.
-                    type: number
                   accountPrivilege:
                     description: 'The privilege of account access database. Default
                       value: RoleReadWrite'
@@ -259,18 +247,6 @@ spec:
                     - name
                     - namespace
                     type: object
-                  accountPasswordWo:
-                    description: The write-only password of the account. It is only
-                      sent to the server when the resource is created or the account_password_wo_version
-                      changes and is never stored in the state or plan.11.0 or later
-                      and must be used together with account_password_wo_version.
-                      It conflicts with account_password and kms_encrypted_password.
-                    type: string
-                  accountPasswordWoVersion:
-                    description: The version of the write-only password. The write-only
-                      password is re-sent to the server only when this argument changes,
-                      so it must be changed whenever account_password_wo changes.
-                    type: number
                   accountPrivilege:
                     description: 'The privilege of account access database. Default
                       value: RoleReadWrite'
@@ -559,18 +535,6 @@ spec:
                     description: 'The name of the account. The name must meet the
                       following requirements:'
                     type: string
-                  accountPasswordWo:
-                    description: The write-only password of the account. It is only
-                      sent to the server when the resource is created or the account_password_wo_version
-                      changes and is never stored in the state or plan.11.0 or later
-                      and must be used together with account_password_wo_version.
-                      It conflicts with account_password and kms_encrypted_password.
-                    type: string
-                  accountPasswordWoVersion:
-                    description: The version of the write-only password. The write-only
-                      password is re-sent to the server only when this argument changes,
-                      so it must be changed whenever account_password_wo changes.
-                    type: number
                   accountPrivilege:
                     description: 'The privilege of account access database. Default
                       value: RoleReadWrite'

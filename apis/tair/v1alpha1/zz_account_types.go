@@ -21,12 +21,6 @@ type AccountInitParameters struct {
 	// The password of the account. The password must be 8 to 32 characters in length. It must contain at least three of the following character types: uppercase letters, lowercase letters, digits, and special characters. Special characters include !@ # $ % ^ & * ( ) _ + - =. It conflicts with account_password_wo.
 	AccountPasswordSecretRef *v1.SecretKeySelector `json:"accountPasswordSecretRef,omitempty" tf:"-"`
 
-	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password and kms_encrypted_password.
-	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
-
-	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
-	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
-
 	// The privilege of account access database. Default value: RoleReadWrite
 	AccountPrivilege *string `json:"accountPrivilege,omitempty" tf:"account_privilege,omitempty"`
 
@@ -61,12 +55,6 @@ type AccountObservation struct {
 
 	// The name of the account. The name must meet the following requirements:
 	AccountName *string `json:"accountName,omitempty" tf:"account_name,omitempty"`
-
-	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password and kms_encrypted_password.
-	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
-
-	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
-	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
 
 	// The privilege of account access database. Default value: RoleReadWrite
 	AccountPrivilege *string `json:"accountPrivilege,omitempty" tf:"account_privilege,omitempty"`
@@ -103,14 +91,6 @@ type AccountParameters struct {
 	// The password of the account. The password must be 8 to 32 characters in length. It must contain at least three of the following character types: uppercase letters, lowercase letters, digits, and special characters. Special characters include !@ # $ % ^ & * ( ) _ + - =. It conflicts with account_password_wo.
 	// +kubebuilder:validation:Optional
 	AccountPasswordSecretRef *v1.SecretKeySelector `json:"accountPasswordSecretRef,omitempty" tf:"-"`
-
-	// The write-only password of the account. It is only sent to the server when the resource is created or the account_password_wo_version changes and is never stored in the state or plan.11.0 or later and must be used together with account_password_wo_version. It conflicts with account_password and kms_encrypted_password.
-	// +kubebuilder:validation:Optional
-	AccountPasswordWo *string `json:"accountPasswordWo,omitempty" tf:"account_password_wo,omitempty"`
-
-	// The version of the write-only password. The write-only password is re-sent to the server only when this argument changes, so it must be changed whenever account_password_wo changes.
-	// +kubebuilder:validation:Optional
-	AccountPasswordWoVersion *float64 `json:"accountPasswordWoVersion,omitempty" tf:"account_password_wo_version,omitempty"`
 
 	// The privilege of account access database. Default value: RoleReadWrite
 	// +kubebuilder:validation:Optional
