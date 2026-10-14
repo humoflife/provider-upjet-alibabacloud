@@ -15,7 +15,7 @@ spec:
     accountPasswordSecretRef:
       key: password
       name: sample-account-password
-      namespace: upbound-system
+      namespace: crossplane-system
     dbInstanceIdSelector:
       matchLabels:
         testing.upbound.io/example-name: default
@@ -92,7 +92,7 @@ metadata:
   annotations:
     meta.upbound.io/example-id: rds/v1alpha1/account
   name: sample-account-password
-  namespace: upbound-system
+  namespace: crossplane-system
 type: Opaque
 stringData:
   password: Crossplane_123!

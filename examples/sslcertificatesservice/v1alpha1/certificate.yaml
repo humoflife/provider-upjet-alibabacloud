@@ -17,8 +17,8 @@ spec:
     certSecretRef:
       key: cert
       name: example-certificate-cert
-      namespace: upbound-system
+      namespace: crossplane-system
     keySecretRef:
       key: key
       name: example-certificate-key
-      namespace: upbound-system
+      namespace: crossplane-system

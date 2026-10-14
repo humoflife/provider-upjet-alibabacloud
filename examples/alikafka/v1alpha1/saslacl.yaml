@@ -62,7 +62,7 @@ spec:
     passwordSecretRef:
       key: password
       name: alikafka-sasl-user-password
-      namespace: upbound-system
+      namespace: crossplane-system
     instanceIdSelector:
       matchLabels:
         testing.upbound.io/example-name: default
@@ -73,7 +73,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: alikafka-sasl-user-password
-  namespace: upbound-system
+  namespace: crossplane-system
 type: Opaque
 stringData:
   password: Crossplane123

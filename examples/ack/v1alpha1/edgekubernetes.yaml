@@ -3,7 +3,7 @@
 # Go to the authorization link provided in MR error message and authorize.
 #
 # Requires example-secret:
-# kubectl create secret generic example-secret -n upbound-system --from-literal=password='f00BarBaz!'
+# kubectl create secret generic example-secret -n crossplane-system --from-literal=password='f00BarBaz!'
 #
 #
 # NAME                                                                   SYNCED   READY   EXTERNAL-NAME                       AGE
