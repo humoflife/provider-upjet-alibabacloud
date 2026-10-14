@@ -13,6 +13,11 @@ env:
   GO_VERSION: '1.27.1'
   GOLANGCI_VERSION: 'v2.14.0'
   DOCKER_BUILDX_VERSION: 'v0.38.0'
+  # go mod download intermittently fails against proxy.golang.org with
+  # "stream error ... INTERNAL_ERROR; received from peer" on this runner,
+  # a known flaky-HTTP/2 interaction with the module proxy. Forcing HTTP/1.1
+  # for the Go toolchain's own HTTP client avoids it. Same fix as e2e.yaml.
+  GODEBUG: 'http2client=0'
 
   # Common users. We can't run a step 'if secrets.XXX != ""' but we can run a
   # step 'if env.XXX != ""', so we copy these to succinctly test whether
