@@ -238,7 +238,6 @@ run: go.build
 # ====================================================================================
 # End to End Testing
 CROSSPLANE_VERSION = 2.4.2
-CROSSPLANE_NAMESPACE = upbound-system
 -include build/makelib/local.xpkg.mk
 -include build/makelib/controlplane.mk
 
@@ -327,7 +326,7 @@ local-deploy.%: controlplane.up
 		$(MAKE) local.xpkg.deploy.provider.$(PROJECT_NAME)-$${api}; \
 		$(INFO) running locally built $(PROJECT_NAME)-$${api}; \
 		$(KUBECTL) wait provider.pkg $(PROJECT_NAME)-$${api} --for condition=Healthy --timeout 5m; \
-		$(KUBECTL) -n upbound-system wait --for=condition=Available deployment --all --timeout=5m; \
+		$(KUBECTL) -n $(CROSSPLANE_NAMESPACE) wait --for=condition=Available deployment --all --timeout=5m; \
 		$(OK) running locally built $(PROJECT_NAME)-$${api}; \
 	done || $(FAIL)
 

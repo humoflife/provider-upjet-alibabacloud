@@ -29,7 +29,7 @@ spec:
     passwordSecretRef:
       key: password
       name: kubernetes-secret
-      namespace: upbound-system
+      namespace: crossplane-system
     platform: AliyunLinux3
     podCidr: 10.32.0.0/27
     proxyMode: ipvs
@@ -121,7 +121,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: kubernetes-secret
-  namespace: upbound-system
+  namespace: crossplane-system
 type: Opaque
 stringData:
   password: "VeryStr0ngP@ssw0rd123!"
