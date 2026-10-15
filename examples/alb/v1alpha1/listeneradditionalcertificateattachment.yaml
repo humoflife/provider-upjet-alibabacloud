@@ -37,11 +37,11 @@ spec:
     certSecretRef:
       key: cert
       name: crossplane-example-additional-cert
-      namespace: upbound-system
+      namespace: crossplane-system
     keySecretRef:
       key: key
       name: crossplane-example-additional-key
-      namespace: upbound-system
+      namespace: crossplane-system
     # The region suffix ALB expects in "<casCertId>-<region>" is CAS's home
     # region (cn-hangzhou on the China site), not the region the Certificate
     # was created through.
@@ -64,11 +64,11 @@ spec:
     certSecretRef:
       key: cert
       name: crossplane-example-default-cert
-      namespace: upbound-system
+      namespace: crossplane-system
     keySecretRef:
       key: key
       name: crossplane-example-default-key
-      namespace: upbound-system
+      namespace: crossplane-system
     # The region suffix ALB expects in "<casCertId>-<region>" is CAS's home
     # region (cn-hangzhou on the China site), not the region the Certificate
     # was created through.
