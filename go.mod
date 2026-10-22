@@ -5,7 +5,7 @@ go 1.27.3
 require (
 	dario.cat/mergo v1.0.1
 	github.com/alecthomas/kingpin/v2 v2.4.0
-	github.com/crossplane/crossplane-runtime v1.20.11
+	github.com/crossplane/crossplane-runtime v1.20.12
 	github.com/crossplane/crossplane-tools v0.0.0-20250725062323-29da02534659
 	github.com/crossplane/upjet v1.9.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.30.0
