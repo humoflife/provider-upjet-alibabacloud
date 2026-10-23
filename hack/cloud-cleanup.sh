@@ -14,8 +14,8 @@
 #
 # Each target line is "<region> <id>" for ids with a recognizable prefix
 # (vpc-, vsw-, sg-, i-, alb-, lsn-, rule-, sgp-, as-, epsrv-), or
-# "<region> <type>:<name>" otherwise, where type is one of ackone, sls, mns,
-# fc, oss, cms or ram. Blank lines and lines starting with # are ignored.
+# "<region> <type>:<name>" otherwise, where type is one of ackone, kafka, sls,
+# mns, fc, oss, cms or ram. Blank lines and lines starting with # are ignored.
 # Use any region for the global types (cms, ram).
 set -euo pipefail
 
@@ -108,6 +108,9 @@ inventory() {
     section "${r} ACK One hub clusters" "ID | Name | State | VPC | Created" \
       '.Clusters[]? | [.ClusterInfo.ClusterId, .ClusterInfo.Name, .ClusterInfo.State, .Network.VpcId, .ClusterInfo.CreationTime]' \
       adcp DescribeHubClusters --region "${r}"
+    section "${r} Kafka instances" "ID | Name | Status | Deploy type | VPC | Created" \
+      '.InstanceList.InstanceVO[]? | [.InstanceId, .Name, .ServiceStatus, .DeployType, .VpcId, .CreateTime]' \
+      alikafka GetInstanceList --RegionId "${r}"
     section "${r} SLS projects" "Name | Status | Created" \
       '.projects[]? | [.projectName, .status, .createTime]' \
       sls ListProject --region "${r}" --size 100
@@ -161,7 +164,7 @@ rank() {
     rule | ascript) echo 1 ;;
     listener) echo 2 ;;
     alb | servergroup) echo 3 ;;
-    ecs | ackone | privatelink | sls | mns | fc | oss | cms | ram) echo 4 ;;
+    ecs | ackone | kafka | privatelink | sls | mns | fc | oss | cms | ram) echo 4 ;;
     sg) echo 5 ;;
     vswitch) echo 6 ;;
     vpc) echo 7 ;;
@@ -192,6 +195,11 @@ delete_one() {
       aliyun adcp UpdateHubClusterFeature --region "${r}" --ClusterId "${id}" \
         --ArgoCDEnabled false --DeletionProtection false >/dev/null 2>&1 || true
       aliyun adcp DeleteHubCluster --region "${r}" --ClusterId "${id}"
+      ;;
+    kafka)
+      # Released instances stay listed until they are deleted as well.
+      aliyun alikafka ReleaseInstance --RegionId "${r}" --InstanceId "${id}" --ForceDeleteInstance true >/dev/null 2>&1 || true
+      aliyun alikafka DeleteInstance --RegionId "${r}" --InstanceId "${id}"
       ;;
     sls) aliyun sls DeleteProject --region "${r}" --project "${id}" ;;
     mns) aliyun mns-open DeleteQueue --region "${r}" --QueueName "${id}" ;;

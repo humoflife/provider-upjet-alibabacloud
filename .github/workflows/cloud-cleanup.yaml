@@ -22,7 +22,7 @@ on:
         type: string
         default: us-west-1,cn-beijing,cn-hangzhou
       targets:
-        description: 'delete: comma-separated "<region> <id>" or "<region> <type>:<name>", e.g. "us-west-1 vpc-abc, cn-beijing ackone:c123"'
+        description: 'delete: comma-separated "<region> <id>" or "<region> <type>:<name>" (types: ackone, kafka, sls, mns, fc, oss, cms, ram), e.g. "us-west-1 vpc-abc, cn-beijing ackone:c123"'
         type: string
         default: ""
       confirm:
