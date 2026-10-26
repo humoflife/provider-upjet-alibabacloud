@@ -20,9 +20,9 @@ on:
       regions:
         description: "inventory: comma-separated regions"
         type: string
-        default: us-west-1,cn-beijing,cn-hangzhou
+        default: us-west-1,cn-beijing,cn-hangzhou,cn-zhangjiakou
       targets:
-        description: 'delete: comma-separated "<region> <id>" or "<region> <type>:<name>" (types: ackone, kafka, sls, mns, fc, oss, cms, ram), e.g. "us-west-1 vpc-abc, cn-beijing ackone:c123"'
+        description: 'delete: comma-separated "<region> <id>" or "<region> <type>:<name>"; `hack/cloud-cleanup.sh types` lists the types'
         type: string
         default: ""
       confirm:
@@ -37,27 +37,27 @@ concurrency:
   group: cloud-cleanup
   cancel-in-progress: false
 
+defaults:
+  run:
+    # Unlike the default shell, this sets pipefail, so a failure piped into
+    # tee fails the step.
+    shell: bash
+
 env:
   ALIYUN_CLI_VERSION: "3.5.2"
-  ALIYUN_CLI_SHA256: 8058cb91fa0e2d46a7c5fd47e44ab6a465be8477b28595d408dcc03a0ed5bd4e
 
 jobs:
   cleanup:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - name: Check Inputs
+      - name: Check Confirmation
         if: inputs.mode == 'delete'
         env:
           CONFIRM: ${{ inputs.confirm }}
-          TARGETS: ${{ inputs.targets }}
         run: |
           if [ "${CONFIRM}" != "delete" ]; then
             echo "::error::delete mode needs confirm set to \"delete\""
-            exit 1
-          fi
-          if [ -z "${TARGETS//[[:space:],]/}" ]; then
-            echo "::error::delete mode needs at least one target"
             exit 1
           fi
 
@@ -66,11 +66,13 @@ jobs:
 
       - name: Install Alibaba Cloud CLI
         run: |
-          curl -fsSL -o aliyun.tgz "https://github.com/aliyun/aliyun-cli/releases/download/v${ALIYUN_CLI_VERSION}/aliyun-cli-linux-${ALIYUN_CLI_VERSION}-amd64.tgz"
-          echo "${ALIYUN_CLI_SHA256}  aliyun.tgz" | sha256sum -c -
-          tar -xzf aliyun.tgz aliyun
+          base="https://github.com/aliyun/aliyun-cli/releases/download/v${ALIYUN_CLI_VERSION}"
+          archive="aliyun-cli-linux-${ALIYUN_CLI_VERSION}-amd64.tgz"
+          curl -fsSLO "${base}/${archive}"
+          curl -fsSL "${base}/SHASUMS256.txt" | grep " ${archive}\$" | sha256sum -c -
+          tar -xzf "${archive}" aliyun
           sudo install -m 0755 aliyun /usr/local/bin/aliyun
-          rm aliyun aliyun.tgz
+          rm aliyun "${archive}"
           aliyun version
 
       - name: Configure Credentials
@@ -88,21 +90,15 @@ jobs:
           aliyun configure set --profile default --mode AK \
             --access-key-id "${ak}" --access-key-secret "${sk}" --region us-west-1 >/dev/null
 
+      # The repository is public, so the summary only shows ids, names,
+      # descriptions and states, and no raw responses are uploaded.
       - name: Inventory
         if: inputs.mode == 'inventory'
         env:
           REGIONS: ${{ inputs.regions }}
         run: |
-          IFS=', ' read -r -a regions <<<"${REGIONS}"
-          hack/cloud-cleanup.sh inventory "${regions[@]}" | tee -a "${GITHUB_STEP_SUMMARY}"
-
-      - name: Upload Raw Inventory
-        if: inputs.mode == 'inventory'
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
-        with:
-          name: cloud-inventory
-          path: _output/cloud-cleanup
-          if-no-files-found: ignore
+          IFS=', ' read -r -a region_list <<<"${REGIONS}"
+          hack/cloud-cleanup.sh inventory "${region_list[@]}" | tee -a "${GITHUB_STEP_SUMMARY}"
 
       - name: Delete
         if: inputs.mode == 'delete'
@@ -110,5 +106,4 @@ jobs:
           TARGETS: ${{ inputs.targets }}
         run: |
           tr ',' '\n' <<<"${TARGETS}" >targets.txt
-          set -o pipefail
           hack/cloud-cleanup.sh delete targets.txt | tee -a "${GITHUB_STEP_SUMMARY}"

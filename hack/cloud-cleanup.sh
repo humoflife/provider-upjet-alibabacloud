@@ -5,121 +5,243 @@
 # that is already configured with credentials.
 #
 #   cloud-cleanup.sh inventory <region>...
-#       Writes a Markdown inventory of the resource types the examples create
-#       to stdout, and every raw API response to $RAW_DIR.
+#       Writes a Markdown inventory of the resource types the examples create.
 #
 #   cloud-cleanup.sh delete <targets-file>
 #       Deletes exactly the listed resources, children before parents, and
 #       retries the ones that are still blocked by a dependency.
 #
-# Each target line is "<region> <id>" for ids with a recognizable prefix
-# (vpc-, vsw-, sg-, i-, alb-, lsn-, rule-, sgp-, as-, epsrv-), or
-# "<region> <type>:<name>" otherwise, where type is one of ackone, kafka, sls,
-# mns, fc, oss, cms or ram. Blank lines and lines starting with # are ignored.
-# Use any region for the global types (cms, ram).
+#   cloud-cleanup.sh types
+#       Lists the resource types a target can name.
+#
+# Each target line is "<region> <id>" when the id has one of the prefixes that
+# `types` lists, or "<region> <type>:<id-or-name>" otherwise. Blank lines and
+# lines starting with # are ignored. Use any region for the global types.
 set -euo pipefail
 
-RAW_DIR="${RAW_DIR:-_output/cloud-cleanup}"
 # Passes over the remaining targets, and the wait between them, while
 # dependents finish deleting.
 PASSES="${PASSES:-6}"
 PASS_WAIT="${PASS_WAIT:-60}"
 
-# Errors that mean the resource is already gone.
-GONE_PATTERN='NotFound|NotExist|not exist|not found|NoSuchBucket|EntityNotExist'
+# The resource types a target can name: type, delete rank (lower ranks are
+# deleted first, so children go before what contains them), and the id
+# prefix that identifies the type on its own ("-" when the type must be
+# named, because its ids are names or share a prefix with another type).
+TYPES='
+alb-rule              1 rule-
+alb-ascript           1 as-
+alb-listener          2 lsn-
+nlb-listener          2 -
+alb-servergroup       3 sgp-
+nlb-servergroup       3 -
+alb                   3 alb-
+nlb                   3 nlb-
+slb                   3 lb-
+privatelink-endpoint  3 ep-
+privatelink-service   4 epsrv-
+ecs                   4 i-
+rds                   4 rm-
+rds-readonly          3 rr-
+polardb               4 pc-
+tair                  4 r-
+ackone                4 -
+kafka                 4 -
+sls                   4 -
+mns                   4 -
+fc                    4 -
+oss                   4 -
+cms                   4 -
+ram                   4 -
+sg                    5 sg-
+vswitch               6 vsw-
+vpc                   7 vpc-
+'
 
-# first_error <output> prints the most useful line of an API error.
-first_error() {
-  { grep -m1 -E 'Code|Message|ERROR' <<<"$1" || head -1 <<<"$1"; } | tr -d '`' | cut -c1-200
+types() {
+  echo "| Type | Id prefix | Example target |"
+  echo "| --- | --- | --- |"
+  local resource_type prefix
+  while read -r resource_type _ prefix; do
+    [ -n "${resource_type}" ] || continue
+    if [ "${prefix}" = - ]; then
+      echo "| ${resource_type} | (name the type) | \`us-west-1 ${resource_type}:<id-or-name>\` |"
+    else
+      echo "| ${resource_type} | \`${prefix}\` | \`us-west-1 ${prefix}...\` |"
+    fi
+  done <<<"${TYPES}"
 }
 
-# section <title> <header> <jq-rows> <aliyun args>...
-# Calls the API, keeps the raw response, and renders the rows the jq filter
-# extracts as a Markdown table. A failed call is reported instead of aborting,
-# so one missing permission does not hide the rest of the inventory.
+# type_of <target> prints the type of an "<id>" or "<type>:<id>" target, or
+# fails when the type is unknown. Longer prefixes win, so "epsrv-" is not
+# mistaken for "ep-", nor "rule-" for "r-".
+type_of() {
+  local target="$1" resource_type prefix
+  if [[ "${target}" == *:* ]]; then
+    resource_type="${target%%:*}"
+    if awk -v t="${resource_type}" '$1 == t { found = 1 } END { exit !found }' <<<"${TYPES}"; then
+      echo "${resource_type}"
+      return
+    fi
+    return 1
+  fi
+  while read -r resource_type _ prefix; do
+    if [ "${prefix}" != - ] && [[ "${target}" == "${prefix}"* ]]; then
+      echo "${resource_type}"
+      return
+    fi
+  done < <(awk 'NF { print $1, $2, $3, length($3) }' <<<"${TYPES}" | sort -k4,4nr | cut -d' ' -f1-3)
+  return 1
+}
+
+rank_of() {
+  awk -v t="$1" '$1 == t { print $2 }' <<<"${TYPES}"
+}
+
+# describe_error <output> prints an API error as "Code: message", or the first
+# line of anything else, such as a local CLI error.
+describe_error() {
+  local message
+  message=$(jq -r 'if .error_code then "\(.error_code): \(.message)" else (.message // empty) end' <<<"$1" 2>/dev/null) ||
+    message=""
+  [ -n "${message}" ] || message=$(head -1 <<<"$1")
+  head -1 <<<"${message}" | tr -d '`|' | cut -c1-200
+}
+
+# check_credentials fails unless the CLI can authenticate. Without it, a
+# rotated key would fail every call in the same way and hide what happened.
+check_credentials() {
+  local out
+  if ! out=$(aliyun sts GetCallerIdentity 2>&1); then
+    echo "::error::cannot authenticate to Alibaba Cloud: $(describe_error "${out}")"
+    return 1
+  fi
+}
+
+# cells turns an array of values into a Markdown table row.
+CELLS='map(if . == null then "" else tostring end | gsub("[|]"; "\\|") | gsub("\n"; " ")) | "| " + join(" | ") + " |"'
+
+# section <title> <header> <list-path> <columns> <aliyun args>...
+# Lists one resource type and renders it as a Markdown table. list-path must
+# exist in the response: a renamed or mistyped key is reported, never shown as
+# an empty list. A failed call is reported too, instead of aborting, so one
+# missing permission does not hide the rest of the inventory.
 section() {
-  local title="$1" header="$2" rows="$3"
-  shift 3
-  local file out table
-  file="${RAW_DIR}/$(tr ' /' '__' <<<"${title}").json"
+  local title="$1" header="$2" path="$3" columns="$4"
+  shift 4
+  local out rows shown total
   echo "#### ${title}"
   echo
   if ! out=$(aliyun "$@" 2>&1); then
-    echo "Could not list: \`$(first_error "${out}")\`"
+    echo "Could not list: \`$(describe_error "${out}")\`"
     echo
     return
   fi
-  echo "${out}" >"${file}"
-  if ! table=$(jq -r "${rows} | map(tostring) | \"| \" + join(\" | \") + \" |\"" <<<"${out}" 2>/dev/null); then
-    echo "Unexpected response shape; see \`$(basename "${file}")\` in the workflow artifact."
+  if ! rows=$(jq -r "(${path} // error(\"missing\"))[] | ${columns} | ${CELLS}" <<<"${out}" 2>/dev/null); then
+    echo "Unexpected response: no \`${path}\` in it. Top-level keys: \`$(jq -r 'keys | join(", ")' <<<"${out}" 2>/dev/null || echo "not JSON")\`."
     echo
     return
   fi
-  if [ -z "${table}" ]; then
+  if [ -z "${rows}" ]; then
     echo "None."
-  else
-    echo "| ${header} |"
-    echo "|$(sed -E 's/[^|]+/ --- /g' <<<"${header}")|"
-    echo "${table}"
+    echo
+    return
   fi
+  echo "| ${header} |"
+  echo "|$(sed -E 's/[^|]+/ --- /g' <<<"${header}")|"
+  echo "${rows}"
   echo
+  shown=$(wc -l <<<"${rows}" | tr -d ' ')
+  total=$(jq -r '.TotalCount // .totalCount // .total // empty' <<<"${out}" 2>/dev/null || true)
+  if [ -n "${total}" ] && [ "${total}" -gt "${shown}" ]; then
+    echo "Showing ${shown} of ${total}."
+    echo
+  elif jq -e '((.NextToken // .nextToken // "") != "") or (.IsTruncated == true)' <<<"${out}" >/dev/null 2>&1; then
+    echo "Showing the first ${shown}; there are more."
+    echo
+  fi
 }
 
 inventory() {
-  mkdir -p "${RAW_DIR}"
+  check_credentials
   echo "## Alibaba Cloud inventory"
   echo
-  echo "Generated $(date -u +%Y-%m-%dT%H:%MZ). Each list shows at most one page (50-100 items)."
+  echo "Generated $(date -u +%Y-%m-%dT%H:%MZ)."
   echo
-  local r
-  for r in "$@"; do
-    echo "### ${r}"
+  local region
+  for region in "$@"; do
+    [ -n "${region}" ] || continue
+    echo "### ${region}"
     echo
-    section "${r} VPCs" "ID | Name | Status | Created" \
-      '.Vpcs.Vpc[]? | [.VpcId, .VpcName, .Status, .CreationTime]' \
-      vpc DescribeVpcs --RegionId "${r}" --PageSize 50
-    section "${r} vSwitches" "ID | Name | VPC | Zone | Created" \
-      '.VSwitches.VSwitch[]? | [.VSwitchId, .VSwitchName, .VpcId, .ZoneId, .CreationTime]' \
-      vpc DescribeVSwitches --RegionId "${r}" --PageSize 50
-    section "${r} security groups" "ID | Name | Description | VPC | Service managed | Created" \
-      '.SecurityGroups.SecurityGroup[]? | [.SecurityGroupId, .SecurityGroupName, .Description, .VpcId, .ServiceManaged, .CreationTime]' \
-      ecs DescribeSecurityGroups --RegionId "${r}" --PageSize 50
-    section "${r} ECS instances" "ID | Name | Status | VPC | Created" \
-      '.Instances.Instance[]? | [.InstanceId, .InstanceName, .Status, .VpcAttributes.VpcId, .CreationTime]' \
-      ecs DescribeInstances --RegionId "${r}" --PageSize 100
-    section "${r} ALB load balancers" "ID | Name | Status | VPC | Deletion protection | Created" \
-      '.LoadBalancers[]? | [.LoadBalancerId, .LoadBalancerName, .LoadBalancerStatus, .VpcId, .DeletionProtectionConfig.Enabled, .CreateTime]' \
-      alb ListLoadBalancers --region "${r}" --MaxResults 100
-    section "${r} ALB listeners" "ID | Load balancer | Protocol | Port" \
-      '.Listeners[]? | [.ListenerId, .LoadBalancerId, .ListenerProtocol, .ListenerPort]' \
-      alb ListListeners --region "${r}" --MaxResults 100
-    section "${r} ALB rules" "ID | Listener | Name" \
-      '.Rules[]? | [.RuleId, .ListenerId, .RuleName]' \
-      alb ListRules --region "${r}" --MaxResults 100
-    section "${r} ALB server groups" "ID | Name | VPC" \
-      '.ServerGroups[]? | [.ServerGroupId, .ServerGroupName, .VpcId]' \
-      alb ListServerGroups --region "${r}" --MaxResults 100
-    section "${r} ALB AScripts" "ID | Name | Listener" \
-      '.AScripts[]? | [.AScriptId, .AScriptName, .ListenerId]' \
-      alb ListAScripts --region "${r}" --MaxResults 100
-    section "${r} PrivateLink endpoint services" "ID | Name | Status | Created" \
-      '.Services[]? | [.ServiceId, .ServiceName, .ServiceStatus, .CreateTime]' \
-      privatelink ListVpcEndpointServices --RegionId "${r}" --MaxResults 100
-    section "${r} ACK One hub clusters" "ID | Name | State | VPC | Created" \
-      '.Clusters[]? | [.ClusterInfo.ClusterId, .ClusterInfo.Name, .ClusterInfo.State, .Network.VpcId, .ClusterInfo.CreationTime]' \
-      adcp DescribeHubClusters --region "${r}"
-    section "${r} Kafka instances" "ID | Name | Status | Deploy type | VPC | Created" \
-      '.InstanceList.InstanceVO[]? | [.InstanceId, .Name, .ServiceStatus, .DeployType, .VpcId, .CreateTime]' \
-      alikafka GetInstanceList --RegionId "${r}"
-    section "${r} SLS projects" "Name | Status | Created" \
-      '.projects[]? | [.projectName, .status, .createTime]' \
-      sls ListProject --region "${r}" --size 100
-    section "${r} MNS queues" "Name | Created" \
-      '.Data.PageData[]? | [.QueueName, .CreateTime]' \
-      mns-open ListQueue --region "${r}" --PageSize 50
-    section "${r} FC functions" "Name | Runtime | Created" \
-      '.functions[]? | [.functionName, .runtime, .createdTime]' \
-      fc ListFunctions --region "${r}" --limit 100
+    section "${region} VPCs" "ID | Name | Status | Created" \
+      '.Vpcs.Vpc' '[.VpcId, .VpcName, .Status, .CreationTime]' \
+      vpc DescribeVpcs --RegionId "${region}" --PageSize 50
+    section "${region} vSwitches" "ID | Name | VPC | Zone | Created" \
+      '.VSwitches.VSwitch' '[.VSwitchId, .VSwitchName, .VpcId, .ZoneId, .CreationTime]' \
+      vpc DescribeVSwitches --RegionId "${region}" --PageSize 50
+    section "${region} security groups" "ID | Name | Description | VPC | Service managed | Created" \
+      '.SecurityGroups.SecurityGroup' '[.SecurityGroupId, .SecurityGroupName, .Description, .VpcId, .ServiceManaged, .CreationTime]' \
+      ecs DescribeSecurityGroups --RegionId "${region}" --PageSize 50
+    section "${region} ECS instances" "ID | Name | Status | VPC | Created" \
+      '.Instances.Instance' '[.InstanceId, .InstanceName, .Status, .VpcAttributes.VpcId, .CreationTime]' \
+      ecs DescribeInstances --RegionId "${region}" --PageSize 100
+    section "${region} ALB load balancers" "ID | Name | Status | VPC | Deletion protection | Created" \
+      '.LoadBalancers' '[.LoadBalancerId, .LoadBalancerName, .LoadBalancerStatus, .VpcId, .DeletionProtectionConfig.Enabled, .CreateTime]' \
+      alb ListLoadBalancers --region "${region}" --MaxResults 100
+    section "${region} ALB listeners" "ID | Load balancer | Protocol | Port" \
+      '.Listeners' '[.ListenerId, .LoadBalancerId, .ListenerProtocol, .ListenerPort]' \
+      alb ListListeners --region "${region}" --MaxResults 100
+    section "${region} ALB rules" "ID | Listener | Name" \
+      '.Rules' '[.RuleId, .ListenerId, .RuleName]' \
+      alb ListRules --region "${region}" --MaxResults 100
+    section "${region} ALB server groups" "ID | Name | VPC" \
+      '.ServerGroups' '[.ServerGroupId, .ServerGroupName, .VpcId]' \
+      alb ListServerGroups --region "${region}" --MaxResults 100
+    section "${region} ALB AScripts" "ID | Name | Listener" \
+      '.AScripts' '[.AScriptId, .AScriptName, .ListenerId]' \
+      alb ListAScripts --region "${region}" --MaxResults 100
+    section "${region} NLB load balancers" "ID | Name | Status | VPC | Created" \
+      '.LoadBalancers' '[.LoadBalancerId, .LoadBalancerName, .LoadBalancerStatus, .VpcId, .CreateTime]' \
+      nlb ListLoadBalancers --RegionId "${region}" --MaxResults 100
+    section "${region} NLB listeners" "ID | Load balancer | Protocol | Port" \
+      '.Listeners' '[.ListenerId, .LoadBalancerId, .ListenerProtocol, .ListenerPort]' \
+      nlb ListListeners --RegionId "${region}" --MaxResults 100
+    section "${region} NLB server groups" "ID | Name | VPC" \
+      '.ServerGroups' '[.ServerGroupId, .ServerGroupName, .VpcId]' \
+      nlb ListServerGroups --RegionId "${region}" --MaxResults 100
+    section "${region} SLB load balancers" "ID | Name | Status | VPC | Created" \
+      '.LoadBalancers.LoadBalancer' '[.LoadBalancerId, .LoadBalancerName, .LoadBalancerStatus, .VpcId, .CreateTime]' \
+      slb DescribeLoadBalancers --RegionId "${region}" --PageSize 100
+    section "${region} PrivateLink endpoint services" "ID | Name | Status | Created" \
+      '.Services' '[.ServiceId, .ServiceName, .ServiceStatus, .CreateTime]' \
+      privatelink ListVpcEndpointServices --RegionId "${region}" --MaxResults 100
+    section "${region} PrivateLink endpoints" "ID | Name | Status | VPC | Created" \
+      '.Endpoints' '[.EndpointId, .EndpointName, .EndpointStatus, .VpcId, .CreateTime]' \
+      privatelink ListVpcEndpoints --RegionId "${region}" --MaxResults 100
+    section "${region} RDS instances" "ID | Description | Engine | Status | VPC | Created" \
+      '.Items.DBInstance' '[.DBInstanceId, .DBInstanceDescription, .Engine, .DBInstanceStatus, .VpcId, .CreateTime]' \
+      rds DescribeDBInstances --RegionId "${region}" --PageSize 100
+    section "${region} PolarDB clusters" "ID | Description | Type | Status | VPC | Created" \
+      '.Items.DBCluster' '[.DBClusterId, .DBClusterDescription, .DBType, .DBClusterStatus, .VpcId, .CreateTime]' \
+      polardb DescribeDBClusters --RegionId "${region}" --PageSize 100
+    section "${region} Tair (Redis) instances" "ID | Name | Status | VPC | Created" \
+      '.Instances.KVStoreInstance' '[.InstanceId, .InstanceName, .InstanceStatus, .VpcId, .CreateTime]' \
+      r-kvstore DescribeInstances --RegionId "${region}" --PageSize 50
+    section "${region} ACK One hub clusters" "ID | Name | State | VPC | Created" \
+      '.Clusters' '[.ClusterInfo.ClusterId, .ClusterInfo.Name, .ClusterInfo.State, .Network.VpcId, .ClusterInfo.CreationTime]' \
+      adcp DescribeHubClusters --region "${region}"
+    section "${region} Kafka instances" "ID | Name | Status | Deploy type | VPC | Created" \
+      '.InstanceList.InstanceVO' '[.InstanceId, .Name, .ServiceStatus, .DeployType, .VpcId, .CreateTime]' \
+      alikafka GetInstanceList --RegionId "${region}"
+    section "${region} SLS projects" "Name | Status | Created" \
+      '.projects' '[.projectName, .status, .createTime]' \
+      sls ListProject --region "${region}" --size 100
+    section "${region} MNS queues" "Name | Created" \
+      '.Data.PageData' '[.QueueName, .CreateTime]' \
+      mns-open ListQueue --region "${region}" --PageSize 50
+    section "${region} FC functions" "Name | Runtime | Created" \
+      '.functions' '[.functionName, .runtime, .createdTime]' \
+      fc ListFunctions --region "${region}" --limit 100
   done
   echo "### Global"
   echo
@@ -129,150 +251,218 @@ inventory() {
   if buckets=$(aliyun oss ls -s 2>&1); then
     grep '^oss://' <<<"${buckets}" | sed 's/^/- /' || echo "None."
   else
-    echo "Could not list: \`$(first_error "${buckets}")\`"
+    echo "Could not list: \`$(describe_error "${buckets}")\`"
   fi
   echo
   section "RAM roles" "Name | Description | Created" \
-    '.Roles.Role[]? | [.RoleName, .Description, .CreateDate]' \
+    '.Roles.Role' '[.RoleName, .Description, .CreateDate]' \
     ram ListRoles --MaxItems 100
   section "CloudMonitor contact groups" "Name" \
-    '.ContactGroups.ContactGroup[]? | [.]' \
+    '.ContactGroups.ContactGroup' '[.]' \
     cms DescribeContactGroupList --PageSize 100
 }
 
-# type_of <id> prints the resource type for an id or "<type>:<name>" target.
-type_of() {
-  case "$1" in
-    *:*) echo "${1%%:*}" ;;
-    vpc-*) echo vpc ;;
-    vsw-*) echo vswitch ;;
-    sg-*) echo sg ;;
-    i-*) echo ecs ;;
-    alb-*) echo alb ;;
-    lsn-*) echo listener ;;
-    rule-*) echo rule ;;
-    sgp-*) echo servergroup ;;
-    as-*) echo ascript ;;
-    epsrv-*) echo privatelink ;;
-    *) echo unknown ;;
-  esac
+# count <list-path> <aliyun args>... prints how many items the call returns
+# at list-path. It fails, rather than printing 0, when the call fails or the
+# path is missing, so a broken check never reads as "already gone".
+count() {
+  local path="$1" out
+  shift
+  out=$(aliyun "$@" 2>&1) || return 1
+  jq "(${path} // error(\"missing\")) | length" <<<"${out}" 2>/dev/null
 }
 
-# rank <type> orders deletes so that children go before what contains them.
-rank() {
-  case "$1" in
-    rule | ascript) echo 1 ;;
-    listener) echo 2 ;;
-    alb | servergroup) echo 3 ;;
-    ecs | ackone | kafka | privatelink | sls | mns | fc | oss | cms | ram) echo 4 ;;
-    sg) echo 5 ;;
-    vswitch) echo 6 ;;
-    vpc) echo 7 ;;
-    *) echo 9 ;;
-  esac
-}
-
-# delete_one <region> <type> <target> deletes one resource; it fails with the
-# API's error output when the delete was refused.
-delete_one() {
-  local r="$1" t="$2" id="${3#*:}"
-  case "${t}" in
-    rule) aliyun alb DeleteRule --region "${r}" --RuleId "${id}" ;;
-    ascript) aliyun alb DeleteAScripts --region "${r}" --AScriptIds.1 "${id}" ;;
-    listener) aliyun alb DeleteListener --region "${r}" --ListenerId "${id}" ;;
-    servergroup) aliyun alb DeleteServerGroup --region "${r}" --ServerGroupId "${id}" ;;
-    alb)
-      aliyun alb DisableDeletionProtection --region "${r}" --ResourceId "${id}" >/dev/null 2>&1 || true
-      aliyun alb DeleteLoadBalancer --region "${r}" --LoadBalancerId "${id}"
+# remaining <region> <type> <id> prints how many resources with that id still
+# exist in the region (0 or 1), or fails when it cannot tell.
+remaining() {
+  local region="$1" resource_type="$2" id="$3"
+  case "${resource_type}" in
+    vpc) count '.Vpcs.Vpc' vpc DescribeVpcs --RegionId "${region}" --VpcId "${id}" ;;
+    vswitch) count '.VSwitches.VSwitch' vpc DescribeVSwitches --RegionId "${region}" --VSwitchId "${id}" ;;
+    sg) count '.SecurityGroups.SecurityGroup' ecs DescribeSecurityGroups --RegionId "${region}" --SecurityGroupId "${id}" ;;
+    ecs) count '.Instances.Instance' ecs DescribeInstances --RegionId "${region}" --InstanceIds "[\"${id}\"]" ;;
+    alb) count '.LoadBalancers' alb ListLoadBalancers --region "${region}" --LoadBalancerIds.1 "${id}" ;;
+    alb-listener) count '.Listeners' alb ListListeners --region "${region}" --ListenerIds.1 "${id}" ;;
+    alb-rule) count '.Rules' alb ListRules --region "${region}" --RuleIds.1 "${id}" ;;
+    alb-servergroup) count '.ServerGroups' alb ListServerGroups --region "${region}" --ServerGroupIds.1 "${id}" ;;
+    alb-ascript) count '.AScripts' alb ListAScripts --region "${region}" --AScriptIds.1 "${id}" ;;
+    nlb) count '.LoadBalancers' nlb ListLoadBalancers --RegionId "${region}" --LoadBalancerIds.1 "${id}" ;;
+    nlb-listener) count '.Listeners' nlb ListListeners --RegionId "${region}" --ListenerIds.1 "${id}" ;;
+    nlb-servergroup) count '.ServerGroups' nlb ListServerGroups --RegionId "${region}" --ServerGroupIds.1 "${id}" ;;
+    slb) count '.LoadBalancers.LoadBalancer' slb DescribeLoadBalancers --RegionId "${region}" --LoadBalancerId "${id}" ;;
+    privatelink-service) count '.Services' privatelink ListVpcEndpointServices --RegionId "${region}" --ServiceId "${id}" ;;
+    privatelink-endpoint) count '.Endpoints' privatelink ListVpcEndpoints --RegionId "${region}" --EndpointId "${id}" ;;
+    rds | rds-readonly) count '.Items.DBInstance' rds DescribeDBInstances --RegionId "${region}" --DBInstanceId "${id}" ;;
+    polardb) count '.Items.DBCluster' polardb DescribeDBClusters --RegionId "${region}" --DBClusterIds "${id}" ;;
+    tair) count '.Instances.KVStoreInstance' r-kvstore DescribeInstances --RegionId "${region}" --InstanceIds "${id}" ;;
+    ackone) count "[(.Clusters // error(\"missing\"))[] | select(.ClusterInfo.ClusterId == \"${id}\")]" adcp DescribeHubClusters --region "${region}" ;;
+    kafka) count '.InstanceList.InstanceVO' alikafka GetInstanceList --RegionId "${region}" --InstanceId.1 "${id}" ;;
+    sls) count "[(.projects // error(\"missing\"))[] | select(.projectName == \"${id}\")]" sls ListProject --region "${region}" --projectName "${id}" ;;
+    mns) count "[(.Data.PageData // error(\"missing\"))[] | select(.QueueName == \"${id}\")]" mns-open ListQueue --region "${region}" --QueueName "${id}" ;;
+    fc) count "[(.functions // error(\"missing\"))[] | select(.functionName == \"${id}\")]" fc ListFunctions --region "${region}" --prefix "${id}" ;;
+    cms) count "[(.ContactGroups.ContactGroup // error(\"missing\"))[] | select(. == \"${id}\")]" cms DescribeContactGroupList --PageSize 100 ;;
+    oss)
+      local buckets
+      buckets=$(aliyun oss ls -s 2>&1) || return 1
+      grep -cx "oss://${id}" <<<"${buckets}" || true
       ;;
-    ecs) aliyun ecs DeleteInstance --region "${r}" --InstanceId "${id}" --Force true ;;
-    sg) aliyun ecs DeleteSecurityGroup --RegionId "${r}" --SecurityGroupId "${id}" ;;
-    vswitch) aliyun vpc DeleteVSwitch --RegionId "${r}" --VSwitchId "${id}" ;;
-    vpc) aliyun vpc DeleteVpc --RegionId "${r}" --VpcId "${id}" ;;
-    privatelink) aliyun privatelink DeleteVpcEndpointService --RegionId "${r}" --ServiceId "${id}" ;;
+    ram)
+      local out
+      if out=$(aliyun ram GetRole --RoleName "${id}" 2>&1); then
+        echo 1
+      elif [ "$(jq -r '.error_code // empty' <<<"${out}" 2>/dev/null)" = "EntityNotExist.Role" ]; then
+        echo 0
+      else
+        return 1
+      fi
+      ;;
+    *) return 1 ;;
+  esac
+}
+
+# prepare <description> <aliyun args>... runs a step that makes a delete
+# possible, such as turning off deletion protection. A failure is reported but
+# does not stop the delete, whose own error then has the context it needs.
+prepare() {
+  local description="$1" out
+  shift
+  if ! out=$(aliyun "$@" 2>&1); then
+    echo "(could not ${description}: $(describe_error "${out}")) "
+  fi
+}
+
+# delete_one <region> <type> <id> deletes one resource. On success it prints
+# any warnings from the preparation steps; on failure, the API's error.
+delete_one() {
+  local region="$1" resource_type="$2" id="$3" notes=""
+  case "${resource_type}" in
+    alb-rule) aliyun alb DeleteRule --region "${region}" --RuleId "${id}" ;;
+    alb-ascript) aliyun alb DeleteAScripts --region "${region}" --AScriptIds.1 "${id}" ;;
+    alb-listener) aliyun alb DeleteListener --region "${region}" --ListenerId "${id}" ;;
+    alb-servergroup) aliyun alb DeleteServerGroup --region "${region}" --ServerGroupId "${id}" ;;
+    alb)
+      notes=$(prepare "turn off deletion protection" alb DisableDeletionProtection --region "${region}" --ResourceId "${id}")
+      aliyun alb DeleteLoadBalancer --region "${region}" --LoadBalancerId "${id}"
+      ;;
+    nlb-listener) aliyun nlb DeleteListener --RegionId "${region}" --ListenerId "${id}" ;;
+    nlb-servergroup) aliyun nlb DeleteServerGroup --RegionId "${region}" --ServerGroupId "${id}" ;;
+    nlb) aliyun nlb DeleteLoadBalancer --RegionId "${region}" --LoadBalancerId "${id}" ;;
+    slb)
+      notes=$(prepare "turn off deletion protection" slb SetLoadBalancerDeleteProtection --RegionId "${region}" --LoadBalancerId "${id}" --DeleteProtection off)
+      aliyun slb DeleteLoadBalancer --RegionId "${region}" --LoadBalancerId "${id}"
+      ;;
+    privatelink-endpoint) aliyun privatelink DeleteVpcEndpoint --RegionId "${region}" --EndpointId "${id}" ;;
+    privatelink-service) aliyun privatelink DeleteVpcEndpointService --RegionId "${region}" --ServiceId "${id}" ;;
+    ecs) aliyun ecs DeleteInstance --region "${region}" --InstanceId "${id}" --Force true ;;
+    rds | rds-readonly)
+      notes=$(prepare "turn off deletion protection" rds ModifyDBInstanceDeletionProtection --region "${region}" --DBInstanceId "${id}" --DeletionProtection false)
+      aliyun rds DeleteDBInstance --region "${region}" --DBInstanceId "${id}"
+      ;;
+    polardb)
+      notes=$(prepare "turn off deletion protection" polardb ModifyDBClusterDeletion --region "${region}" --DBClusterId "${id}" --Protection false)
+      aliyun polardb DeleteDBCluster --region "${region}" --DBClusterId "${id}"
+      ;;
+    tair) aliyun r-kvstore DeleteInstance --region "${region}" --InstanceId "${id}" ;;
     ackone)
       # DeleteHubCluster refuses while ArgoCD is enabled, which is the default.
-      aliyun adcp UpdateHubClusterFeature --region "${r}" --ClusterId "${id}" \
-        --ArgoCDEnabled false --DeletionProtection false >/dev/null 2>&1 || true
-      aliyun adcp DeleteHubCluster --region "${r}" --ClusterId "${id}"
+      notes=$(prepare "turn off ArgoCD and deletion protection" adcp UpdateHubClusterFeature --region "${region}" \
+        --ClusterId "${id}" --ArgoCDEnabled false --DeletionProtection false)
+      aliyun adcp DeleteHubCluster --region "${region}" --ClusterId "${id}"
       ;;
     kafka)
       # Released instances stay listed until they are deleted as well.
-      aliyun alikafka ReleaseInstance --RegionId "${r}" --InstanceId "${id}" --ForceDeleteInstance true >/dev/null 2>&1 || true
-      aliyun alikafka DeleteInstance --RegionId "${r}" --InstanceId "${id}"
+      notes=$(prepare "release the instance" alikafka ReleaseInstance --RegionId "${region}" --InstanceId "${id}" --ForceDeleteInstance true)
+      aliyun alikafka DeleteInstance --RegionId "${region}" --InstanceId "${id}"
       ;;
-    sls) aliyun sls DeleteProject --region "${r}" --project "${id}" ;;
-    mns) aliyun mns-open DeleteQueue --region "${r}" --QueueName "${id}" ;;
-    fc) aliyun fc DeleteFunction --region "${r}" --functionName "${id}" ;;
-    oss) aliyun oss rm "oss://${id}" --region "${r}" -b -a -r -f ;;
+    sls) aliyun sls DeleteProject --region "${region}" --project "${id}" ;;
+    mns) aliyun mns-open DeleteQueue --region "${region}" --QueueName "${id}" ;;
+    fc) aliyun fc DeleteFunction --region "${region}" --functionName "${id}" ;;
+    oss) aliyun oss rm "oss://${id}" --region "${region}" -b -a -r -f --all-versions ;;
     cms) aliyun cms DeleteContactGroup --ContactGroupName "${id}" ;;
     ram)
-      local policies name ptype
+      local policies name policy_type
       policies=$(aliyun ram ListPoliciesForRole --RoleName "${id}")
-      while read -r name ptype; do
+      while read -r name policy_type; do
         [ -n "${name}" ] || continue
-        aliyun ram DetachPolicyFromRole --RoleName "${id}" --PolicyName "${name}" --PolicyType "${ptype}" >/dev/null
+        notes+=$(prepare "detach policy ${name}" ram DetachPolicyFromRole --RoleName "${id}" --PolicyName "${name}" --PolicyType "${policy_type}")
       done < <(jq -r '.Policies.Policy[]? | "\(.PolicyName) \(.PolicyType)"' <<<"${policies}")
       aliyun ram DeleteRole --RoleName "${id}"
       ;;
+    sg) aliyun ecs DeleteSecurityGroup --RegionId "${region}" --SecurityGroupId "${id}" ;;
+    vswitch) aliyun vpc DeleteVSwitch --RegionId "${region}" --VSwitchId "${id}" ;;
+    vpc) aliyun vpc DeleteVpc --RegionId "${region}" --VpcId "${id}" ;;
     *)
-      echo "unknown resource type for $3"
+      echo "no delete for type ${resource_type}" >&2
       return 1
       ;;
-  esac
+  esac >"${ERR_FILE}" 2>&1 || {
+    echo "${notes}$(describe_error "$(cat "${ERR_FILE}")")"
+    return 1
+  }
+  printf '%s' "${notes}"
 }
 
 delete() {
-  local targets=() remaining=() line r id t pass out
+  local targets=() failed=() line region target resource_type id pass error notes left
+  local deleted=0 absent=0
   while IFS= read -r line || [ -n "${line}" ]; do
     line="$(sed -E 's/#.*//; s/^[[:space:]]+//; s/[[:space:]]+$//' <<<"${line}")"
     [ -z "${line}" ] && continue
-    r="" id=""
-    read -r r id <<<"${line}"
-    if [ -z "${id}" ]; then
+    region="" target=""
+    read -r region target <<<"${line}"
+    if [ -z "${target}" ]; then
       echo "::error::target \"${line}\" needs a region and an id"
       return 1
     fi
-    t="$(type_of "${id}")"
-    if [ "${t}" = unknown ]; then
-      echo "::error::cannot tell the type of \"${id}\"; write it as <type>:<name>"
+    if ! resource_type="$(type_of "${target}")"; then
+      echo "::error::unknown resource type in \"${target}\"; run \"$0 types\" for the list"
       return 1
     fi
-    targets+=("$(rank "${t}") ${r} ${t} ${id}")
+    targets+=("$(rank_of "${resource_type}") ${region} ${resource_type} ${target#*:}")
   done <"$1"
   if [ "${#targets[@]}" -eq 0 ]; then
     echo "::error::no targets given"
     return 1
   fi
+  check_credentials
   mapfile -t targets < <(printf '%s\n' "${targets[@]}" | sort -n -k1,1)
+  ERR_FILE="$(mktemp)"
+  trap 'rm -f "${ERR_FILE}"' EXIT
 
   echo "## Alibaba Cloud cleanup"
   echo
   for ((pass = 1; pass <= PASSES; pass++)); do
-    remaining=()
+    failed=()
     for line in "${targets[@]}"; do
-      read -r _ r t id <<<"${line}"
-      if out=$(delete_one "${r}" "${t}" "${id}" 2>&1); then
-        echo "- deleted \`${id}\` (${t}, ${r})"
-      elif grep -qE "${GONE_PATTERN}" <<<"${out}"; then
-        echo "- \`${id}\` (${t}, ${r}) was already gone"
+      read -r _ region resource_type id <<<"${line}"
+      if notes=$(delete_one "${region}" "${resource_type}" "${id}"); then
+        deleted=$((deleted + 1))
+        echo "- deleted \`${id}\` (${resource_type}, ${region}) ${notes}"
+        continue
+      fi
+      error="${notes}"
+      if left=$(remaining "${region}" "${resource_type}" "${id}") && [ "${left}" = 0 ]; then
+        absent=$((absent + 1))
+        echo "- \`${id}\` (${resource_type}) does not exist in ${region}; nothing to delete"
       else
-        remaining+=("${line}")
-        echo "- pass ${pass}: \`${id}\` (${t}, ${r}) not deleted yet: \`$(first_error "${out}")\`"
+        failed+=("${line}")
+        echo "- pass ${pass}: \`${id}\` (${resource_type}, ${region}) not deleted yet: \`${error}\`"
       fi
     done
-    [ "${#remaining[@]}" -eq 0 ] && break
-    targets=("${remaining[@]}")
+    [ "${#failed[@]}" -eq 0 ] && break
+    targets=("${failed[@]}")
     if ((pass < PASSES)); then
       sleep "${PASS_WAIT}"
     fi
   done
   echo
-  if [ "${#remaining[@]}" -gt 0 ]; then
-    echo "**${#remaining[@]} target(s) could not be deleted;** see the errors above."
+  echo "**Deleted ${deleted}, not found ${absent}, failed ${#failed[@]}.**"
+  if [ "${#failed[@]}" -gt 0 ]; then
     return 1
   fi
-  echo "All targets are gone."
+  if [ "${deleted}" -eq 0 ]; then
+    echo "::warning::nothing was deleted: none of the targets exist in the regions given"
+  fi
 }
 
 case "${1:-}" in
@@ -283,8 +473,11 @@ case "${1:-}" in
   delete)
     delete "${2:?usage: $0 delete <targets-file>}"
     ;;
+  types)
+    types
+    ;;
   *)
-    echo "usage: $0 inventory <region>... | delete <targets-file>" >&2
+    echo "usage: $0 inventory <region>... | delete <targets-file> | types" >&2
     exit 2
     ;;
 esac
