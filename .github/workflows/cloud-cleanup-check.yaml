@@ -11,6 +11,7 @@ on:
     paths:
       - hack/cloud-cleanup.sh
       - hack/cloud-cleanup-test.sh
+      - hack/install-aliyun-cli.sh
       - .github/workflows/cloud-cleanup.yaml
       - .github/workflows/cloud-cleanup-check.yaml
 
@@ -33,7 +34,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Shellcheck
-        run: shellcheck hack/cloud-cleanup.sh hack/cloud-cleanup-test.sh
+        run: shellcheck hack/cloud-cleanup.sh hack/cloud-cleanup-test.sh hack/install-aliyun-cli.sh
 
       - name: Actionlint
         run: |
@@ -46,3 +47,8 @@ jobs:
 
       - name: Test
         run: hack/cloud-cleanup-test.sh
+
+      # The cleanup workflow installs the CLI the same way, so a version bump
+      # that breaks the download is caught here.
+      - name: Install Alibaba Cloud CLI
+        run: hack/install-aliyun-cli.sh

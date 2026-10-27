@@ -43,9 +43,6 @@ defaults:
     # tee fails the step.
     shell: bash
 
-env:
-  ALIYUN_CLI_VERSION: "3.5.2"
-
 jobs:
   cleanup:
     runs-on: ubuntu-latest
@@ -65,15 +62,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Install Alibaba Cloud CLI
-        run: |
-          base="https://github.com/aliyun/aliyun-cli/releases/download/v${ALIYUN_CLI_VERSION}"
-          archive="aliyun-cli-linux-${ALIYUN_CLI_VERSION}-amd64.tgz"
-          curl -fsSLO "${base}/${archive}"
-          curl -fsSL "${base}/SHASUMS256.txt" | grep " ${archive}\$" | sha256sum -c -
-          tar -xzf "${archive}" aliyun
-          sudo install -m 0755 aliyun /usr/local/bin/aliyun
-          rm aliyun "${archive}"
-          aliyun version
+        run: hack/install-aliyun-cli.sh
 
       - name: Configure Credentials
         env:
@@ -91,14 +80,19 @@ jobs:
             --access-key-id "${ak}" --access-key-secret "${sk}" --region us-west-1 >/dev/null
 
       # The repository is public, so the summary only shows ids, names,
-      # descriptions and states, and no raw responses are uploaded.
+      # descriptions and states, and no raw responses are uploaded. Both steps
+      # keep the ::error:: and ::warning:: annotations out of the summary,
+      # where they would show as text, and still fail when the script does.
       - name: Inventory
         if: inputs.mode == 'inventory'
         env:
           REGIONS: ${{ inputs.regions }}
         run: |
           IFS=', ' read -r -a region_list <<<"${REGIONS}"
-          hack/cloud-cleanup.sh inventory "${region_list[@]}" | tee -a "${GITHUB_STEP_SUMMARY}"
+          status=0
+          hack/cloud-cleanup.sh inventory "${region_list[@]}" | tee output.md || status=$?
+          grep -v '^::' output.md >>"${GITHUB_STEP_SUMMARY}" || true
+          exit "${status}"
 
       - name: Delete
         if: inputs.mode == 'delete'
@@ -106,4 +100,7 @@ jobs:
           TARGETS: ${{ inputs.targets }}
         run: |
           tr ',' '\n' <<<"${TARGETS}" >targets.txt
-          hack/cloud-cleanup.sh delete targets.txt | tee -a "${GITHUB_STEP_SUMMARY}"
+          status=0
+          hack/cloud-cleanup.sh delete targets.txt | tee output.md || status=$?
+          grep -v '^::' output.md >>"${GITHUB_STEP_SUMMARY}" || true
+          exit "${status}"

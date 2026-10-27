@@ -2,7 +2,8 @@
 # Lists and deletes Alibaba Cloud resources that end-to-end test runs left
 # behind, for example when a run was cancelled before its cleanup finished.
 # Driven by .github/workflows/cloud-cleanup.yaml; it expects an `aliyun` CLI
-# that is already configured with credentials.
+# that is already configured with credentials, and bash 4 or later. To run it
+# locally against a named CLI profile, set ALIBABA_CLOUD_PROFILE=<profile>.
 #
 #   cloud-cleanup.sh inventory <region>...
 #       Writes a Markdown inventory of the resource types the examples create.
@@ -19,6 +20,11 @@
 # lines starting with # are ignored. Use any region for the global types.
 set -euo pipefail
 
+if ((BASH_VERSINFO[0] < 4)); then
+  echo "$0 needs bash 4 or later; this is bash ${BASH_VERSION}" >&2
+  exit 2
+fi
+
 # Passes over the remaining targets, and the wait between them, while
 # dependents finish deleting.
 PASSES="${PASSES:-6}"
@@ -27,19 +33,22 @@ PASS_WAIT="${PASS_WAIT:-60}"
 # The resource types a target can name: type, delete rank (lower ranks are
 # deleted first, so children go before what contains them), and the id
 # prefix that identifies the type on its own ("-" when the type must be
-# named, because its ids are names or share a prefix with another type).
+# named, because its ids are names or share a prefix with another type: ALB
+# and NLB listeners are both "lsn-", their server groups both "sgp-"). A
+# PrivateLink endpoint goes before its service, which goes before the load
+# balancer behind it.
 TYPES='
 alb-rule              1 rule-
 alb-ascript           1 as-
-alb-listener          2 lsn-
+privatelink-endpoint  1 ep-
+alb-listener          2 -
 nlb-listener          2 -
-alb-servergroup       3 sgp-
+privatelink-service   2 epsrv-
+alb-servergroup       3 -
 nlb-servergroup       3 -
 alb                   3 alb-
 nlb                   3 nlb-
 slb                   3 lb-
-privatelink-endpoint  3 ep-
-privatelink-service   4 epsrv-
 ecs                   4 i-
 rds                   4 rm-
 rds-readonly          3 rr-
@@ -73,48 +82,58 @@ types() {
 }
 
 # type_of <target> prints the type of an "<id>" or "<type>:<id>" target, or
-# fails when the type is unknown. Longer prefixes win, so "epsrv-" is not
-# mistaken for "ep-", nor "rule-" for "r-".
+# fails when the type is unknown.
 type_of() {
-  local target="$1" resource_type prefix
+  local target="$1"
   if [[ "${target}" == *:* ]]; then
-    resource_type="${target%%:*}"
-    if awk -v t="${resource_type}" '$1 == t { found = 1 } END { exit !found }' <<<"${TYPES}"; then
-      echo "${resource_type}"
-      return
-    fi
-    return 1
+    awk -v t="${target%%:*}" '$1 == t { print $1; found = 1 } END { exit !found }' <<<"${TYPES}"
+  else
+    awk -v p="${target%%-*}-" '$3 == p { print $1; found = 1 } END { exit !found }' <<<"${TYPES}"
   fi
-  while read -r resource_type _ prefix; do
-    if [ "${prefix}" != - ] && [[ "${target}" == "${prefix}"* ]]; then
-      echo "${resource_type}"
-      return
-    fi
-  done < <(awk 'NF { print $1, $2, $3, length($3) }' <<<"${TYPES}" | sort -k4,4nr | cut -d' ' -f1-3)
-  return 1
 }
 
 rank_of() {
   awk -v t="$1" '$1 == t { print $2 }' <<<"${TYPES}"
 }
 
+# The CLI prints errors as text ("ErrorCode: ..." and "Message: ..." lines,
+# in color) unless it runs in its AI agent mode, where they are JSON. Both are
+# parsed, so the script does not depend on which mode the CLI picks.
+ESC=$'\033'
+
+# error_code <output> prints the API error code, or nothing for a local error.
+error_code() {
+  local code
+  code=$(jq -r '.error_code // empty' <<<"$1" 2>/dev/null) || code=""
+  [ -n "${code}" ] || code=$(sed -nE 's/^ErrorCode: *([^[:space:]]+).*/\1/p' <<<"$1" | head -1)
+  echo "${code}"
+}
+
 # describe_error <output> prints an API error as "Code: message", or the first
 # line of anything else, such as a local CLI error.
 describe_error() {
-  local message
-  message=$(jq -r 'if .error_code then "\(.error_code): \(.message)" else (.message // empty) end' <<<"$1" 2>/dev/null) ||
-    message=""
-  [ -n "${message}" ] || message=$(head -1 <<<"$1")
+  local plain code message
+  plain=$(sed -E "s/${ESC}\[[0-9;]*m//g" <<<"$1")
+  code=$(error_code "${plain}")
+  message=$(jq -r '.message // empty' <<<"${plain}" 2>/dev/null) || message=""
+  [ -n "${message}" ] || message=$(sed -nE 's/^Message: *//p' <<<"${plain}" | head -1)
+  [ -n "${message}" ] || message=$(grep -m1 . <<<"${plain}" || true)
+  [ -z "${code}" ] || message="${code}: ${message}"
   head -1 <<<"${message}" | tr -d '`|' | cut -c1-200
 }
 
 # check_credentials fails unless the CLI can authenticate. Without it, a
 # rotated key would fail every call in the same way and hide what happened.
+# Run locally, it also says which identity is in use; not in CI, where the
+# output is public.
 check_credentials() {
   local out
   if ! out=$(aliyun sts GetCallerIdentity 2>&1); then
     echo "::error::cannot authenticate to Alibaba Cloud: $(describe_error "${out}")"
     return 1
+  fi
+  if [ "${GITHUB_ACTIONS:-}" != true ]; then
+    echo "Using $(jq -r '.Arn // "an unknown identity"' <<<"${out}" 2>/dev/null)" >&2
   fi
 }
 
@@ -152,7 +171,7 @@ section() {
   echo "${rows}"
   echo
   shown=$(wc -l <<<"${rows}" | tr -d ' ')
-  total=$(jq -r '.TotalCount // .totalCount // .total // empty' <<<"${out}" 2>/dev/null || true)
+  total=$(jq -r '.TotalCount // .totalCount // .total // .Total // .Data.Total // .TotalRecordCount // empty' <<<"${out}" 2>/dev/null || true)
   if [ -n "${total}" ] && [ "${total}" -gt "${shown}" ]; then
     echo "Showing ${shown} of ${total}."
     echo
@@ -300,7 +319,21 @@ remaining() {
     sls) count "[(.projects // error(\"missing\"))[] | select(.projectName == \"${id}\")]" sls ListProject --region "${region}" --projectName "${id}" ;;
     mns) count "[(.Data.PageData // error(\"missing\"))[] | select(.QueueName == \"${id}\")]" mns-open ListQueue --region "${region}" --QueueName "${id}" ;;
     fc) count "[(.functions // error(\"missing\"))[] | select(.functionName == \"${id}\")]" fc ListFunctions --region "${region}" --prefix "${id}" ;;
-    cms) count "[(.ContactGroups.ContactGroup // error(\"missing\"))[] | select(. == \"${id}\")]" cms DescribeContactGroupList --PageSize 100 ;;
+    cms)
+      # The list cannot be filtered by name, so read every page.
+      local page=1 out
+      while :; do
+        out=$(aliyun cms DescribeContactGroupList --PageSize 100 --PageNumber "${page}" 2>&1) || return 1
+        jq -e "(.ContactGroups.ContactGroup // error(\"missing\")) | index(\"${id}\") != null" <<<"${out}" >/dev/null 2>&1 &&
+          { echo 1; return; }
+        [ "$(jq '.ContactGroups.ContactGroup | length' <<<"${out}" 2>/dev/null || echo error)" = 100 ] ||
+          break
+        page=$((page + 1))
+      done
+      # Distinguish "not on any page" from a broken response.
+      jq -e '.ContactGroups.ContactGroup | arrays' <<<"${out}" >/dev/null 2>&1 || return 1
+      echo 0
+      ;;
     oss)
       local buckets
       buckets=$(aliyun oss ls -s 2>&1) || return 1
@@ -310,13 +343,16 @@ remaining() {
       local out
       if out=$(aliyun ram GetRole --RoleName "${id}" 2>&1); then
         echo 1
-      elif [ "$(jq -r '.error_code // empty' <<<"${out}" 2>/dev/null)" = "EntityNotExist.Role" ]; then
+      elif [ "$(error_code "${out}")" = "EntityNotExist.Role" ]; then
         echo 0
       else
         return 1
       fi
       ;;
-    *) return 1 ;;
+    *)
+      echo "no existence check for type ${resource_type}" >&2
+      return 1
+      ;;
   esac
 }
 
@@ -332,46 +368,47 @@ prepare() {
 }
 
 # delete_one <region> <type> <id> deletes one resource. On success it prints
-# any warnings from the preparation steps; on failure, the API's error.
+# any warnings from the preparation steps; on failure, those and the API's
+# error.
 delete_one() {
-  local region="$1" resource_type="$2" id="$3" notes=""
+  local region="$1" resource_type="$2" id="$3" result=""
   case "${resource_type}" in
     alb-rule) aliyun alb DeleteRule --region "${region}" --RuleId "${id}" ;;
     alb-ascript) aliyun alb DeleteAScripts --region "${region}" --AScriptIds.1 "${id}" ;;
     alb-listener) aliyun alb DeleteListener --region "${region}" --ListenerId "${id}" ;;
     alb-servergroup) aliyun alb DeleteServerGroup --region "${region}" --ServerGroupId "${id}" ;;
     alb)
-      notes=$(prepare "turn off deletion protection" alb DisableDeletionProtection --region "${region}" --ResourceId "${id}")
+      result=$(prepare "turn off deletion protection" alb DisableDeletionProtection --region "${region}" --ResourceId "${id}")
       aliyun alb DeleteLoadBalancer --region "${region}" --LoadBalancerId "${id}"
       ;;
     nlb-listener) aliyun nlb DeleteListener --RegionId "${region}" --ListenerId "${id}" ;;
     nlb-servergroup) aliyun nlb DeleteServerGroup --RegionId "${region}" --ServerGroupId "${id}" ;;
     nlb) aliyun nlb DeleteLoadBalancer --RegionId "${region}" --LoadBalancerId "${id}" ;;
     slb)
-      notes=$(prepare "turn off deletion protection" slb SetLoadBalancerDeleteProtection --RegionId "${region}" --LoadBalancerId "${id}" --DeleteProtection off)
+      result=$(prepare "turn off deletion protection" slb SetLoadBalancerDeleteProtection --RegionId "${region}" --LoadBalancerId "${id}" --DeleteProtection off)
       aliyun slb DeleteLoadBalancer --RegionId "${region}" --LoadBalancerId "${id}"
       ;;
     privatelink-endpoint) aliyun privatelink DeleteVpcEndpoint --RegionId "${region}" --EndpointId "${id}" ;;
     privatelink-service) aliyun privatelink DeleteVpcEndpointService --RegionId "${region}" --ServiceId "${id}" ;;
     ecs) aliyun ecs DeleteInstance --region "${region}" --InstanceId "${id}" --Force true ;;
     rds | rds-readonly)
-      notes=$(prepare "turn off deletion protection" rds ModifyDBInstanceDeletionProtection --region "${region}" --DBInstanceId "${id}" --DeletionProtection false)
+      result=$(prepare "turn off deletion protection" rds ModifyDBInstanceDeletionProtection --region "${region}" --DBInstanceId "${id}" --DeletionProtection false)
       aliyun rds DeleteDBInstance --region "${region}" --DBInstanceId "${id}"
       ;;
     polardb)
-      notes=$(prepare "turn off deletion protection" polardb ModifyDBClusterDeletion --region "${region}" --DBClusterId "${id}" --Protection false)
+      result=$(prepare "turn off deletion protection" polardb ModifyDBClusterDeletion --region "${region}" --DBClusterId "${id}" --Protection false)
       aliyun polardb DeleteDBCluster --region "${region}" --DBClusterId "${id}"
       ;;
     tair) aliyun r-kvstore DeleteInstance --region "${region}" --InstanceId "${id}" ;;
     ackone)
       # DeleteHubCluster refuses while ArgoCD is enabled, which is the default.
-      notes=$(prepare "turn off ArgoCD and deletion protection" adcp UpdateHubClusterFeature --region "${region}" \
+      result=$(prepare "turn off ArgoCD and deletion protection" adcp UpdateHubClusterFeature --region "${region}" \
         --ClusterId "${id}" --ArgoCDEnabled false --DeletionProtection false)
       aliyun adcp DeleteHubCluster --region "${region}" --ClusterId "${id}"
       ;;
     kafka)
       # Released instances stay listed until they are deleted as well.
-      notes=$(prepare "release the instance" alikafka ReleaseInstance --RegionId "${region}" --InstanceId "${id}" --ForceDeleteInstance true)
+      result=$(prepare "release the instance" alikafka ReleaseInstance --RegionId "${region}" --InstanceId "${id}" --ForceDeleteInstance true)
       aliyun alikafka DeleteInstance --RegionId "${region}" --InstanceId "${id}"
       ;;
     sls) aliyun sls DeleteProject --region "${region}" --project "${id}" ;;
@@ -380,13 +417,20 @@ delete_one() {
     oss) aliyun oss rm "oss://${id}" --region "${region}" -b -a -r -f --all-versions ;;
     cms) aliyun cms DeleteContactGroup --ContactGroupName "${id}" ;;
     ram)
-      local policies name policy_type
-      policies=$(aliyun ram ListPoliciesForRole --RoleName "${id}")
-      while read -r name policy_type; do
-        [ -n "${name}" ] || continue
-        notes+=$(prepare "detach policy ${name}" ram DetachPolicyFromRole --RoleName "${id}" --PolicyName "${name}" --PolicyType "${policy_type}")
-      done < <(jq -r '.Policies.Policy[]? | "\(.PolicyName) \(.PolicyType)"' <<<"${policies}")
-      aliyun ram DeleteRole --RoleName "${id}"
+      # A role with policies attached cannot be deleted. If listing them
+      # fails, that error is the one to report, not DeleteRole's.
+      local policies attached name policy_type
+      if policies=$(aliyun ram ListPoliciesForRole --RoleName "${id}") &&
+        attached=$(jq -er '(.Policies.Policy // error("missing"))[] | "\(.PolicyName) \(.PolicyType)"' <<<"${policies}" ||
+          [ $? -eq 4 ]); then
+        while read -r name policy_type; do
+          [ -n "${name}" ] || continue
+          result+=$(prepare "detach policy ${name}" ram DetachPolicyFromRole --RoleName "${id}" --PolicyName "${name}" --PolicyType "${policy_type}")
+        done <<<"${attached}"
+        aliyun ram DeleteRole --RoleName "${id}"
+      else
+        false
+      fi
       ;;
     sg) aliyun ecs DeleteSecurityGroup --RegionId "${region}" --SecurityGroupId "${id}" ;;
     vswitch) aliyun vpc DeleteVSwitch --RegionId "${region}" --VSwitchId "${id}" ;;
@@ -396,14 +440,14 @@ delete_one() {
       return 1
       ;;
   esac >"${ERR_FILE}" 2>&1 || {
-    echo "${notes}$(describe_error "$(cat "${ERR_FILE}")")"
+    echo "${result}$(describe_error "$(cat "${ERR_FILE}")")"
     return 1
   }
-  printf '%s' "${notes}"
+  printf '%s' "${result}"
 }
 
 delete() {
-  local targets=() failed=() line region target resource_type id pass error notes left
+  local targets=() failed=() line region target resource_type id pass result left
   local deleted=0 absent=0
   while IFS= read -r line || [ -n "${line}" ]; do
     line="$(sed -E 's/#.*//; s/^[[:space:]]+//; s/[[:space:]]+$//' <<<"${line}")"
@@ -435,18 +479,17 @@ delete() {
     failed=()
     for line in "${targets[@]}"; do
       read -r _ region resource_type id <<<"${line}"
-      if notes=$(delete_one "${region}" "${resource_type}" "${id}"); then
+      if result=$(delete_one "${region}" "${resource_type}" "${id}"); then
         deleted=$((deleted + 1))
-        echo "- deleted \`${id}\` (${resource_type}, ${region}) ${notes}"
+        echo "- deleted \`${id}\` (${resource_type}, ${region}) ${result}"
         continue
       fi
-      error="${notes}"
       if left=$(remaining "${region}" "${resource_type}" "${id}") && [ "${left}" = 0 ]; then
         absent=$((absent + 1))
         echo "- \`${id}\` (${resource_type}) does not exist in ${region}; nothing to delete"
       else
         failed+=("${line}")
-        echo "- pass ${pass}: \`${id}\` (${resource_type}, ${region}) not deleted yet: \`${error}\`"
+        echo "- pass ${pass}: \`${id}\` (${resource_type}, ${region}) not deleted yet: \`${result}\`"
       fi
     done
     [ "${#failed[@]}" -eq 0 ] && break
@@ -458,6 +501,12 @@ delete() {
   echo
   echo "**Deleted ${deleted}, not found ${absent}, failed ${#failed[@]}.**"
   if [ "${#failed[@]}" -gt 0 ]; then
+    echo
+    echo "Not deleted:"
+    for line in "${failed[@]}"; do
+      read -r _ region resource_type id <<<"${line}"
+      echo "- \`${region} ${resource_type}:${id}\`"
+    done
     return 1
   fi
   if [ "${deleted}" -eq 0 ]; then

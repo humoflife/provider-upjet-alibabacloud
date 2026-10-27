@@ -66,12 +66,13 @@
     {
       // The cloud cleanup workflows download these tools from GitHub
       // releases and verify them against the checksums file each release
-      // publishes, so bumping the version is all an update needs.
+      // publishes, so bumping the version is all an update needs. The
+      // Cloud Cleanup Check workflow installs the CLI on every bump.
       "customType": "regex",
-      "description": "Bump the Alibaba Cloud CLI in the cloud cleanup workflow",
-      "managerFilePatterns": ["/^\\.github\\/workflows\\/cloud-cleanup[^/]*\\.ya?ml$/"],
+      "description": "Bump the Alibaba Cloud CLI used by the cloud cleanup workflow",
+      "managerFilePatterns": ["/^hack\\/install-aliyun-cli\\.sh$/"],
       "matchStrings": [
-        "ALIYUN_CLI_VERSION: ['\"]?(?<currentValue>.*?)['\"]?\\n"
+        "ALIYUN_CLI_VERSION=\"(?<currentValue>[^\"]+)\"\\n"
       ],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "aliyun/aliyun-cli",
