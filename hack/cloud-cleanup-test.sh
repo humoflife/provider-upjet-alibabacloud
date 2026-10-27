@@ -17,7 +17,8 @@ mkdir -p "${WORK}/bin"
 #   response/<action>     printed as the response; response/<action>.p<N>
 #                         answers page N of a paged call
 #   format                "json" prints errors as the CLI's AI agent mode
-#                         does; otherwise as text, as in CI
+#                         does; otherwise as text, as in CI, with every line
+#                         colored so that parsing has to strip the colors
 # Anything else succeeds with an empty JSON object, or an empty policy list
 # for ListPoliciesForRole.
 cat >"${WORK}/bin/aliyun" <<'STUB'
@@ -28,7 +29,7 @@ fail() {
   if [ "$(cat "${STUB_DIR}/format" 2>/dev/null)" = json ]; then
     echo "{\"schemaVersion\":\"v1\",\"message\":\"stub error\",\"error_code\":\"$1\",\"status_code\":400}" >&2
   else
-    printf '\033[1;31mERROR: SDK.ServerError\nErrorCode: %s\nRecommend: https://example.invalid\nMessage: stub error\n\033[0m' "$1" >&2
+    printf '\033[1;31m%s\033[0m\n' "ERROR: SDK.ServerError" "ErrorCode: $1" "Recommend: https://example.invalid" "Message: stub error" >&2
   fi
   exit 1
 }
@@ -132,6 +133,12 @@ check "a mistyped type is rejected" status_is 1
 check "the rejection names the target" output_has 'unknown resource type in "kafak:x"'
 check "nothing is deleted for a rejected target" not_called "Delete"
 
+start missing-comma
+targets "us-west-1 vpc-a us-west-1 vpc-b"
+check "a line with two targets is rejected" status_is 1
+check "the rejection names the line" output_has 'target "us-west-1 vpc-a us-west-1 vpc-b" needs exactly a region and an id'
+check "nothing is deleted for a line with two targets" not_called "Delete"
+
 start unknown-prefix
 targets "us-west-1 foo-1"
 check "an id without a known prefix is rejected" status_is 1
@@ -157,7 +164,7 @@ echo DependencyViolation.SecurityGroup >"${case_dir}/fail-once/DeleteVpc"
 targets "us-west-1 vpc-a" "us-west-1 sg-a" "us-west-1 alb-a" "us-west-1 alb-listener:lsn-a" \
   "us-west-1 epsrv-a" "us-west-1 ep-a"
 check "the run succeeds" status_is 0
-check "the summary counts every delete" output_has "Deleted 6, not found 0, failed 0."
+check "the summary counts every delete" output_has "Delete accepted for 6, not found 0, failed 0."
 check "the blocked VPC was retried" \
   output_has "pass 1: \`vpc-a\` (vpc, us-west-1) not deleted yet: \`DependencyViolation.SecurityGroup: stub error"
 check "endpoint before endpoint service" before DeleteVpcEndpoint DeleteVpcEndpointService
@@ -179,7 +186,7 @@ fail_with DeleteVpc InternalError
 fail_with DescribeVpcs Throttling
 targets "us-west-1 vpc-a"
 check "a failed delete whose check also fails is a failure" status_is 1
-check "it is never reported as gone" output_has "Deleted 0, not found 0, failed 1."
+check "it is never reported as gone" output_has "Delete accepted for 0, not found 0, failed 1."
 check "the summary lists the target that was not deleted" output_has "- \`us-west-1 vpc:vpc-a\`"
 
 start still-there
@@ -209,6 +216,27 @@ targets "us-west-1 ram:test-role-1"
 check "a role whose policies cannot be listed is not deleted" not_called "DeleteRole"
 check "the listing error is the one reported" output_has "not deleted yet: \`Forbidden.RAM: stub error"
 
+# Names are matched as values: a quote or a dot in one is not jq or a pattern.
+start quoted-name-gone
+fail_with DeleteProject ProjectNotExist
+respond ListProject '{"projects":[{"projectName":"ab"}]}'
+targets 'us-west-1 sls:a"b'
+check "a name with a quote is checked, and found absent" status_is 0
+check "it is reported as absent" output_has "\`a\"b\` (sls) does not exist in us-west-1"
+
+start quoted-name-there
+fail_with DeleteProject InternalError
+respond ListProject '{"projects":[{"projectName":"a\"b"}]}'
+targets 'us-west-1 sls:a"b'
+check "a name with a quote is checked, and found" status_is 1
+check "it is listed as not deleted" output_has "- \`us-west-1 sls:a\"b\`"
+
+start dotted-bucket
+fail_with rm InternalError
+respond ls 'oss://aXb'
+targets "us-west-1 oss:a.b"
+check "a dot in a bucket name matches only a dot" status_is 0
+
 start cms-paging
 fail_with DeleteContactGroup InternalError
 respond DescribeContactGroupList.p1 "$(jq -nc '{ContactGroups: {ContactGroup: [range(100) | "group-\(.)"]}}')"
@@ -227,7 +255,7 @@ check "the failed preparation is reported" output_has "could not turn off ArgoCD
 for resource_type in $(bash "${SCRIPT}" types | awk -F'|' 'NR > 2 { gsub(/ /, "", $2); print $2 }'); do
   start "type-${resource_type}"
   targets "us-west-1 ${resource_type}:x-1"
-  check "${resource_type} has a delete" output_has "Deleted 1, not found 0, failed 0."
+  check "${resource_type} has a delete" output_has "Delete accepted for 1, not found 0, failed 0."
   start "type-${resource_type}-check"
   touch "${case_dir}/fail-deletes"
   PASSES=1 targets "us-west-1 ${resource_type}:x-1"

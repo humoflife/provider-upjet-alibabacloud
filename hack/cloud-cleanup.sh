@@ -101,11 +101,14 @@ rank_of() {
 # parsed, so the script does not depend on which mode the CLI picks.
 ESC=$'\033'
 
+strip_color() { sed -E "s/${ESC}\[[0-9;]*m//g" <<<"$1"; }
+
 # error_code <output> prints the API error code, or nothing for a local error.
 error_code() {
-  local code
-  code=$(jq -r '.error_code // empty' <<<"$1" 2>/dev/null) || code=""
-  [ -n "${code}" ] || code=$(sed -nE 's/^ErrorCode: *([^[:space:]]+).*/\1/p' <<<"$1" | head -1)
+  local plain code
+  plain=$(strip_color "$1")
+  code=$(jq -r '.error_code // empty' <<<"${plain}" 2>/dev/null) || code=""
+  [ -n "${code}" ] || code=$(sed -nE 's/^ErrorCode: *([^[:space:]]+).*/\1/p' <<<"${plain}" | head -1)
   echo "${code}"
 }
 
@@ -113,7 +116,7 @@ error_code() {
 # line of anything else, such as a local CLI error.
 describe_error() {
   local plain code message
-  plain=$(sed -E "s/${ESC}\[[0-9;]*m//g" <<<"$1")
+  plain=$(strip_color "$1")
   code=$(error_code "${plain}")
   message=$(jq -r '.message // empty' <<<"${plain}" 2>/dev/null) || message=""
   [ -n "${message}" ] || message=$(sed -nE 's/^Message: *//p' <<<"${plain}" | head -1)
@@ -281,50 +284,53 @@ inventory() {
     cms DescribeContactGroupList --PageSize 100
 }
 
-# count <list-path> <aliyun args>... prints how many items the call returns
-# at list-path. It fails, rather than printing 0, when the call fails or the
-# path is missing, so a broken check never reads as "already gone".
+# count <id> <list-path> <aliyun args>... prints how many items the call
+# returns at list-path, which refers to the id as $id. It fails, rather than
+# printing 0, when the call fails or the path is missing, so a broken check
+# never reads as "already gone".
 count() {
-  local path="$1" out
-  shift
+  local id="$1" path="$2" out
+  shift 2
   out=$(aliyun "$@" 2>&1) || return 1
-  jq "(${path} // error(\"missing\")) | length" <<<"${out}" 2>/dev/null
+  jq --arg id "${id}" "(${path} // error(\"missing\")) | length" <<<"${out}" 2>/dev/null
 }
 
 # remaining <region> <type> <id> prints how many resources with that id still
-# exist in the region (0 or 1), or fails when it cannot tell.
+# exist in the region (0 or 1), or fails when it cannot tell. Ids reach jq and
+# grep as values, never as part of a program or pattern.
 remaining() {
   local region="$1" resource_type="$2" id="$3"
+  # shellcheck disable=SC2016 # $id in the list paths is jq's, not the shell's.
   case "${resource_type}" in
-    vpc) count '.Vpcs.Vpc' vpc DescribeVpcs --RegionId "${region}" --VpcId "${id}" ;;
-    vswitch) count '.VSwitches.VSwitch' vpc DescribeVSwitches --RegionId "${region}" --VSwitchId "${id}" ;;
-    sg) count '.SecurityGroups.SecurityGroup' ecs DescribeSecurityGroups --RegionId "${region}" --SecurityGroupId "${id}" ;;
-    ecs) count '.Instances.Instance' ecs DescribeInstances --RegionId "${region}" --InstanceIds "[\"${id}\"]" ;;
-    alb) count '.LoadBalancers' alb ListLoadBalancers --region "${region}" --LoadBalancerIds.1 "${id}" ;;
-    alb-listener) count '.Listeners' alb ListListeners --region "${region}" --ListenerIds.1 "${id}" ;;
-    alb-rule) count '.Rules' alb ListRules --region "${region}" --RuleIds.1 "${id}" ;;
-    alb-servergroup) count '.ServerGroups' alb ListServerGroups --region "${region}" --ServerGroupIds.1 "${id}" ;;
-    alb-ascript) count '.AScripts' alb ListAScripts --region "${region}" --AScriptIds.1 "${id}" ;;
-    nlb) count '.LoadBalancers' nlb ListLoadBalancers --RegionId "${region}" --LoadBalancerIds.1 "${id}" ;;
-    nlb-listener) count '.Listeners' nlb ListListeners --RegionId "${region}" --ListenerIds.1 "${id}" ;;
-    nlb-servergroup) count '.ServerGroups' nlb ListServerGroups --RegionId "${region}" --ServerGroupIds.1 "${id}" ;;
-    slb) count '.LoadBalancers.LoadBalancer' slb DescribeLoadBalancers --RegionId "${region}" --LoadBalancerId "${id}" ;;
-    privatelink-service) count '.Services' privatelink ListVpcEndpointServices --RegionId "${region}" --ServiceId "${id}" ;;
-    privatelink-endpoint) count '.Endpoints' privatelink ListVpcEndpoints --RegionId "${region}" --EndpointId "${id}" ;;
-    rds | rds-readonly) count '.Items.DBInstance' rds DescribeDBInstances --RegionId "${region}" --DBInstanceId "${id}" ;;
-    polardb) count '.Items.DBCluster' polardb DescribeDBClusters --RegionId "${region}" --DBClusterIds "${id}" ;;
-    tair) count '.Instances.KVStoreInstance' r-kvstore DescribeInstances --RegionId "${region}" --InstanceIds "${id}" ;;
-    ackone) count "[(.Clusters // error(\"missing\"))[] | select(.ClusterInfo.ClusterId == \"${id}\")]" adcp DescribeHubClusters --region "${region}" ;;
-    kafka) count '.InstanceList.InstanceVO' alikafka GetInstanceList --RegionId "${region}" --InstanceId.1 "${id}" ;;
-    sls) count "[(.projects // error(\"missing\"))[] | select(.projectName == \"${id}\")]" sls ListProject --region "${region}" --projectName "${id}" ;;
-    mns) count "[(.Data.PageData // error(\"missing\"))[] | select(.QueueName == \"${id}\")]" mns-open ListQueue --region "${region}" --QueueName "${id}" ;;
-    fc) count "[(.functions // error(\"missing\"))[] | select(.functionName == \"${id}\")]" fc ListFunctions --region "${region}" --prefix "${id}" ;;
+    vpc) count "${id}" '.Vpcs.Vpc' vpc DescribeVpcs --RegionId "${region}" --VpcId "${id}" ;;
+    vswitch) count "${id}" '.VSwitches.VSwitch' vpc DescribeVSwitches --RegionId "${region}" --VSwitchId "${id}" ;;
+    sg) count "${id}" '.SecurityGroups.SecurityGroup' ecs DescribeSecurityGroups --RegionId "${region}" --SecurityGroupId "${id}" ;;
+    ecs) count "${id}" '.Instances.Instance' ecs DescribeInstances --RegionId "${region}" --InstanceIds "$(jq -nc --arg id "${id}" '[$id]')" ;;
+    alb) count "${id}" '.LoadBalancers' alb ListLoadBalancers --region "${region}" --LoadBalancerIds.1 "${id}" ;;
+    alb-listener) count "${id}" '.Listeners' alb ListListeners --region "${region}" --ListenerIds.1 "${id}" ;;
+    alb-rule) count "${id}" '.Rules' alb ListRules --region "${region}" --RuleIds.1 "${id}" ;;
+    alb-servergroup) count "${id}" '.ServerGroups' alb ListServerGroups --region "${region}" --ServerGroupIds.1 "${id}" ;;
+    alb-ascript) count "${id}" '.AScripts' alb ListAScripts --region "${region}" --AScriptIds.1 "${id}" ;;
+    nlb) count "${id}" '.LoadBalancers' nlb ListLoadBalancers --RegionId "${region}" --LoadBalancerIds.1 "${id}" ;;
+    nlb-listener) count "${id}" '.Listeners' nlb ListListeners --RegionId "${region}" --ListenerIds.1 "${id}" ;;
+    nlb-servergroup) count "${id}" '.ServerGroups' nlb ListServerGroups --RegionId "${region}" --ServerGroupIds.1 "${id}" ;;
+    slb) count "${id}" '.LoadBalancers.LoadBalancer' slb DescribeLoadBalancers --RegionId "${region}" --LoadBalancerId "${id}" ;;
+    privatelink-service) count "${id}" '.Services' privatelink ListVpcEndpointServices --RegionId "${region}" --ServiceId "${id}" ;;
+    privatelink-endpoint) count "${id}" '.Endpoints' privatelink ListVpcEndpoints --RegionId "${region}" --EndpointId "${id}" ;;
+    rds | rds-readonly) count "${id}" '.Items.DBInstance' rds DescribeDBInstances --RegionId "${region}" --DBInstanceId "${id}" ;;
+    polardb) count "${id}" '.Items.DBCluster' polardb DescribeDBClusters --RegionId "${region}" --DBClusterIds "${id}" ;;
+    tair) count "${id}" '.Instances.KVStoreInstance' r-kvstore DescribeInstances --RegionId "${region}" --InstanceIds "${id}" ;;
+    ackone) count "${id}" '[(.Clusters // error("missing"))[] | select(.ClusterInfo.ClusterId == $id)]' adcp DescribeHubClusters --region "${region}" ;;
+    kafka) count "${id}" '.InstanceList.InstanceVO' alikafka GetInstanceList --RegionId "${region}" --InstanceId.1 "${id}" ;;
+    sls) count "${id}" '[(.projects // error("missing"))[] | select(.projectName == $id)]' sls ListProject --region "${region}" --projectName "${id}" ;;
+    mns) count "${id}" '[(.Data.PageData // error("missing"))[] | select(.QueueName == $id)]' mns-open ListQueue --region "${region}" --QueueName "${id}" ;;
+    fc) count "${id}" '[(.functions // error("missing"))[] | select(.functionName == $id)]' fc ListFunctions --region "${region}" --prefix "${id}" ;;
     cms)
       # The list cannot be filtered by name, so read every page.
       local page=1 out
       while :; do
         out=$(aliyun cms DescribeContactGroupList --PageSize 100 --PageNumber "${page}" 2>&1) || return 1
-        jq -e "(.ContactGroups.ContactGroup // error(\"missing\")) | index(\"${id}\") != null" <<<"${out}" >/dev/null 2>&1 &&
+        jq -e --arg id "${id}" '(.ContactGroups.ContactGroup // error("missing")) | index($id) != null' <<<"${out}" >/dev/null 2>&1 &&
           { echo 1; return; }
         [ "$(jq '.ContactGroups.ContactGroup | length' <<<"${out}" 2>/dev/null || echo error)" = 100 ] ||
           break
@@ -337,7 +343,7 @@ remaining() {
     oss)
       local buckets
       buckets=$(aliyun oss ls -s 2>&1) || return 1
-      grep -cx "oss://${id}" <<<"${buckets}" || true
+      grep -cxF "oss://${id}" <<<"${buckets}" || true
       ;;
     ram)
       local out
@@ -447,15 +453,15 @@ delete_one() {
 }
 
 delete() {
-  local targets=() failed=() line region target resource_type id pass result left
-  local deleted=0 absent=0
+  local targets=() failed=() line region target extra resource_type id pass result left
+  local accepted=0 absent=0
   while IFS= read -r line || [ -n "${line}" ]; do
     line="$(sed -E 's/#.*//; s/^[[:space:]]+//; s/[[:space:]]+$//' <<<"${line}")"
     [ -z "${line}" ] && continue
-    region="" target=""
-    read -r region target <<<"${line}"
-    if [ -z "${target}" ]; then
-      echo "::error::target \"${line}\" needs a region and an id"
+    region="" target="" extra=""
+    read -r region target extra <<<"${line}"
+    if [ -z "${target}" ] || [ -n "${extra}" ]; then
+      echo "::error::target \"${line}\" needs exactly a region and an id"
       return 1
     fi
     if ! resource_type="$(type_of "${target}")"; then
@@ -480,8 +486,8 @@ delete() {
     for line in "${targets[@]}"; do
       read -r _ region resource_type id <<<"${line}"
       if result=$(delete_one "${region}" "${resource_type}" "${id}"); then
-        deleted=$((deleted + 1))
-        echo "- deleted \`${id}\` (${resource_type}, ${region}) ${result}"
+        accepted=$((accepted + 1))
+        echo "- delete accepted for \`${id}\` (${resource_type}, ${region}) ${result}"
         continue
       fi
       if left=$(remaining "${region}" "${resource_type}" "${id}") && [ "${left}" = 0 ]; then
@@ -499,7 +505,11 @@ delete() {
     fi
   done
   echo
-  echo "**Deleted ${deleted}, not found ${absent}, failed ${#failed[@]}.**"
+  echo "**Delete accepted for ${accepted}, not found ${absent}, failed ${#failed[@]}.**"
+  if [ "${accepted}" -gt 0 ]; then
+    echo
+    echo "Some types, such as load balancers, databases and clusters, finish deleting in the background. The next inventory shows whether they are gone."
+  fi
   if [ "${#failed[@]}" -gt 0 ]; then
     echo
     echo "Not deleted:"
@@ -509,7 +519,7 @@ delete() {
     done
     return 1
   fi
-  if [ "${deleted}" -eq 0 ]; then
+  if [ "${accepted}" -eq 0 ]; then
     echo "::warning::nothing was deleted: none of the targets exist in the regions given"
   fi
 }

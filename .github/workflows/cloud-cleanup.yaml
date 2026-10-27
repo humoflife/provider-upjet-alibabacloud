@@ -48,6 +48,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      # Runs use the test account's credentials, so only the reviewed
+      # workflow and script on main may run. This stops a run from another
+      # branch by mistake. It cannot stop one on purpose, since a branch can
+      # change this file; keeping the secret in an environment that only main
+      # can deploy to would.
+      - name: Check Branch
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::run this workflow from main, not ${GITHUB_REF}"
+          exit 1
+
       - name: Check Confirmation
         if: inputs.mode == 'delete'
         env:
