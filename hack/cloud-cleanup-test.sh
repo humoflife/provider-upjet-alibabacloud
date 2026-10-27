@@ -81,7 +81,7 @@ fail_with() { echo "$2" >"${case_dir}/fail/$1"; }
 # run <args>... runs the script against the stub, saving output and status.
 run() {
   set +e
-  STUB_DIR="${case_dir}" PATH="${WORK}/bin:${PATH}" PASSES="${PASSES:-3}" PASS_WAIT=0 \
+  STUB_DIR="${case_dir}" PATH="${WORK}/bin:${PATH}" PASSES="${PASSES:-3}" PASS_WAIT=0 CONFIRM="${CONFIRM-delete}" \
     bash "${SCRIPT}" "$@" >"${case_dir}/out" 2>&1
   echo $? >"${case_dir}/status"
   set -e
@@ -216,21 +216,23 @@ targets "us-west-1 ram:test-role-1"
 check "a role whose policies cannot be listed is not deleted" not_called "DeleteRole"
 check "the listing error is the one reported" output_has "not deleted yet: \`Forbidden.RAM: stub error"
 
-# Names are matched as values: a quote or a dot in one is not jq or a pattern.
-start quoted-name-gone
-fail_with DeleteProject ProjectNotExist
-respond ListProject '{"projects":[{"projectName":"ab"}]}'
-targets 'us-west-1 sls:a"b'
-check "a name with a quote is checked, and found absent" status_is 0
-check "it is reported as absent" output_has "\`a\"b\` (sls) does not exist in us-west-1"
+# Only names that every type's own rules allow reach a command.
+for bad in 'oss:bkt/logs' 'oss:' 'cms:' 'sls:a"b' '-x' 'ram:-x'; do
+  start "bad-name-${bad}"
+  targets "us-west-1 ${bad}"
+  check "\"${bad}\" is rejected" status_is 1
+  check "\"${bad}\" is rejected with the rule" output_has "is not a valid id or name"
+  check "nothing is called for \"${bad}\"" not_called "Delete"
+  check "nothing is removed for \"${bad}\"" not_called "oss rm"
+done
 
-start quoted-name-there
-fail_with DeleteProject InternalError
-respond ListProject '{"projects":[{"projectName":"a\"b"}]}'
-targets 'us-west-1 sls:a"b'
-check "a name with a quote is checked, and found" status_is 1
-check "it is listed as not deleted" output_has "- \`us-west-1 sls:a\"b\`"
+start not-confirmed
+CONFIRM="" targets "us-west-1 vpc-a"
+check "delete without CONFIRM=delete fails" status_is 1
+check "it says how to confirm" output_has "set CONFIRM=delete to delete these 1 targets"
+check "it deletes nothing" not_called "DeleteVpc"
 
+# A dot in a bucket name is not a pattern.
 start dotted-bucket
 fail_with rm InternalError
 respond ls 'oss://aXb'
@@ -251,8 +253,15 @@ targets "cn-beijing ackone:c123"
 check "the delete still runs" called "adcp DeleteHubCluster --region cn-beijing --ClusterId c123"
 check "the failed preparation is reported" output_has "could not turn off ArgoCD and deletion protection: Forbidden.RAM: stub error"
 
-# Every type needs a delete and an existence check.
-for resource_type in $(bash "${SCRIPT}" types | awk -F'|' 'NR > 2 { gsub(/ /, "", $2); print $2 }'); do
+# Every type needs a delete and an existence check. The types list is checked
+# against the table in the script, so the loop cannot pass by running zero
+# times.
+start types-list
+mapfile -t type_list < <(bash "${SCRIPT}" types | awk -F'|' 'NR > 2 { gsub(/ /, "", $2); print $2 }')
+type_rows=$(awk "/^TYPES='/ { in_table = 1; next } in_table && /^'/ { exit } in_table && NF" "${SCRIPT}" | wc -l | tr -d " ")
+check "types lists types" [ "${#type_list[@]}" -gt 0 ]
+check "types lists every type in the table (${#type_list[@]} of ${type_rows})" [ "${#type_list[@]}" -eq "${type_rows}" ]
+for resource_type in "${type_list[@]}"; do
   start "type-${resource_type}"
   targets "us-west-1 ${resource_type}:x-1"
   check "${resource_type} has a delete" output_has "Delete accepted for 1, not found 0, failed 0."
@@ -273,6 +282,7 @@ check "truncation is shown" output_has "Showing 2 of 5."
 check "truncation is shown from TotalRecordCount" output_has "Showing 1 of 3."
 check "a pipe in a cell is escaped" output_has '| vpc-1 | a\|b |'
 check "a null cell is empty" output_has '| vpc-2 |  |'
+check "a section shows a bare target for a type with its own prefix" output_has "Target: \`us-west-1 <ID>\`"
 check "a renamed key is reported" output_has "Unexpected response: no \`.VSwitches.VSwitch\` in it. Top-level keys: \`VSwitchSet\`."
 check "a failed list is reported" output_has "Could not list: \`Forbidden.RAM: stub error\`"
 check "an empty region is skipped" [ "$(grep -c '^### ' "${case_dir}/out")" -eq 3 ]

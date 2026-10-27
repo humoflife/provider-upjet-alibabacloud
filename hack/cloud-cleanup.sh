@@ -8,7 +8,7 @@
 #   cloud-cleanup.sh inventory <region>...
 #       Writes a Markdown inventory of the resource types the examples create.
 #
-#   cloud-cleanup.sh delete <targets-file>
+#   CONFIRM=delete cloud-cleanup.sh delete <targets-file>
 #       Deletes exactly the listed resources, children before parents, and
 #       retries the ones that are still blocked by a dependency.
 #
@@ -17,7 +17,10 @@
 #
 # Each target line is "<region> <id>" when the id has one of the prefixes that
 # `types` lists, or "<region> <type>:<id-or-name>" otherwise. Blank lines and
-# lines starting with # are ignored. Use any region for the global types.
+# lines starting with # are ignored. Use any region for the global types. An
+# id or name starts with a letter or digit and has only letters, digits, ".",
+# "_" and "-": every type's names fit, and nothing else can reach a command,
+# such as an OSS object path or an empty name.
 set -euo pipefail
 
 if ((BASH_VERSINFO[0] < 4)); then
@@ -88,7 +91,7 @@ type_of() {
   if [[ "${target}" == *:* ]]; then
     awk -v t="${target%%:*}" '$1 == t { print $1; found = 1 } END { exit !found }' <<<"${TYPES}"
   else
-    awk -v p="${target%%-*}-" '$3 == p { print $1; found = 1 } END { exit !found }' <<<"${TYPES}"
+    awk -v p="${target%%-*}-" '$3 != "-" && $3 == p { print $1; found = 1 } END { exit !found }' <<<"${TYPES}"
   fi
 }
 
@@ -143,14 +146,15 @@ check_credentials() {
 # cells turns an array of values into a Markdown table row.
 CELLS='map(if . == null then "" else tostring end | gsub("[|]"; "\\|") | gsub("\n"; " ")) | "| " + join(" | ") + " |"'
 
-# section <title> <header> <list-path> <columns> <aliyun args>...
-# Lists one resource type and renders it as a Markdown table. list-path must
+# section <title> <target> <header> <list-path> <columns> <aliyun args>...
+# Lists one resource type and renders it as a Markdown table, followed by the
+# form of a delete target for it. list-path must
 # exist in the response: a renamed or mistyped key is reported, never shown as
 # an empty list. A failed call is reported too, instead of aborting, so one
 # missing permission does not hide the rest of the inventory.
 section() {
-  local title="$1" header="$2" path="$3" columns="$4"
-  shift 4
+  local title="$1" target="$2" header="$3" path="$4" columns="$5"
+  shift 5
   local out rows shown total
   echo "#### ${title}"
   echo
@@ -172,6 +176,8 @@ section() {
   echo "| ${header} |"
   echo "|$(sed -E 's/[^|]+/ --- /g' <<<"${header}")|"
   echo "${rows}"
+  echo
+  echo "Target: \`${target}\`"
   echo
   shown=$(wc -l <<<"${rows}" | tr -d ' ')
   total=$(jq -r '.TotalCount // .totalCount // .total // .Total // .Data.Total // .TotalRecordCount // empty' <<<"${out}" 2>/dev/null || true)
@@ -195,73 +201,96 @@ inventory() {
     [ -n "${region}" ] || continue
     echo "### ${region}"
     echo
-    section "${region} VPCs" "ID | Name | Status | Created" \
+    section "${region} VPCs" "${region} <ID>" \
+      "ID | Name | Status | Created" \
       '.Vpcs.Vpc' '[.VpcId, .VpcName, .Status, .CreationTime]' \
       vpc DescribeVpcs --RegionId "${region}" --PageSize 50
-    section "${region} vSwitches" "ID | Name | VPC | Zone | Created" \
+    section "${region} vSwitches" "${region} <ID>" \
+      "ID | Name | VPC | Zone | Created" \
       '.VSwitches.VSwitch' '[.VSwitchId, .VSwitchName, .VpcId, .ZoneId, .CreationTime]' \
       vpc DescribeVSwitches --RegionId "${region}" --PageSize 50
-    section "${region} security groups" "ID | Name | Description | VPC | Service managed | Created" \
+    section "${region} security groups" "${region} <ID>" \
+      "ID | Name | Description | VPC | Service managed | Created" \
       '.SecurityGroups.SecurityGroup' '[.SecurityGroupId, .SecurityGroupName, .Description, .VpcId, .ServiceManaged, .CreationTime]' \
       ecs DescribeSecurityGroups --RegionId "${region}" --PageSize 50
-    section "${region} ECS instances" "ID | Name | Status | VPC | Created" \
+    section "${region} ECS instances" "${region} <ID>" \
+      "ID | Name | Status | VPC | Created" \
       '.Instances.Instance' '[.InstanceId, .InstanceName, .Status, .VpcAttributes.VpcId, .CreationTime]' \
       ecs DescribeInstances --RegionId "${region}" --PageSize 100
-    section "${region} ALB load balancers" "ID | Name | Status | VPC | Deletion protection | Created" \
+    section "${region} ALB load balancers" "${region} <ID>" \
+      "ID | Name | Status | VPC | Deletion protection | Created" \
       '.LoadBalancers' '[.LoadBalancerId, .LoadBalancerName, .LoadBalancerStatus, .VpcId, .DeletionProtectionConfig.Enabled, .CreateTime]' \
       alb ListLoadBalancers --region "${region}" --MaxResults 100
-    section "${region} ALB listeners" "ID | Load balancer | Protocol | Port" \
+    section "${region} ALB listeners" "${region} alb-listener:<ID>" \
+      "ID | Load balancer | Protocol | Port" \
       '.Listeners' '[.ListenerId, .LoadBalancerId, .ListenerProtocol, .ListenerPort]' \
       alb ListListeners --region "${region}" --MaxResults 100
-    section "${region} ALB rules" "ID | Listener | Name" \
+    section "${region} ALB rules" "${region} <ID>" \
+      "ID | Listener | Name" \
       '.Rules' '[.RuleId, .ListenerId, .RuleName]' \
       alb ListRules --region "${region}" --MaxResults 100
-    section "${region} ALB server groups" "ID | Name | VPC" \
+    section "${region} ALB server groups" "${region} alb-servergroup:<ID>" \
+      "ID | Name | VPC" \
       '.ServerGroups' '[.ServerGroupId, .ServerGroupName, .VpcId]' \
       alb ListServerGroups --region "${region}" --MaxResults 100
-    section "${region} ALB AScripts" "ID | Name | Listener" \
+    section "${region} ALB AScripts" "${region} <ID>" \
+      "ID | Name | Listener" \
       '.AScripts' '[.AScriptId, .AScriptName, .ListenerId]' \
       alb ListAScripts --region "${region}" --MaxResults 100
-    section "${region} NLB load balancers" "ID | Name | Status | VPC | Created" \
+    section "${region} NLB load balancers" "${region} <ID>" \
+      "ID | Name | Status | VPC | Created" \
       '.LoadBalancers' '[.LoadBalancerId, .LoadBalancerName, .LoadBalancerStatus, .VpcId, .CreateTime]' \
       nlb ListLoadBalancers --RegionId "${region}" --MaxResults 100
-    section "${region} NLB listeners" "ID | Load balancer | Protocol | Port" \
+    section "${region} NLB listeners" "${region} nlb-listener:<ID>" \
+      "ID | Load balancer | Protocol | Port" \
       '.Listeners' '[.ListenerId, .LoadBalancerId, .ListenerProtocol, .ListenerPort]' \
       nlb ListListeners --RegionId "${region}" --MaxResults 100
-    section "${region} NLB server groups" "ID | Name | VPC" \
+    section "${region} NLB server groups" "${region} nlb-servergroup:<ID>" \
+      "ID | Name | VPC" \
       '.ServerGroups' '[.ServerGroupId, .ServerGroupName, .VpcId]' \
       nlb ListServerGroups --RegionId "${region}" --MaxResults 100
-    section "${region} SLB load balancers" "ID | Name | Status | VPC | Created" \
+    section "${region} SLB load balancers" "${region} <ID>" \
+      "ID | Name | Status | VPC | Created" \
       '.LoadBalancers.LoadBalancer' '[.LoadBalancerId, .LoadBalancerName, .LoadBalancerStatus, .VpcId, .CreateTime]' \
       slb DescribeLoadBalancers --RegionId "${region}" --PageSize 100
-    section "${region} PrivateLink endpoint services" "ID | Name | Status | Created" \
+    section "${region} PrivateLink endpoint services" "${region} <ID>" \
+      "ID | Name | Status | Created" \
       '.Services' '[.ServiceId, .ServiceName, .ServiceStatus, .CreateTime]' \
       privatelink ListVpcEndpointServices --RegionId "${region}" --MaxResults 100
-    section "${region} PrivateLink endpoints" "ID | Name | Status | VPC | Created" \
+    section "${region} PrivateLink endpoints" "${region} <ID>" \
+      "ID | Name | Status | VPC | Created" \
       '.Endpoints' '[.EndpointId, .EndpointName, .EndpointStatus, .VpcId, .CreateTime]' \
       privatelink ListVpcEndpoints --RegionId "${region}" --MaxResults 100
-    section "${region} RDS instances" "ID | Description | Engine | Status | VPC | Created" \
+    section "${region} RDS instances" "${region} <ID>" \
+      "ID | Description | Engine | Status | VPC | Created" \
       '.Items.DBInstance' '[.DBInstanceId, .DBInstanceDescription, .Engine, .DBInstanceStatus, .VpcId, .CreateTime]' \
       rds DescribeDBInstances --RegionId "${region}" --PageSize 100
-    section "${region} PolarDB clusters" "ID | Description | Type | Status | VPC | Created" \
+    section "${region} PolarDB clusters" "${region} <ID>" \
+      "ID | Description | Type | Status | VPC | Created" \
       '.Items.DBCluster' '[.DBClusterId, .DBClusterDescription, .DBType, .DBClusterStatus, .VpcId, .CreateTime]' \
       polardb DescribeDBClusters --RegionId "${region}" --PageSize 100
-    section "${region} Tair (Redis) instances" "ID | Name | Status | VPC | Created" \
+    section "${region} Tair (Redis) instances" "${region} <ID>" \
+      "ID | Name | Status | VPC | Created" \
       '.Instances.KVStoreInstance' '[.InstanceId, .InstanceName, .InstanceStatus, .VpcId, .CreateTime]' \
       r-kvstore DescribeInstances --RegionId "${region}" --PageSize 50
-    section "${region} ACK One hub clusters" "ID | Name | State | VPC | Created" \
+    section "${region} ACK One hub clusters" "${region} ackone:<ID>" \
+      "ID | Name | State | VPC | Created" \
       '.Clusters' '[.ClusterInfo.ClusterId, .ClusterInfo.Name, .ClusterInfo.State, .Network.VpcId, .ClusterInfo.CreationTime]' \
       adcp DescribeHubClusters --region "${region}"
-    section "${region} Kafka instances" "ID | Name | Status | Deploy type | VPC | Created" \
+    section "${region} Kafka instances" "${region} kafka:<ID>" \
+      "ID | Name | Status | Deploy type | VPC | Created" \
       '.InstanceList.InstanceVO' '[.InstanceId, .Name, .ServiceStatus, .DeployType, .VpcId, .CreateTime]' \
       alikafka GetInstanceList --RegionId "${region}"
-    section "${region} SLS projects" "Name | Status | Created" \
+    section "${region} SLS projects" "${region} sls:<name>" \
+      "Name | Status | Created" \
       '.projects' '[.projectName, .status, .createTime]' \
       sls ListProject --region "${region}" --size 100
-    section "${region} MNS queues" "Name | Created" \
+    section "${region} MNS queues" "${region} mns:<name>" \
+      "Name | Created" \
       '.Data.PageData' '[.QueueName, .CreateTime]' \
       mns-open ListQueue --region "${region}" --PageSize 50
-    section "${region} FC functions" "Name | Runtime | Created" \
+    section "${region} FC functions" "${region} fc:<name>" \
+      "Name | Runtime | Created" \
       '.functions' '[.functionName, .runtime, .createdTime]' \
       fc ListFunctions --region "${region}" --limit 100
   done
@@ -271,15 +300,22 @@ inventory() {
   echo
   local buckets
   if buckets=$(aliyun oss ls -s 2>&1); then
-    grep '^oss://' <<<"${buckets}" | sed 's/^/- /' || echo "None."
+    if grep '^oss://' <<<"${buckets}" | sed 's/^/- /' | grep .; then
+      echo
+      echo "Target: \`us-west-1 oss:<name>\`, the name without oss://"
+    else
+      echo "None."
+    fi
   else
     echo "Could not list: \`$(describe_error "${buckets}")\`"
   fi
   echo
-  section "RAM roles" "Name | Description | Created" \
+  section "RAM roles" "us-west-1 ram:<name>" \
+    "Name | Description | Created" \
     '.Roles.Role' '[.RoleName, .Description, .CreateDate]' \
     ram ListRoles --MaxItems 100
-  section "CloudMonitor contact groups" "Name" \
+  section "CloudMonitor contact groups" "us-west-1 cms:<name>" \
+    "Name" \
     '.ContactGroups.ContactGroup' '[.]' \
     cms DescribeContactGroupList --PageSize 100
 }
@@ -464,6 +500,10 @@ delete() {
       echo "::error::target \"${line}\" needs exactly a region and an id"
       return 1
     fi
+    if ! [[ "${target#*:}" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+      echo "::error::\"${target}\" is not a valid id or name: it must start with a letter or digit, and have only letters, digits, \".\", \"_\" and \"-\""
+      return 1
+    fi
     if ! resource_type="$(type_of "${target}")"; then
       echo "::error::unknown resource type in \"${target}\"; run \"$0 types\" for the list"
       return 1
@@ -475,6 +515,10 @@ delete() {
     return 1
   fi
   check_credentials
+  if [ "${CONFIRM:-}" != delete ]; then
+    echo "::error::set CONFIRM=delete to delete these ${#targets[@]} targets"
+    return 1
+  fi
   mapfile -t targets < <(printf '%s\n' "${targets[@]}" | sort -n -k1,1)
   ERR_FILE="$(mktemp)"
   trap 'rm -f "${ERR_FILE}"' EXIT

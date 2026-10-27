@@ -51,8 +51,11 @@ jobs:
       # Runs use the test account's credentials, so only the reviewed
       # workflow and script on main may run. This stops a run from another
       # branch by mistake. It cannot stop one on purpose, since a branch can
-      # change this file; keeping the secret in an environment that only main
-      # can deploy to would.
+      # change this file. Enforcing it means moving UPTEST_CLOUD_CREDENTIALS
+      # from a repository secret to an environment that only main can deploy
+      # to, and adding `environment:` to this job and to e2e.yaml's, which
+      # shares the secret. e2e.yaml runs on issue comments, and so on main,
+      # so the limit does not stop it.
       - name: Check Branch
         if: github.ref != 'refs/heads/main'
         run: |
@@ -109,6 +112,7 @@ jobs:
         if: inputs.mode == 'delete'
         env:
           TARGETS: ${{ inputs.targets }}
+          CONFIRM: ${{ inputs.confirm }}
         run: |
           tr ',' '\n' <<<"${TARGETS}" >targets.txt
           status=0
